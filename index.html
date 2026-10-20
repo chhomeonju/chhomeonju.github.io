@@ -1,7 +1,7 @@
 <!DOCTYPE HTML>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="author" content="Myeongju Cho"><meta name="description" content="Myeongju Cho — academic portfolio, publications, presentations, and projects.">
-<title>Myeongju Cho</title><link rel="stylesheet" href="stylesheet.css"><link rel="stylesheet" href="custom.css?v=2"></head>
+<title>Myeongju Cho</title><link rel="stylesheet" href="stylesheet.css"><link rel="stylesheet" href="custom.css?v=3"></head>
 <body><main><nav class="section-nav" aria-label="Page sections">
 <a href="#about">About</a><a href="#publications">Publications</a><a href="#presentations">Presentations</a><a href="#projects">Projects</a><a href="#awards">Awards</a><a href="#education">Education</a><a href="#experience">Experience</a>
 </nav><header id="about"><table class="intro"><tbody><tr>
@@ -30,32 +30,57 @@
 const navigation = document.querySelector('.section-nav');
 const sectionLinks = [...navigation.querySelectorAll('a')];
 const sections = [...document.querySelectorAll('main > header[id], main > section[id]')];
+const main = document.querySelector('main');
+const lastSection = sections[sections.length - 1];
+let navigationOffset = 80;
 function setCurrent(id) {
   sectionLinks.forEach(link => {
     if (link.hash === '#' + id) link.setAttribute('aria-current', 'location');
     else link.removeAttribute('aria-current');
   });
 }
-function revealProject() {
-  const target = document.getElementById(location.hash.slice(1));
-  if (target && target.matches('.project-card')) target.open = true;
+function measureLayout() {
+  navigationOffset = Math.ceil(navigation.getBoundingClientRect().height) + 20;
+  document.documentElement.style.setProperty('--section-offset', navigationOffset + 'px');
+  // Leave enough space to align even the final sections below the fixed menu.
+  const footerHeight = document.querySelector('footer').getBoundingClientRect().height;
+  main.style.paddingBottom = Math.max(0, window.innerHeight - navigationOffset - lastSection.getBoundingClientRect().height - footerHeight) + 'px';
 }
+function navigateToHash() {
+  const target = document.getElementById(location.hash.slice(1));
+  if (!target) return;
+  if (target.matches('.project-card')) target.open = true;
+  measureLayout();
+  window.scrollTo({top: Math.max(0, target.getBoundingClientRect().top + window.scrollY - navigationOffset), behavior: 'instant'});
+  setCurrent(target.matches('.project-card') ? 'projects' : target.id);
+}
+sectionLinks.forEach(link => {
+  link.addEventListener('click', event => {
+    if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    if (location.hash !== link.hash) history.pushState(null, '', link.hash);
+    navigateToHash();
+  });
+});
 let pending = false;
 function updateNavigation() {
-  const offset = navigation.getBoundingClientRect().height + 24;
   let current = sections[0];
   for (const section of sections) {
-    if (section.getBoundingClientRect().top <= offset) current = section;
+    if (section.getBoundingClientRect().top <= navigationOffset + 2) current = section;
   }
-  if (window.scrollY + window.innerHeight >= document.documentElement.scrollHeight - 4) current = sections[sections.length - 1];
   setCurrent(current.id);
   pending = false;
 }
 window.addEventListener('scroll', () => {
   if (!pending) { pending = true; requestAnimationFrame(updateNavigation); }
 }, { passive: true });
-window.addEventListener('resize', updateNavigation);
-window.addEventListener('hashchange', () => { revealProject(); updateNavigation(); });
-revealProject();
+window.addEventListener('resize', () => { measureLayout(); updateNavigation(); });
+window.addEventListener('hashchange', navigateToHash);
+window.addEventListener('popstate', () => { if (location.hash) navigateToHash(); else window.scrollTo({top:0,behavior:'instant'}); });
+new ResizeObserver(measureLayout).observe(navigation);
+new ResizeObserver(measureLayout).observe(lastSection);
+measureLayout();
 updateNavigation();
+window.addEventListener('load', () => { measureLayout(); if (location.hash) navigateToHash(); });
+document.fonts.ready.then(() => { measureLayout(); if (location.hash) navigateToHash(); });
 </script></body></html>

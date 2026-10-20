@@ -101,3 +101,31 @@ button, summary { font-family: 'Lato', Verdana, Helvetica, sans-serif; }
   .project-steps li { display: flex; gap: 12px; align-items: baseline; }
 }
 .project-card[open] > summary { height: auto; }
+
+/* Larger text in the original Lato family, with exact section navigation. */
+html { scroll-behavior: auto; }
+body, td, th, tr, p, a, strong { font-size: 16px; line-height: 1.65; }
+.papertitle { font-size: 16px; line-height: 1.6; }
+h2 { font-size: 26px; line-height: 1.3; }
+main { max-width: 860px; }
+.name { font-size: 36px; line-height: 1.35; }
+.section-nav { gap: 6px 22px; padding: 8px 0; }
+.section-nav a { font-size: 15px; min-height: 44px; display: inline-flex; align-items: center; padding: 0 2px; box-sizing: border-box; }
+section, header, .project-card { scroll-margin-top: var(--section-offset, 90px); }
+.project-name { font-size: 27px; }
+.project-subtitle, .project-teaser, .project-detail p, .project-detail li { font-size: 16px; line-height: 1.75; }
+.project-category, .project-number, .project-tags span, .project-steps span { font-size: 12px; }
+.project-date, .project-detail h4 { font-size: 14px; }
+.project-toggle { min-height: 48px; font-size: 15px; }
+.project-code, .project-permalink { font-size: 14px; min-height: 44px; box-sizing: border-box; display: inline-flex; align-items: center; }
+.project-detail-grid { grid-template-columns: 1fr 1.2fr; }
+.timeline h3 { font-size: 17px; }
+.mj-status, .mj-small, .contribution { color: #4d5660; }
+footer p, footer a { font-size: 13px; }
+@media (max-width:560px) {
+  .section-nav { gap: 0 14px; padding: 6px 12px; }
+  .section-nav a { font-size: 14px; min-height: 44px; }
+  section, header, .project-card { scroll-margin-top: var(--section-offset, 120px); }
+  .project-detail-grid { grid-template-columns: 1fr; }
+  .project-subtitle, .project-teaser, .project-detail p, .project-detail li { font-size: 16px; }
+}
