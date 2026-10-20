@@ -44,3 +44,60 @@ a:focus-visible { outline: 2px solid #1772d0; outline-offset: 4px; }
   .timeline td:last-child { text-align: left; padding: 0 0 10px; color: #555; }
   .timeline td:first-child { padding-bottom: 3px; }
 }
+
+/* Persistent navigation and expandable project case studies. */
+.section-nav { position: sticky; top: 0; z-index: 20; margin: 0 20px 10px; padding: 12px 0; background: rgba(255,255,255,.97); backdrop-filter: blur(12px); gap: 8px 24px; }
+section, header, .project-card { scroll-margin-top: 90px; }
+.projects-heading { margin: 10px 0 22px; }
+.projects-heading p { color: #646d78; line-height: 1.6; margin: 8px 0 0; }
+.project-grid { display: grid; grid-template-columns: repeat(2,minmax(0,1fr)); gap: 16px; }
+.project-card { border: 1px solid #e2e7eb; border-radius: 12px; background: #fff; min-width: 0; overflow: hidden; }
+.project-card:hover { border-color: #a9becd; }
+.project-card[open] { grid-column: 1 / -1; border-color: #94b5ca; }
+.project-card summary { cursor: pointer; padding: 22px; list-style: none; display: flex; flex-direction: column; height: 100%; box-sizing: border-box; }
+.project-card summary::-webkit-details-marker { display: none; }
+.project-card summary:focus-visible { outline: 2px solid #1772d0; outline-offset: -4px; }
+.project-topline { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 20px; }
+.project-category { font-size: 10px; text-transform: uppercase; letter-spacing: .08em; color: #526c80; font-weight: 700; }
+.project-number { font-size: 12px; color: #8493a0; }
+.project-name { font-size: 24px; letter-spacing: -.025em; font-weight: 700; color: #172a38; }
+.project-subtitle { font-size: 14px; color: #374855; line-height: 1.5; margin: 5px 0 10px; }
+.project-date { font-size: 11px; color: #78838d; margin-bottom: 14px; }
+.project-teaser { font-size: 13px; line-height: 1.7; color: #5b6670; margin-bottom: 18px; }
+.project-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: auto; }
+.project-tags span { font-size: 10px; background: #f1f5f7; color: #526776; padding: 5px 8px; border-radius: 4px; }
+.project-toggle { display: flex; justify-content: space-between; align-items: center; font-size: 12px; font-weight: 700; color: #1772a0; margin-top: 20px; padding-top: 14px; border-top: 1px solid #edf0f2; }
+.toggle-symbol { font-size: 21px; font-weight: 400; line-height: 1; }
+.when-open { display: none; }
+.project-card[open] .when-open { display: inline; }
+.project-card[open] .when-closed { display: none; }
+.project-card[open] .toggle-symbol { transform: rotate(45deg); }
+.project-detail { border-top: 1px solid #e6edf1; background: #f9fbfc; padding: 24px; }
+.project-detail-grid { display: grid; grid-template-columns: 1fr 1.2fr; gap: 30px; }
+.project-detail h4 { margin: 0 0 10px; font-family: inherit; font-size: 12px; letter-spacing: .04em; color: #344c5e; }
+.project-detail p, .project-detail li { font-size: 13px; line-height: 1.8; color: #53606a; }
+.project-detail p { margin: 0 0 16px; }
+.project-detail ul { padding-left: 18px; margin: 0 0 22px; }
+.project-detail li + li { margin-top: 5px; }
+.project-steps { list-style: none; padding: 0; display: grid; grid-template-columns: repeat(3,minmax(0,1fr)); gap: 8px; margin: 0 0 24px; }
+.project-steps li { background: #fff; border: 1px solid #e3eaf0; padding: 12px; border-radius: 6px; margin: 0 !important; }
+.project-steps span { display: block; font-size: 10px; color: #68879b; margin-bottom: 5px; }
+.project-publication { border-top: 1px solid #e3eaf0; padding-top: 20px; margin-bottom: 22px; }
+.project-publication p { margin-bottom: 4px; }
+.project-resources { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; }
+.project-code { display: inline-block; padding: 9px 12px; background: #1b4059; color: #fff; border-radius: 5px; font-size: 12px; }
+.project-code:hover { color: #fff; background: #245a7b; }
+.project-permalink { font-size: 11px; }
+button, summary { font-family: 'Lato', Verdana, Helvetica, sans-serif; }
+@media (max-width: 560px) {
+  .section-nav { margin: 0; padding: 10px 16px; gap: 4px 15px; flex-wrap: wrap; box-shadow: 0 2px 10px #172a3808; }
+  .section-nav a { font-size: 12px; padding: 6px 0; }
+  section, header, .project-card { scroll-margin-top: 110px; }
+  .project-grid, .project-detail-grid { grid-template-columns: 1fr; }
+  .project-detail-grid { gap: 4px; }
+  .project-card summary { padding: 20px; }
+  .project-detail { padding: 20px; }
+  .project-steps { grid-template-columns: 1fr; }
+  .project-steps li { display: flex; gap: 12px; align-items: baseline; }
+}
+.project-card[open] > summary { height: auto; }
