@@ -8,4 +8,4 @@ Technology badges reflect source dependencies and imports rather than a common a
 - **ESSENTI**: BERT and KoBART were already explicitly identified in the portfolio's project description.
 - **BLPM, CELP, NeuralSpeech, NeuroDecoder**: no language/framework badges are inferred. Existing descriptions and research methods remain visible until matching source code is supplied.
 
-Projects with no representative image show their existing approach steps, not an invented model diagram.
+Projects without a representative image use a text-only layout. Approach steps remain available in the optional research details.

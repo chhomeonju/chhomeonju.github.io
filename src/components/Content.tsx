@@ -50,34 +50,47 @@ export function Presentations() {
   </section>;
 }
 
-export function ProjectCard({ project: p, index, open, onToggle, navigate }: {
+const projectEmphasis: Record<string, string> = {
+  'project-blpm': 'Latent predictive modeling',
+  'project-celp': 'Self-supervised prediction',
+  'project-tada': 'adaptive multi-window fusion',
+  'project-neuralspeech': 'GAN-based speech synthesis pipeline',
+  'project-essenti': 'BERT for sentiment analysis',
+  'project-eeg-llm': 'fine-tuned language model',
+  'project-neurodecoder': 'imagined-speech EEG experiments',
+  'project-inner-speech': 'grouped CSP with LDA/SVM classification',
+};
+
+function ProjectContribution({ text, emphasis }: { text: string; emphasis?: string }) {
+  if (!emphasis || !text.includes(emphasis)) return <>{text}</>;
+  const start = text.indexOf(emphasis);
+  return <>{text.slice(0, start)}<strong>{emphasis}</strong>{text.slice(start + emphasis.length)}</>;
+}
+
+export function ProjectCard({ project: p, open, onToggle, navigate }: {
   project: Project; index: number; open: boolean;
   onToggle: (id: string, open: boolean) => void; navigate: Navigate;
 }) {
-  return <details className="project-card" id={p.id} open={open} onToggle={event => onToggle(p.id, event.currentTarget.open)}>
-    <summary>
-      <span className="project-topline"><span className="project-category">{p.category}</span><span className="project-date">{p.date}</span></span>
-      <span className="project-preview">
-        <span className="project-copy">
-          <span className="project-title-row"><span className="project-number">{String(index + 1).padStart(2, '0')}</span><span className="project-name">{p.name}</span></span>
-          <span className="project-subtitle">{p.subtitle}</span><span className="project-teaser">{p.teaser}</span>
-          <span className="project-highlights">{p.contributions.slice(0, 2).map(text => <span key={text}>{text}</span>)}</span>
-          <span className="project-tags">{p.tags.map(tag => <span key={tag}>{tag}</span>)}</span>
-          {p.stack.length > 0 && <span className="project-stack"><span className="project-stack-label">Tools &amp; methods</span><span className="project-stack-items">{p.stack.map(tool => <span key={tool}>{tool}</span>)}</span></span>}
-        </span>
-        {p.image ? <span className="project-visual project-visual-image"><img src={p.image.src} alt={p.image.alt} loading="lazy" />{p.image.caption && <span className="project-image-caption">{p.image.caption}</span>}</span>
-          : <span className="project-visual project-workflow" aria-label="Project approach"><span className="project-visual-label">Approach</span><span className="project-workflow-nodes">{p.steps.map((step, i) => <span className="project-workflow-node" key={step}><span>{String(i + 1).padStart(2, '0')}</span><span>{step}</span></span>)}</span></span>}
-      </span>
-      <span className="project-toggle"><span className="when-closed">Explore project</span><span className="when-open">Close details</span><span className="toggle-symbol" aria-hidden="true">+</span></span>
-    </summary>
-    <div className="project-detail"><div className="project-detail-grid">
-      <div><h4>Research / project goal</h4><p>{p.goal}</p></div>
-      <div><h4>{p.contributionLabel}</h4><ul>{p.contributions.map(text => <li key={text}>{text}</li>)}</ul></div>
-    </div><h4>Approach</h4><ol className="project-steps">{p.steps.map((step, i) => <li key={step}><span>{String(i + 1).padStart(2, '0')}</span>{step}</li>)}</ol>
-      {p.relatedPublication && <div className="project-publication"><h4>Related publication</h4><p>{p.relatedPublication.title}</p><p className="mj-small">{p.relatedPublication.venue}</p><a href="#publications" onClick={e => navigate(e, 'publications')}>View publications ↑</a></div>}
-      <div className="project-resources">{p.code && <ExternalLink className="project-code" href={p.code}>View source on GitHub ↗</ExternalLink>}<a className="project-permalink" href={`#${p.id}`} onClick={e => navigate(e, p.id)}>Link to this project ↗</a></div>
+  return <article className="project-card" id={p.id} aria-labelledby={`${p.id}-title`}>
+    <div className="project-topline"><span className="project-category">{p.category}</span>{p.date && <span className="project-date">{p.date}</span>}</div>
+    <div className={`project-preview${p.image ? ' has-image' : ''}`}>
+      <div className="project-copy">
+        <h3 id={`${p.id}-title`} className="project-title"><span className="project-name">{p.name}</span><span className="project-subtitle">{p.subtitle}</span></h3>
+        <p className="project-teaser">{p.teaser}</p>
+        <ul className="project-highlights" aria-label={p.contributionLabel}>{p.contributions.map(text => <li key={text}><ProjectContribution text={text} emphasis={projectEmphasis[p.id]} /></li>)}</ul>
+        {p.stack.length > 0 && <p className="project-stack"><span className="project-stack-label">Stack</span>{p.stack.join(' · ')}</p>}
+        <div className="project-resources">{p.code && <ExternalLink href={p.code}>GitHub ↗</ExternalLink>}{p.relatedPublication && <a href="#publications" onClick={e => navigate(e, 'publications')}>Paper ↑</a>}</div>
+      </div>
+      {p.image && <figure className="project-visual project-visual-image"><img src={p.image.src} alt={p.image.alt} loading="lazy" />{p.image.caption && <figcaption>{p.image.caption}</figcaption>}</figure>}
     </div>
-  </details>;
+    <details className="project-notes" open={open} onToggle={event => onToggle(p.id, event.currentTarget.open)}>
+      <summary>Research details</summary>
+      <div className="project-detail"><p>{p.goal}</p><p className="project-approach"><span>Approach</span>{p.steps.join(' → ')}</p>
+        {p.relatedPublication && <p className="project-related">{p.relatedPublication.title}<br /><span>{p.relatedPublication.venue}</span></p>}
+        <a className="project-permalink" href={`#${p.id}`} onClick={e => navigate(e, p.id)}>Link to this project ↗</a>
+      </div>
+    </details>
+  </article>;
 }
 
 export function Awards() {

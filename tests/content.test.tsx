@@ -34,7 +34,12 @@ test('preview-only controls and removed explanatory copy stay absent', () => {
 test('project cards support both expanded and collapsed initial render', () => {
   const props = { project: portfolio.projects[0], index: 0, onToggle: () => {}, navigate: () => {} };
   assert.match(renderToStaticMarkup(<ProjectCard {...props} open />), /<details[^>]* open=""/);
-  assert.ok(!/<details[^>]* open=""/.test(renderToStaticMarkup(<ProjectCard {...props} open={false} />)));
+  const html = renderToStaticMarkup(<ProjectCard {...props} open={false} />);
+  assert.ok(!/<details[^>]* open=""/.test(html));
+  const visibleContent = html.split('<details')[0];
+  assert.ok(visibleContent.includes('Semantic information as a guide'));
+  assert.ok(visibleContent.includes('<strong>Latent predictive modeling</strong>'));
+  assert.ok(!html.includes('project-workflow'));
 });
 
 test('project figures are optional and all configured resources exist', () => {

@@ -23,8 +23,8 @@ npm run dev
 
 Project showcases use one full-width card per project. Add a representative image in
 `public/assets/images/`, then set the project's `image` to `{ src, alt, caption }`.
-Set `image` to `null` to show the project's approach steps instead. The `stack` array
-controls the tools/model badges. Source evidence is recorded in `docs/project-sources.md`.
+Set `image` to `null` for a text-only entry. The `stack` array
+controls the secondary technology line. Source evidence is recorded in `docs/project-sources.md`.
 
 ## Validation and production preview
 
