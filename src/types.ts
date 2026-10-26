@@ -11,6 +11,8 @@ export interface Project {
   teaser: string; tags: string[]; goal: string; contributionLabel: string;
   contributions: string[]; steps: string[]; code: string | null;
   relatedPublication: { title: string; venue: string } | null;
+  stack: string[];
+  image: { src: string; alt: string; caption?: string } | null;
 }
 export interface Award { date: string; title: string; organization: string; detail: string | null }
 export interface TimelineEntry { title: string; description: string; date: string }

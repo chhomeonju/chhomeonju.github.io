@@ -8,7 +8,12 @@ export const portfolio: PortfolioData = {
       "venue": "IEEE BCI 2027 · Planned submission",
       "image": null,
       "imageAlt": null,
-      "links": []
+      "links": [
+        {
+          "label": "Code ↗",
+          "href": "https://github.com/Myeongjuuu/TADA"
+        }
+      ]
     },
     {
       "title": "Continuous Latent Predictive Modeling with Predictive Semantic Alignment for EEG-Language Foundation Models",
@@ -48,7 +53,7 @@ export const portfolio: PortfolioData = {
       "location": "Washington, DC, USA"
     },
     {
-      "status": "Conference presentation · Sep. 2023",
+      "status": "Poster · Sep. 2023",
       "title": "Decoding electroencephalographic signals for inner speech words (functional, emotional) in brain-computer interface using Echo State Networks",
       "authors": "M.-J. Cho, D.-H. Lim, H. Park, Y.-J. Cho, S.-H. Ko, and H.-H. Kim",
       "venue": "2023 KSEE Annual Conference",
@@ -81,7 +86,9 @@ export const portfolio: PortfolioData = {
         "Transferable representations"
       ],
       "code": null,
-      "relatedPublication": null
+      "relatedPublication": null,
+      "stack": [],
+      "image": null
     },
     {
       "id": "project-celp",
@@ -107,7 +114,48 @@ export const portfolio: PortfolioData = {
         "Semantic representations"
       ],
       "code": null,
-      "relatedPublication": null
+      "relatedPublication": null,
+      "stack": [],
+      "image": null
+    },
+    {
+      "id": "project-tada",
+      "name": "TADA",
+      "category": "ECoG-to-text semantic decoding",
+      "subtitle": "Multi-Scale Temporal Fusion & Encoding-Guided Re-ranking",
+      "date": "",
+      "teaser": "A multi-scale ECoG-to-text decoding implementation combining temporal encoding, shared response alignment, and encoding-guided reciprocal re-ranking.",
+      "tags": [
+        "ECoG",
+        "Semantic decoding",
+        "Multi-scale modeling"
+      ],
+      "goal": "Decode semantic information from ECoG using multiple temporal scales and encoding-guided re-ranking.",
+      "contributionLabel": "Implementation",
+      "contributions": [
+        "Implemented residual temporal encoders and adaptive multi-window fusion.",
+        "Integrated SRM alignment, ranking losses, and encoding-guided re-ranking.",
+        "Provided source and held-out participant evaluation pipelines."
+      ],
+      "steps": [
+        "ECoG preparation & SRM alignment",
+        "Multi-scale temporal decoding",
+        "Encoding-guided re-ranking"
+      ],
+      "code": "https://github.com/Myeongjuuu/TADA",
+      "relatedPublication": {
+        "title": "Multi-Scale Temporal Fusion Network with Encoding-Guided Reciprocal Re-ranking for ECoG-to-Text Semantic Decoding",
+        "venue": "IEEE BCI 2027 · Planned submission"
+      },
+      "stack": [
+        "Python",
+        "PyTorch",
+        "MNE",
+        "scikit-learn",
+        "Brainiak / SRM",
+        "h5py"
+      ],
+      "image": null
     },
     {
       "id": "project-neuralspeech",
@@ -135,7 +183,9 @@ export const portfolio: PortfolioData = {
         "Speech reconstruction"
       ],
       "code": null,
-      "relatedPublication": null
+      "relatedPublication": null,
+      "stack": [],
+      "image": null
     },
     {
       "id": "project-essenti",
@@ -163,7 +213,12 @@ export const portfolio: PortfolioData = {
         "KoBART summaries"
       ],
       "code": "https://github.com/E-SSENTI/ESSENTI-Model",
-      "relatedPublication": null
+      "relatedPublication": null,
+      "stack": [
+        "BERT",
+        "KoBART"
+      ],
+      "image": null
     },
     {
       "id": "project-eeg-llm",
@@ -193,6 +248,18 @@ export const portfolio: PortfolioData = {
       "relatedPublication": {
         "title": "Classification of Non-Invasive EEG Signals During Motor Imagery Tasks Using a Large Language Model",
         "venue": "IEEE International Conference on Cyberworlds (CW), 2024"
+      },
+      "stack": [
+        "Python",
+        "OpenAI API",
+        "MNE",
+        "scikit-learn",
+        "NumPy"
+      ],
+      "image": {
+        "src": "assets/images/ieee-cw-2024-framework.png",
+        "alt": "EEG–LLM: feature extraction, JSON conversion, and LLM fine-tuning pipeline",
+        "caption": "EEG–LLM · IEEE CW 2024"
       }
     },
     {
@@ -220,7 +287,45 @@ export const portfolio: PortfolioData = {
         "Feature extraction"
       ],
       "code": null,
-      "relatedPublication": null
+      "relatedPublication": null,
+      "stack": [],
+      "image": null
+    },
+    {
+      "id": "project-inner-speech",
+      "name": "Inner Speech EEG",
+      "category": "EEG signal processing & analysis",
+      "subtitle": "Inner Speech Decoding & Functional Connectivity",
+      "date": "",
+      "teaser": "A reproducible analysis pipeline for the public Inner Speech EEG dataset, covering preprocessing, grouped CSP classification, and exploratory task/rest connectivity.",
+      "tags": [
+        "Inner speech",
+        "Functional connectivity",
+        "Public EEG data"
+      ],
+      "goal": "Analyze inner-speech EEG with auditable preprocessing and run-held-out classification.",
+      "contributionLabel": "Implementation",
+      "contributions": [
+        "Built filtering, resampling, ICA, and paired quality-control stages.",
+        "Implemented grouped CSP with LDA/SVM classification.",
+        "Added exploratory wPLI, coherence, PLV, and multitaper time-frequency analyses."
+      ],
+      "steps": [
+        "EEG preprocessing & quality control",
+        "Grouped CSP classification",
+        "Exploratory connectivity analysis"
+      ],
+      "code": "https://github.com/Myeongjuuu/Inner_Speech_Decoding",
+      "relatedPublication": null,
+      "stack": [
+        "Python",
+        "MNE",
+        "MNE-Connectivity",
+        "scikit-learn",
+        "SciPy",
+        "pandas"
+      ],
+      "image": null
     }
   ],
   "awards": [

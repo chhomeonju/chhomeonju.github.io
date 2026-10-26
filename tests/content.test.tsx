@@ -12,7 +12,7 @@ test('all existing sections and project permalinks are present in initial HTML',
   for (const project of portfolio.projects) assert.ok(html.includes(`id="${project.id}"`));
   assert.equal(portfolio.publications.length, 3);
   assert.equal(portfolio.presentations.length, 3);
-  assert.equal(portfolio.projects.length, 6);
+  assert.equal(portfolio.projects.length, 8);
   assert.ok(html.includes('Copyright ©Myeongju Cho'));
 });
 
@@ -35,4 +35,20 @@ test('project cards support both expanded and collapsed initial render', () => {
   const props = { project: portfolio.projects[0], index: 0, onToggle: () => {}, navigate: () => {} };
   assert.match(renderToStaticMarkup(<ProjectCard {...props} open />), /<details[^>]* open=""/);
   assert.ok(!/<details[^>]* open=""/.test(renderToStaticMarkup(<ProjectCard {...props} open={false} />)));
+});
+
+test('project figures are optional and all configured resources exist', () => {
+  const project = portfolio.projects.find(p => p.id === 'project-eeg-llm')!;
+  assert.ok(project.image);
+  assert.ok(!project.stack.includes('PyTorch'));
+  const html = renderToStaticMarkup(<ProjectCard project={project} index={0} open={false} onToggle={() => {}} navigate={() => {}} />);
+  assert.ok(html.includes('class="project-visual project-visual-image"'));
+  assert.ok(html.includes('OpenAI API'));
+  for (const p of portfolio.projects) if (p.image) assert.ok(existsSync(`public/${p.image.src}`));
+});
+
+test('all conference entries are posters and repository-specific stacks stay distinct', () => {
+  for (const p of portfolio.presentations) assert.match(p.status, /^Poster · /);
+  assert.ok(portfolio.projects.find(p => p.id === 'project-tada')!.stack.includes('PyTorch'));
+  assert.ok(!portfolio.projects.find(p => p.id === 'project-inner-speech')!.stack.includes('PyTorch'));
 });

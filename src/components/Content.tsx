@@ -42,7 +42,7 @@ export function Publications() {
 }
 
 export function Presentations() {
-  return <section id="presentations"><h2>Conference Presentations</h2>
+  return <section id="presentations"><h2>Poster Presentations</h2>
     <table className="entries"><tbody>{portfolio.presentations.map(p => <tr key={p.title + p.status}><td>
       <p className="mj-status">{p.status}</p><span className="papertitle">{p.title}</span>
       <p className="mj-authors"><Authors>{p.authors}</Authors></p><p className="mj-venue">{p.venue}</p><p className="mj-small">{p.location}</p>
@@ -55,9 +55,19 @@ export function ProjectCard({ project: p, index, open, onToggle, navigate }: {
   onToggle: (id: string, open: boolean) => void; navigate: Navigate;
 }) {
   return <details className="project-card" id={p.id} open={open} onToggle={event => onToggle(p.id, event.currentTarget.open)}>
-    <summary><span className="project-topline"><span className="project-category">{p.category}</span><span className="project-number">{String(index + 1).padStart(2, '0')}</span></span>
-      <span className="project-name">{p.name}</span><span className="project-subtitle">{p.subtitle}</span><span className="project-date">{p.date}</span><span className="project-teaser">{p.teaser}</span>
-      <span className="project-tags">{p.tags.map(tag => <span key={tag}>{tag}</span>)}</span>
+    <summary>
+      <span className="project-topline"><span className="project-category">{p.category}</span><span className="project-date">{p.date}</span></span>
+      <span className="project-preview">
+        <span className="project-copy">
+          <span className="project-title-row"><span className="project-number">{String(index + 1).padStart(2, '0')}</span><span className="project-name">{p.name}</span></span>
+          <span className="project-subtitle">{p.subtitle}</span><span className="project-teaser">{p.teaser}</span>
+          <span className="project-highlights">{p.contributions.slice(0, 2).map(text => <span key={text}>{text}</span>)}</span>
+          <span className="project-tags">{p.tags.map(tag => <span key={tag}>{tag}</span>)}</span>
+          {p.stack.length > 0 && <span className="project-stack"><span className="project-stack-label">Tools &amp; methods</span><span className="project-stack-items">{p.stack.map(tool => <span key={tool}>{tool}</span>)}</span></span>}
+        </span>
+        {p.image ? <span className="project-visual project-visual-image"><img src={p.image.src} alt={p.image.alt} loading="lazy" />{p.image.caption && <span className="project-image-caption">{p.image.caption}</span>}</span>
+          : <span className="project-visual project-workflow" aria-label="Project approach"><span className="project-visual-label">Approach</span><span className="project-workflow-nodes">{p.steps.map((step, i) => <span className="project-workflow-node" key={step}><span>{String(i + 1).padStart(2, '0')}</span><span>{step}</span></span>)}</span></span>}
+      </span>
       <span className="project-toggle"><span className="when-closed">Explore project</span><span className="when-open">Close details</span><span className="toggle-symbol" aria-hidden="true">+</span></span>
     </summary>
     <div className="project-detail"><div className="project-detail-grid">
