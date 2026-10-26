@@ -18,7 +18,7 @@ function HomePage() {
   const navigation = useSectionNavigation();
 
   const [view, setView] = useState<'home' | 'portfolio'>(() => {
-    if (typeof window === 'undefined') return 'home';
+    if (typeof window === 'undefined') return 'portfolio';
     const hash = window.location.hash.slice(1);
     return !hash ? 'home' : 'portfolio';
   });
