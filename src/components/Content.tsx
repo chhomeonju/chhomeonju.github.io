@@ -2,7 +2,9 @@ import type { MouseEvent, ReactNode } from 'react';
 import { portfolio } from '../data/portfolio';
 import type { Project, TimelineEntry } from '../types';
 import { SkillIcon } from './SkillIcon';
+import { Mail, MapPin } from 'lucide-react';
 export type Navigate = (event: MouseEvent<HTMLAnchorElement>, id: string) => void;
+
 
 export function Authors({ children }: { children: string }) {
   return <>{children.split(/(M\.-J\. Cho\*?)/).map((text, index) =>
@@ -13,16 +15,51 @@ export function ExternalLink({ href, children, className }: { href: string; chil
   return <a href={href} className={className} target="_blank" rel="noopener noreferrer">{children}</a>;
 }
 
-export function About() {
+export function ResearchTrajectory() {
   return (
-    <section id="about">
-      <div className="research-interests" aria-labelledby="research-interests-heading">
-        <h2 id="research-interests-heading">Research Trajectory</h2>
+    <section aria-labelledby="research-trajectory-heading">
+      <div className="research-interests" aria-labelledby="research-trajectory-heading">
+        <h2 id="research-trajectory-heading">Research Trajectory</h2>
         <div className="research-interests-list">{portfolio.researchInterests.map(interest =>
           <div className="research-interest" key={interest.title}>
             <h3>{interest.title}</h3>
             <p>{interest.description}</p>
             {interest.raisedQuestion && <p className="raised-question">→ {interest.raisedQuestion}</p>}
+          </div>
+        )}</div>
+      </div>
+    </section>
+  );
+}
+
+export function About() {
+  return (
+    <section id="about">
+      <div className="intro">
+        <aside className="profile-sidebar" aria-label="Profile and contact">
+          <div className="portrait" role="img" aria-label="Profile photo to be added">Profile photo<br /><small>To be added</small></div>
+          <ul className="profile-links">
+            <li className="profile-location"><MapPin size={17} aria-hidden="true" /><span>Seoul, Republic of Korea</span></li>
+            <li><a href="mailto:mj_cho@korea.ac.kr"><Mail size={17} aria-hidden="true" /><span>Email</span></a></li>
+            <li><ExternalLink href="https://github.com/Myeongjuuu"><img src="assets/icons/contact-github.svg" alt="" aria-hidden="true" /><span>GitHub</span></ExternalLink></li>
+            <li><ExternalLink href="https://www.linkedin.com/in/myeongju-cho-a690a0387/"><img src="assets/icons/contact-linkedin.svg" alt="" aria-hidden="true" /><span>LinkedIn</span></ExternalLink></li>
+          </ul>
+        </aside>
+        <div className="bio">
+          <h1 className="name">Myeongju Cho</h1>
+          <p className="intro-role">
+            <span className="researcher-position">M.S. Researcher @ Korea University</span>
+            <span className="research-vision">Understanding Human Cognition Through AI</span>
+          </p>
+          <p>I am a master's student in Brain and Cognitive Engineering at Korea University, working in the <ExternalLink href="http://pr.korea.ac.kr/">Pattern Recognition and Machine Learning (PRML) Lab</ExternalLink>, supervised by Prof. Seong-Whan Lee.</p>
+        </div>
+      </div>
+      <div className="research-interests" aria-labelledby="research-interests-heading">
+        <h2 id="research-interests-heading">Research Interests</h2>
+        <div className="research-interests-list">{portfolio.researchInterests.map(interest =>
+          <div className="research-interest" key={interest.title}>
+            <h3>{interest.title}</h3>
+            <p>{interest.description}</p>
           </div>
         )}</div>
       </div>
