@@ -26,7 +26,7 @@ export function About() {
         <li><ExternalLink href="https://www.linkedin.com/in/myeongju-cho-a690a0387/"><img src="assets/icons/contact-linkedin.svg" alt="" aria-hidden="true" /><span>LinkedIn</span></ExternalLink></li>
       </ul>
     </aside>
-    <div className="bio"><h1 className="name">Myeongju Cho</h1><p className="intro-role">M.S. Researcher @ Korea University | Understanding Human Cognition Through AI</p>
+    <div className="bio"><h1 className="name">Myeongju Cho</h1><p className="intro-role"><span className="researcher-position">M.S. Researcher @ Korea University</span><span className="research-vision">Understanding Human Cognition Through AI</span></p>
       <p>I am a master’s student in Brain and Cognitive Engineering at Korea University, working in the <ExternalLink href="http://pr.korea.ac.kr/">Pattern Recognition and Machine Learning (PRML) Lab</ExternalLink>, supervised by Prof. Seong-Whan Lee.</p>
     </div>
   </div><div className="research-interests" aria-labelledby="research-interests-heading">
@@ -113,9 +113,9 @@ export function projectHref(project: Project) {
 export function ProjectCard({ project: p, navigate }: { project: Project; navigate: Navigate }) {
   return <article className="project-card" id={p.id} aria-labelledby={`${p.id}-title`}>
     <div className="project-topline"><span className="project-category">{p.category}</span>{p.date && <span className="project-date">{p.date}</span>}</div>
+<h3 id={`${p.id}-title`} className="project-title"><a className="project-title-link" href={projectHref(p)}><span className="project-name">{p.name}</span><span className="project-subtitle">{p.subtitle}</span></a></h3>
     <div className={`project-preview${p.image ? ' has-image' : ''}`}>
       <div className="project-copy">
-        <h3 id={`${p.id}-title`} className="project-title"><a className="project-title-link" href={projectHref(p)}><span className="project-name">{p.name}</span><span className="project-subtitle">{p.subtitle}</span></a></h3>
         <p className="project-teaser">{p.teaser}</p>
         <ul className="project-highlights" aria-label={p.contributionLabel}>{p.contributions.slice(0, 2).map(text => <li key={text}><ProjectContribution text={text} emphasis={projectEmphasis[p.id]} /></li>)}</ul>
         {p.stack.length > 0 && <p className="project-stack"><span className="project-stack-label">Stack</span>{p.stack.join(' · ')}</p>}

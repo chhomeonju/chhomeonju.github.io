@@ -10,7 +10,8 @@ export default function App({ projectId }: { projectId?: string } = {}) {
 
 function HomePage() {
   const navigation = useSectionNavigation();
-  return <main ref={navigation.mainRef}>
+  return <main className="homepage" ref={navigation.mainRef}>
+    <a className="skip-link" href="#about">Skip to content</a>
     <div ref={navigation.navRef} className={`site-nav${navigation.menuOpen ? ' is-open' : ''}`} onKeyDown={event => {
       if (event.key === 'Escape' && navigation.menuOpen) {
         navigation.setMenuOpen(false);
