@@ -16,7 +16,7 @@ export function ExternalLink({ href, children, className }: { href: string; chil
 
 export function About() {
   return <header id="about"><div className="intro">
-    <div className="bio"><p className="intro-role">M.S. Student · Korea University · PRML Lab</p><h1 className="name">Myeongju Cho</h1>
+    <div className="bio"><h1 className="name">Myeongju Cho</h1><p className="intro-role">M.S. Researcher @ Korea University | Understanding Human Cognition Through AI</p>
       <p>I am a master’s student in Brain and Cognitive Engineering at Korea University, working in the <ExternalLink href="http://pr.korea.ac.kr/">Pattern Recognition and Machine Learning (PRML) Lab</ExternalLink>, supervised by Prof. Seong-Whan Lee.</p>
       <p className="contact"><a href="mailto:mj_cho@korea.ac.kr">Email</a><span>/</span><ExternalLink href="https://github.com/Myeongjuuu">GitHub</ExternalLink><span>/</span><ExternalLink href="https://www.linkedin.com/in/myeongju-cho-a690a0387/">LinkedIn</ExternalLink></p>
     </div>

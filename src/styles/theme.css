@@ -11,8 +11,8 @@ a:hover { color: #173f7d; text-decoration: underline; text-underline-offset: 3px
 .section-nav a[aria-current='location'] { color: var(--accent); font-weight: 700; box-shadow: 0 2px var(--accent); }
 #about .intro { padding: 56px 0 40px; grid-template-columns: minmax(0, 1fr) 200px; gap: clamp(30px, 5vw, 76px); }
 #about .bio { justify-self: start; max-width: 70ch; }
-.intro-role { color: var(--accent); font-size: .86rem; font-weight: 700; margin: 0 0 10px; }
-#about .name { text-align: left; font-size: clamp(2.6rem, 4.2vw, 3.6rem); font-weight: 700; letter-spacing: -.045em; line-height: 1.1; margin: 0 0 22px; color: var(--ink); }
+.intro-role { color: var(--accent); font-size: .86rem; font-weight: 700; margin: 0 0 20px; line-height: 1.7; }
+#about .name { text-align: left; font-size: clamp(2.6rem, 4.2vw, 3.6rem); font-weight: 700; letter-spacing: -.045em; line-height: 1.1; margin: 0 0 12px; color: var(--ink); }
 .bio > p:not(.intro-role):not(.contact) { color: #514b52; font-size: 1.02rem; line-height: 1.8; margin: 0; }
 .bio > p a { font-weight: 600; }
 #about .contact { justify-content: flex-start; gap: 10px; margin: 23px 0 0; }
