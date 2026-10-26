@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { About, Activities, Awards, Patents, Presentations, ProjectCard, Publications, Timeline } from './components/Content';
 import { ProjectPage } from './components/ProjectPage';
 import { portfolio } from './data/portfolio';
@@ -10,6 +11,25 @@ export default function App({ projectId }: { projectId?: string } = {}) {
 
 function HomePage() {
   const navigation = useSectionNavigation();
+
+  useEffect(() => {
+    const targets = document.querySelectorAll<HTMLElement>('section, .mj-paper, .project-card, .research-interest');
+    const obs = new IntersectionObserver(
+      entries => entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.removeAttribute('data-hidden');
+          obs.unobserve(entry.target);
+        }
+      }),
+      { threshold: 0.06, rootMargin: '0px 0px -32px 0px' }
+    );
+    targets.forEach((el, i) => {
+      el.setAttribute('data-hidden', '');
+      el.style.transitionDelay = `${Math.min(i % 4 * 60, 180)}ms`;
+      obs.observe(el);
+    });
+    return () => obs.disconnect();
+  }, []);
   return <main className="homepage" ref={navigation.mainRef}>
     <a className="skip-link" href="#about">Skip to content</a>
     <div ref={navigation.navRef} className={`site-nav${navigation.menuOpen ? ' is-open' : ''}`} onKeyDown={event => {
