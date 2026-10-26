@@ -112,3 +112,16 @@ footer p { color: #6b7786; }
   .skills-group li { font-size: .87rem; }
   .skills-group li:not(:last-child)::after { margin: 0 9px; }
 }
+
+/* Icon badges keep individual skills recognizable while labels stay readable. */
+.skills-group { align-items: center; padding: 18px 0; }
+.skills-group ul { gap: 9px; }
+.skills-group li { display: inline-flex; align-items: center; gap: 9px; padding: 8px 11px; border: 1px solid #e3dcdf; border-radius: 5px; background: #fff; color: #302930; font-size: .84rem; font-weight: 500; min-height: 42px; max-width: 100%; }
+.skills-group li:not(:last-child)::after { content: none; }
+.skill-icon { width: 22px; height: 22px; flex: 0 0 22px; display: block; }
+.skill-symbol { color: var(--accent); }
+.skills-group li > span { overflow-wrap: anywhere; line-height: 1.4; }
+@media (max-width: 680px) {
+  .skills-group { gap: 12px; }
+  .skills-group li { font-size: .82rem; padding: 8px 10px; }
+}

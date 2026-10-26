@@ -1,6 +1,7 @@
 import type { MouseEvent, ReactNode } from 'react';
 import { portfolio } from '../data/portfolio';
 import type { Project, TimelineEntry } from '../types';
+import { SkillIcon } from './SkillIcon';
 
 export type Navigate = (event: MouseEvent<HTMLAnchorElement>, id: string) => void;
 
@@ -28,7 +29,7 @@ export function About() {
   </div><div className="technical-skills" aria-labelledby="technical-skills-heading">
     <h2 id="technical-skills-heading">Technical Skills</h2>
     <dl className="skills-list">{portfolio.technicalSkills.map(group =>
-      <div className="skills-group" key={group.category}><dt>{group.category}</dt><dd><ul>{group.skills.map(skill => <li key={skill}>{skill}</li>)}</ul></dd></div>
+      <div className="skills-group" key={group.category}><dt>{group.category}</dt><dd><ul>{group.skills.map(skill => <li key={skill}><SkillIcon skill={skill} /><span>{skill}</span></li>)}</ul></dd></div>
     )}</dl>
   </div></header>;
 }

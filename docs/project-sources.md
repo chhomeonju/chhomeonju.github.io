@@ -10,4 +10,4 @@ Technology badges reflect source dependencies and imports rather than a common a
 
 Projects without a representative image use a text-only layout. Approach steps remain available in the optional research details.
 
-The About section's Technical Skills groups reuse the verified dependencies and methods above. BERT and KoBART come from ESSENTI's existing description. The website's own React/TypeScript implementation is not used as evidence of the portfolio owner's skills.
+The About section's Technical Skills list was supplied directly by the owner and replaces the earlier repository-derived summary. Repository evidence above still applies to individual project stacks. The website's own React/TypeScript implementation is not used as evidence of the portfolio owner's skills.

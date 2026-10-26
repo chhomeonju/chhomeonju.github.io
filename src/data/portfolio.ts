@@ -2,10 +2,12 @@ import type { PortfolioData } from '../types';
 
 export const portfolio: PortfolioData = {
   technicalSkills: [
-    { category: 'Programming & Scientific Computing', skills: ['Python', 'NumPy', 'SciPy', 'pandas'] },
-    { category: 'Deep Learning & Language Models', skills: ['PyTorch', 'OpenAI API', 'BERT', 'KoBART'] },
-    { category: 'Neural Signal Processing', skills: ['MNE', 'MNE-Connectivity', 'CSP', 'ICA', 'Time–frequency analysis'] },
-    { category: 'Machine Learning & Evaluation', skills: ['scikit-learn', 'LDA / SVM', 'Grouped cross-validation', 'SRM alignment'] },
+    { category: 'Programming Languages', skills: ['Python', 'MATLAB', 'C', 'SQL'] },
+    { category: 'Deep Learning Frameworks and Libraries', skills: ['PyTorch', 'TensorFlow', 'Scikit-learn', 'Hugging Face Transformers', 'PEFT', 'Accelerate'] },
+    { category: 'Neuroimaging and Signal Processing', skills: ['MNE-Python', 'EEGLAB', 'SPM', 'fMRIPrep'] },
+    { category: 'GPU Computing and Distributed Training', skills: ['CUDA', 'Multi-GPU Training', 'Distributed Training'] },
+    { category: 'Databases and Experiment Tracking', skills: ['MySQL', 'LMDB', 'Weights & Biases'] },
+    { category: 'Development and Research Tools', skills: ['Git', 'Linux', 'Docker', 'Conda', 'LaTeX'] },
   ],
   researchInterests: [
     {
