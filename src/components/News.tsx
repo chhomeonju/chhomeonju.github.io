@@ -44,8 +44,10 @@ export function News() {
       <div className="news-list">
         {items.map((item, i) => (
           <div key={i} className="news-item">
-            <span className="news-date">{item.date}</span>
-            <span className={`news-tag ${tagClass[item.category] ?? ''}`}>{item.category}</span>
+            <div className="news-left">
+              <span className="news-date">{item.date}</span>
+              <span className={`news-tag ${tagClass[item.category] ?? ''}`}>{item.category}</span>
+            </div>
             <div className="news-body">
               <p className="news-title">{item.title}</p>
               {item.detail && <p className="news-detail">{item.detail}</p>}
