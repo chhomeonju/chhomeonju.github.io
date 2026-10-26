@@ -1,6 +1,21 @@
 import type { PortfolioData } from '../types';
+import { blpmExperience, celpExperience } from './foundation-experience';
 
 export const portfolio: PortfolioData = {
+  activities: [
+    { title: 'LG Aimers · 7th Cohort', role: 'Participant', date: 'Jul. – Aug. 2025', description: 'Worked on food and beverage demand prediction.' },
+    { title: 'AI Study Group', role: 'Peer Study', date: 'Mar. – Jun. 2025', description: 'Studied artificial intelligence through a peer study group.' },
+    { title: 'MATLAB for Neuroscience Study Group', role: 'Peer Study', date: 'Jan. – Feb. 2024', description: 'Studied MATLAB for Neuroscience through a peer reading group.' },
+    { title: 'Neuroscience Study Group', role: 'Peer Study', date: 'Jul. – Aug. 2023', description: 'Studied neuroscience through a peer study group.' },
+    { title: 'WAP Programming Club', role: 'Member', date: 'Sep. 2021 – Aug. 2022', description: 'Participated in web development activities.' },
+  ],
+  patents: [
+    {
+      title: 'Apparatus and Method for Learning Universal Electroencephalogram Representations Based on Functional Connectivity Reconstruction',
+      inventors: ['Seong-Whan Lee', 'Myeong-Ju Cho', 'Hana Jo', 'Seo-Hyun Lee'],
+      date: 'Jan. 2026', number: '10-2026-0018395', status: 'Korean patent application · Filed',
+    },
+  ],
   technicalSkills: [
     { category: 'Programming Languages', skills: ['Python', 'MATLAB', 'C', 'SQL'] },
     { category: 'Deep Learning Frameworks and Libraries', skills: ['PyTorch', 'TensorFlow', 'Scikit-learn', 'Hugging Face Transformers', 'PEFT', 'Accelerate'] },
@@ -89,28 +104,29 @@ export const portfolio: PortfolioData = {
       "name": "BLPM",
       "subtitle": "Brain Latent Predictive Model",
       "date": "Apr. 2026 – Present",
-      "teaser": "A brain latent predictive modeling framework for learning generalizable EEG representations, with a focus on transferable and semantically meaningful neural features.",
+      "teaser": "A unified EEG–language model that predicts answer embeddings across heterogeneous decoding tasks.",
       "tags": [
         "EEG",
         "Foundation models",
         "Representation learning"
       ],
-      "goal": "Learn neural representations that transfer across EEG tasks while retaining semantic information.",
+      "goal": "Can continuous EEG representations support diverse decoding tasks through a shared language-semantic prediction space?",
       "contributionLabel": "Research focus",
       "contributions": [
-        "Latent predictive modeling for EEG representation learning.",
-        "Transferable neural features as a central research focus.",
-        "Semantic information as a guide for representation learning."
+        "Latent predictive modeling with the CELP encoder.",
+        "Language-guided multi-query semantic decomposition (MQSD).",
+        "Instruction-conditioned answer embedding prediction and semantic matching."
       ],
       "steps": [
-        "EEG signals",
-        "Latent prediction",
-        "Transferable representations"
+        "CELP pretraining: predict masked latent targets with an EMA teacher, using temporal and spectral EEG features.",
+        "Semantic alignment: language-derived queries attend to EEG tokens; contrastive learning aligns predictions with label-text embeddings.",
+        "Multi-task decoding: LoRA-adapted Llama predicts an answer embedding; similarity to candidate answers determines the class."
       ],
       "code": null,
-      "relatedPublication": null,
-      "stack": [],
-      "image": null
+
+      "stack": ["Python", "PyTorch", "NeuralSet", "NeuralBench", "LoRA"],
+      "image": null,
+      ...blpmExperience
     },
     {
       "id": "project-celp",
@@ -136,9 +152,10 @@ export const portfolio: PortfolioData = {
         "Semantic representations"
       ],
       "code": null,
-      "relatedPublication": null,
-      "stack": [],
-      "image": null
+
+      "stack": ["Python", "PyTorch"],
+      "image": null,
+      ...celpExperience
     },
     {
       "id": "project-tada",
@@ -207,7 +224,25 @@ export const portfolio: PortfolioData = {
       "code": null,
       "relatedPublication": null,
       "stack": [],
-      "image": null
+      "image": null,
+      experimentalExperience: [
+        {
+                "title": "Equipment",
+                "description": "BEL EEG recording system."
+        },
+        {
+                "title": "Experimental design & recording",
+                "description": "Designed and conducted imagined- and spoken-speech EEG data-collection experiments."
+        },
+        {
+                "title": "Signal processing",
+                "description": "Preprocessed the recorded EEG for speech reconstruction experiments."
+        },
+        {
+                "title": "Model experiments",
+                "description": "Reproduced and extended NeuroTalk’s GAN-based mel-spectrogram reconstruction pipeline."
+        }
+]
     },
     {
       "id": "project-essenti",
@@ -311,7 +346,21 @@ export const portfolio: PortfolioData = {
       "code": null,
       "relatedPublication": null,
       "stack": [],
-      "image": null
+      "image": null,
+      experimentalExperience: [
+        {
+                "title": "Equipment",
+                "description": "OpenBCI, 16 EEG channels."
+        },
+        {
+                "title": "Experimental design & recording",
+                "description": "Designed and conducted imagined-speech EEG data-collection experiments."
+        },
+        {
+                "title": "Signal processing",
+                "description": "Preprocessed EEG recordings and extracted features for BCI experiments."
+        }
+]
     },
     {
       "id": "project-inner-speech",

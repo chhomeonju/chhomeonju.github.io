@@ -21,7 +21,9 @@ npm run dev
 - `src/styles/`: typography, layout, and responsive styles.
 - `public/assets/images/`: publication figures. Store the relative path in the publication data.
 
-Project showcases use one full-width card per project. Add a representative image in
+Project showcases use one bordered full-width card per project. Clicking a card opens
+a separate static page under `projects/<slug>.html`. Detail pages and the homepage
+are prerendered together, so direct links and refresh work on GitHub Pages. Add a representative image in
 `public/assets/images/`, then set the project's `image` to `{ src, alt, caption }`.
 Set `image` to `null` for a text-only entry. The `stack` array
 controls the secondary technology line. Source evidence is recorded in `docs/project-sources.md`.

@@ -1,8 +1,14 @@
-import { About, Awards, Presentations, ProjectCard, Publications, Timeline } from './components/Content';
+import { About, Activities, Awards, Patents, Presentations, ProjectCard, Publications, Timeline } from './components/Content';
+import { ProjectPage } from './components/ProjectPage';
 import { portfolio } from './data/portfolio';
 import { sections, useSectionNavigation } from './hooks/useSectionNavigation';
 
-export default function App() {
+export default function App({ projectId }: { projectId?: string } = {}) {
+  const project = portfolio.projects.find(project => project.id === projectId);
+  return project ? <ProjectPage project={project} /> : <HomePage />;
+}
+
+function HomePage() {
   const navigation = useSectionNavigation();
   return <main ref={navigation.mainRef}>
     <div ref={navigation.navRef} className={`site-nav${navigation.menuOpen ? ' is-open' : ''}`} onKeyDown={event => {
@@ -16,8 +22,8 @@ export default function App() {
       <nav id="section-navigation" className="section-nav" aria-label="Page sections">{sections.map(([id, label]) => <a key={id} href={`#${id}`} aria-current={navigation.active === id ? 'location' : undefined} onClick={event => navigation.navigate(event, id)}>{label}</a>)}</nav>
     </div>
     <About /><Publications /><Presentations />
-    <section id="projects"><div className="projects-heading"><h2>Projects</h2><p>Research and applied work, from neural signals to language.</p></div><div className="project-grid">{portfolio.projects.map((project, index) => <ProjectCard key={project.id} project={project} index={index} open={navigation.openProjects.has(project.id)} onToggle={navigation.toggleProject} navigate={navigation.navigate} />)}</div></section>
-    <Awards />
+    <section id="projects"><div className="projects-heading"><h2>Projects</h2><p>Research and applied work, from neural signals to language.</p></div><div className="project-grid">{portfolio.projects.map(project => <ProjectCard key={project.id} project={project} navigate={navigation.navigate} />)}</div></section>
+    <Activities /><Patents /><Awards />
     <Timeline id="education" title="Education" entries={portfolio.education} />
     <Timeline id="experience" title="Research Experience" entries={portfolio.experience} />
     <footer><p>Copyright ©Myeongju Cho</p></footer>

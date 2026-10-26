@@ -2,6 +2,7 @@ import type { MouseEvent, ReactNode } from 'react';
 import { portfolio } from '../data/portfolio';
 import type { Project, TimelineEntry } from '../types';
 import { SkillIcon } from './SkillIcon';
+import { Mail, MapPin } from 'lucide-react';
 
 export type Navigate = (event: MouseEvent<HTMLAnchorElement>, id: string) => void;
 
@@ -16,11 +17,18 @@ export function ExternalLink({ href, children, className }: { href: string; chil
 
 export function About() {
   return <header id="about"><div className="intro">
+    <aside className="profile-sidebar" aria-label="Profile and contact">
+      <div className="portrait" role="img" aria-label="Profile photo to be added">Profile photo<br /><small>To be added</small></div>
+      <ul className="profile-links">
+        <li className="profile-location"><MapPin size={17} aria-hidden="true" /><span>Seoul, Republic of Korea</span></li>
+        <li><a href="mailto:mj_cho@korea.ac.kr"><Mail size={17} aria-hidden="true" /><span>Email</span></a></li>
+        <li><ExternalLink href="https://github.com/Myeongjuuu"><img src="assets/icons/contact-github.svg" alt="" aria-hidden="true" /><span>GitHub</span></ExternalLink></li>
+        <li><ExternalLink href="https://www.linkedin.com/in/myeongju-cho-a690a0387/"><img src="assets/icons/contact-linkedin.svg" alt="" aria-hidden="true" /><span>LinkedIn</span></ExternalLink></li>
+      </ul>
+    </aside>
     <div className="bio"><h1 className="name">Myeongju Cho</h1><p className="intro-role">M.S. Researcher @ Korea University | Understanding Human Cognition Through AI</p>
       <p>I am a master’s student in Brain and Cognitive Engineering at Korea University, working in the <ExternalLink href="http://pr.korea.ac.kr/">Pattern Recognition and Machine Learning (PRML) Lab</ExternalLink>, supervised by Prof. Seong-Whan Lee.</p>
-      <p className="contact"><a href="mailto:mj_cho@korea.ac.kr">Email</a><span>/</span><ExternalLink href="https://github.com/Myeongjuuu">GitHub</ExternalLink><span>/</span><ExternalLink href="https://www.linkedin.com/in/myeongju-cho-a690a0387/">LinkedIn</ExternalLink></p>
     </div>
-    <div className="portrait-cell"><div className="portrait" role="img" aria-label="Profile photo to be added">Profile photo<br /><small>To be added</small></div></div>
   </div><div className="research-interests" aria-labelledby="research-interests-heading">
     <h2 id="research-interests-heading">Research Interests</h2>
     <div className="research-interests-list">{portfolio.researchInterests.map(interest =>
@@ -61,6 +69,26 @@ export function Presentations() {
   </section>;
 }
 
+export function Patents() {
+  return <section id="patents"><h2>Patents</h2><div className="patent-list">{portfolio.patents.map(patent =>
+    <article className="patent-entry" key={patent.number}>
+      <div className="patent-meta"><span>{patent.status}</span><span>{patent.date}</span></div>
+      <h3>{patent.title}</h3>
+      <p className="patent-inventors">{patent.inventors.map((name, index) => <span key={name}>{index > 0 && ', '}{name === 'Myeong-Ju Cho' ? <strong>{name}</strong> : name}</span>)}</p>
+      <p className="patent-number">Application No. {patent.number}</p>
+    </article>
+  )}</div></section>;
+}
+
+export function Activities() {
+  return <section id="activities"><h2>Extracurricular Activities</h2><p className="activities-intro">Alongside research, I have founded peer study groups and participated in AI training and programming club activities.</p><div className="activity-list">{portfolio.activities.map(activity =>
+    <article className="activity-entry" key={activity.title}>
+      <div className="activity-date">{activity.date}</div>
+      <div><h3>{activity.title}</h3><p className="activity-role">{activity.role}</p><p className="activity-description">{activity.description}</p></div>
+    </article>
+  )}</div></section>;
+}
+
 const projectEmphasis: Record<string, string> = {
   'project-blpm': 'Latent predictive modeling',
   'project-celp': 'Self-supervised prediction',
@@ -78,29 +106,23 @@ function ProjectContribution({ text, emphasis }: { text: string; emphasis?: stri
   return <>{text.slice(0, start)}<strong>{emphasis}</strong>{text.slice(start + emphasis.length)}</>;
 }
 
-export function ProjectCard({ project: p, open, onToggle, navigate }: {
-  project: Project; index: number; open: boolean;
-  onToggle: (id: string, open: boolean) => void; navigate: Navigate;
-}) {
+export function projectHref(project: Project) {
+  return `projects/${project.id.replace(/^project-/, '')}.html`;
+}
+
+export function ProjectCard({ project: p, navigate }: { project: Project; navigate: Navigate }) {
   return <article className="project-card" id={p.id} aria-labelledby={`${p.id}-title`}>
     <div className="project-topline"><span className="project-category">{p.category}</span>{p.date && <span className="project-date">{p.date}</span>}</div>
     <div className={`project-preview${p.image ? ' has-image' : ''}`}>
       <div className="project-copy">
-        <h3 id={`${p.id}-title`} className="project-title"><span className="project-name">{p.name}</span><span className="project-subtitle">{p.subtitle}</span></h3>
+        <h3 id={`${p.id}-title`} className="project-title"><a className="project-title-link" href={projectHref(p)}><span className="project-name">{p.name}</span><span className="project-subtitle">{p.subtitle}</span></a></h3>
         <p className="project-teaser">{p.teaser}</p>
-        <ul className="project-highlights" aria-label={p.contributionLabel}>{p.contributions.map(text => <li key={text}><ProjectContribution text={text} emphasis={projectEmphasis[p.id]} /></li>)}</ul>
+        <ul className="project-highlights" aria-label={p.contributionLabel}>{p.contributions.slice(0, 2).map(text => <li key={text}><ProjectContribution text={text} emphasis={projectEmphasis[p.id]} /></li>)}</ul>
         {p.stack.length > 0 && <p className="project-stack"><span className="project-stack-label">Stack</span>{p.stack.join(' · ')}</p>}
-        <div className="project-resources">{p.code && <ExternalLink href={p.code}>GitHub ↗</ExternalLink>}{p.relatedPublication && <a href="#publications" onClick={e => navigate(e, 'publications')}>Paper ↑</a>}</div>
       </div>
       {p.image && <figure className="project-visual project-visual-image"><img src={p.image.src} alt={p.image.alt} loading="lazy" />{p.image.caption && <figcaption>{p.image.caption}</figcaption>}</figure>}
     </div>
-    <details className="project-notes" open={open} onToggle={event => onToggle(p.id, event.currentTarget.open)}>
-      <summary>Research details</summary>
-      <div className="project-detail"><p>{p.goal}</p><p className="project-approach"><span>Approach</span>{p.steps.join(' → ')}</p>
-        {p.relatedPublication && <p className="project-related">{p.relatedPublication.title}<br /><span>{p.relatedPublication.venue}</span></p>}
-        <a className="project-permalink" href={`#${p.id}`} onClick={e => navigate(e, p.id)}>Link to this project ↗</a>
-      </div>
-    </details>
+    <div className="project-card-footer"><span className="project-read-more" aria-hidden="true">View project <span>→</span></span><div className="project-resources">{p.code && <ExternalLink href={p.code}>GitHub ↗</ExternalLink>}{p.relatedPublication && (p.relatedPublication.url ? <ExternalLink href={p.relatedPublication.url}>Paper ↗</ExternalLink> : <a href="#publications" onClick={e => navigate(e, 'publications')}>Paper ↑</a>)}</div></div>
   </article>;
 }
 

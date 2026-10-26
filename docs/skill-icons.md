@@ -17,3 +17,9 @@ they are not presented as official product logos.
 - fMRIPrep: https://github.com/nipreps/identity/blob/main/nipreps-general/nipreps-logo.svg (the official NiPreps project symbol, rather than a dedicated fMRIPrep wordmark).
 
 The downloaded originals retain their colors and aspect ratios. These four entries supersede the generic Lucide symbols previously used for neuroimaging tools.
+
+## Profile contact icons
+
+GitHub and LinkedIn marks use Bootstrap Icons (MIT):
+https://github.com/twbs/icons/tree/main/icons . The license is included as
+`public/assets/icons/BOOTSTRAP-ICONS-LICENSE.txt`. Location and email use Lucide.

@@ -55,7 +55,7 @@ main > section > h2::after, .projects-heading h2::after { content: ''; height: 1
 .entries .mj-authors, .entries .mj-venue { color: #625c62; font-size: .9rem; }
 .entries .mj-authors strong { font-size: inherit; }
 .entries .mj-small { font-size: .82rem; color: #717b88; }
-#awards .papertitle { color: #855123; }
+#awards .papertitle { color: var(--accent); }
 #awards .mj-status { color: #6d7784; font-weight: 400; }
 #awards .entries td > p:not(.mj-status) { font-size: .9rem; color: #625c62; }
 .timeline td { padding: 20px 0; border-bottom: 1px solid #e7ebf0; }

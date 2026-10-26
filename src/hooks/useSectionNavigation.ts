@@ -1,25 +1,17 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import type { Navigate } from '../components/Content';
 
 export const sections = [
-  ['about', 'About'], ['publications', 'Publications'], ['presentations', 'Presentations'],
-  ['projects', 'Projects'], ['awards', 'Awards'], ['education', 'Education'], ['experience', 'Experience'],
+  ['about', 'About'], ['publications', 'Publications'],
+  ['presentations', 'Presentations'], ['projects', 'Projects'], ['activities', 'Activities'],
+  ['patents', 'Patents'], ['awards', 'Awards'], ['education', 'Education'], ['experience', 'Experience'],
 ] as const;
 
 export function useSectionNavigation() {
   const [active, setActive] = useState<string>('about');
   const [menuOpen, setMenuOpen] = useState(false);
-  const [openProjects, setOpenProjects] = useState<Set<string>>(() => new Set());
   const navRef = useRef<HTMLDivElement>(null);
   const mainRef = useRef<HTMLElement>(null);
-  const toggleProject = useCallback((id: string, open: boolean) => {
-    setOpenProjects(previous => {
-      if (previous.has(id) === open) return previous;
-      const next = new Set(previous);
-      if (open) next.add(id); else next.delete(id);
-      return next;
-    });
-  }, []);
 
   useEffect(() => {
     const nav = navRef.current;
@@ -28,6 +20,7 @@ export function useSectionNavigation() {
     const lastSection = main.querySelector<HTMLElement>('#experience');
     const footer = main.querySelector('footer');
     let disposed = false;
+    let interacted = false;
     let scrollFrame = 0;
     let alignmentFrame = 0;
     let offset = 80;
@@ -45,22 +38,29 @@ export function useSectionNavigation() {
       }
       setActive(current);
     }
-    function alignHash() {
+    function alignHash(animate: boolean) {
       const id = window.location.hash.slice(1);
-      if (!id) { window.scrollTo({ top: 0 }); setActive('about'); return; }
-      const target = document.getElementById(id);
-      if (!target) return;
+      const target = id ? document.getElementById(id) : null;
+      if (id && !target) return;
       measure();
-      window.scrollTo({ top: Math.max(0, target.getBoundingClientRect().top + window.scrollY - offset), behavior: 'instant' });
-      setActive(id.startsWith('project-') ? 'projects' : id);
+      const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      window.scrollTo({
+        top: target ? Math.max(0, target.getBoundingClientRect().top + window.scrollY - offset) : 0,
+        behavior: animate && !reducedMotion ? 'smooth' : 'instant',
+      });
+      if (!animate || reducedMotion) updateActive();
     }
-    function hashChanged() {
-      const id = window.location.hash.slice(1);
-      if (id.startsWith('project-')) toggleProject(id, true);
+    function scheduleAlignment(animate: boolean) {
       setMenuOpen(false);
       cancelAnimationFrame(alignmentFrame);
-      alignmentFrame = requestAnimationFrame(() => { alignmentFrame = requestAnimationFrame(alignHash); });
+      // Wait for the mobile menu to close before measuring the sticky navigation.
+      alignmentFrame = requestAnimationFrame(() => {
+        alignmentFrame = requestAnimationFrame(() => alignHash(animate));
+      });
     }
+    function navigateRequested() { interacted = true; scheduleAlignment(true); }
+    function hashChanged() { interacted = true; scheduleAlignment(true); }
+    function initialAlignment() { if (!interacted) scheduleAlignment(false); }
     function scroll() {
       if (scrollFrame) return;
       scrollFrame = requestAnimationFrame(() => { scrollFrame = 0; updateActive(); });
@@ -76,23 +76,25 @@ export function useSectionNavigation() {
     window.addEventListener('resize', resize);
     window.addEventListener('hashchange', hashChanged);
     window.addEventListener('popstate', hashChanged);
-    window.addEventListener('load', hashChanged);
-    measure(); updateActive(); hashChanged();
-    document.fonts.ready.then(() => { if (!disposed) { measure(); hashChanged(); } });
+    window.addEventListener('portfolio:navigate', navigateRequested);
+    window.addEventListener('load', initialAlignment);
+    measure(); updateActive(); initialAlignment();
+    document.fonts.ready.then(() => { if (!disposed) initialAlignment(); });
     return () => {
       disposed = true;
       observer.disconnect(); cancelAnimationFrame(scrollFrame); cancelAnimationFrame(alignmentFrame);
       window.removeEventListener('scroll', scroll); window.removeEventListener('resize', resize);
       window.removeEventListener('hashchange', hashChanged); window.removeEventListener('popstate', hashChanged);
-      window.removeEventListener('load', hashChanged);
+      window.removeEventListener('portfolio:navigate', navigateRequested);
+      window.removeEventListener('load', initialAlignment);
     };
-  }, [toggleProject]);
+  }, []);
 
   const navigate: Navigate = (event, id) => {
     if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
     event.preventDefault();
     if (window.location.hash !== `#${id}`) window.history.pushState(null, '', `#${id}`);
-    window.dispatchEvent(new HashChangeEvent('hashchange'));
+    window.dispatchEvent(new Event('portfolio:navigate'));
   };
-  return { active, menuOpen, setMenuOpen, openProjects, toggleProject, navigate, navRef, mainRef };
+  return { active, menuOpen, setMenuOpen, navigate, navRef, mainRef };
 }

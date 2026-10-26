@@ -1,0 +1,28 @@
+/* Profile contacts follow the portrait, independent of the research introduction. */
+#about .intro { grid-template-columns: 220px minmax(0, 1fr); gap: clamp(36px, 5vw, 72px); align-items: center; padding: 42px 0 38px; }
+.profile-sidebar { min-width: 0; align-self: start; }
+#about .profile-sidebar .portrait { width: 180px; max-width: 100%; margin: 0 0 18px; }
+.profile-links { margin: 0; padding: 0; list-style: none; display: flex; flex-direction: column; gap: 4px; }
+.profile-links li, .profile-links li a { font-size: .85rem; font-weight: 400; color: #4b5665; line-height: 1.6; }
+.profile-links li a, .profile-location { display: flex; align-items: center; gap: 10px; min-height: 32px; }
+.profile-location { padding: 3px 0; }
+.profile-links svg, .profile-links img { width: 17px; height: 17px; flex: 0 0 17px; display: block; }
+.profile-links svg { color: #647182; }
+.profile-links li a { width: fit-content; text-decoration: none; padding: 3px 0; }
+.profile-links li a:hover { color: var(--accent); text-decoration: underline; text-underline-offset: 3px; }
+#about .bio { justify-self: start; align-self: center; }
+@media (max-width: 760px) and (min-width: 681px) {
+  #about .intro { grid-template-columns: 190px minmax(0, 1fr); gap: 28px; }
+  .profile-links li, .profile-links li a { font-size: .8rem; }
+}
+@media (max-width: 680px) {
+  #about .intro { grid-template-columns: minmax(0, 1fr); gap: 28px; padding: 28px 0; }
+  .profile-sidebar { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 18px; align-items: center; }
+  #about .profile-sidebar .portrait { width: 96px; margin: 0; }
+  .profile-links { gap: 0; }
+  .profile-links li, .profile-links li a { font-size: .81rem; }
+  .profile-links li a, .profile-location { min-height: 31px; gap: 8px; }
+  .profile-location { align-items: flex-start; }
+  .profile-location svg { margin-top: 2px; }
+  .profile-links svg, .profile-links img { width: 15px; height: 15px; flex-basis: 15px; }
+}
