@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { About, Activities, Awards, Competencies, GitHubCard, Patents, Presentations, ProjectCard, Publications, Timeline, TechnicalSkills } from './components/Content';
+import { About, Activities, Awards, Competencies, FutureDirections, GitHubCard, Patents, Presentations, ProjectCard, Publications, Timeline, TechnicalSkills } from './components/Content';
 import { ProjectsSection } from './components/ProjectsSection';
 import { CustomCursor } from './components/CustomCursor';
 import { News } from './components/News';
@@ -66,6 +66,7 @@ function HomePage() {
     </div>
     <Publications /><Presentations />
     <ProjectsSection navigate={navigation.navigate} />
+    <FutureDirections />
     <Activities /><Patents /><Awards />
     <footer><p>Copyright ©Myeongju Cho</p></footer>
   </main></>;

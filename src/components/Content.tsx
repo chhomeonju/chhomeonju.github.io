@@ -33,13 +33,17 @@ export function About() {
           <span className="researcher-position">M.S. Researcher @ Korea University</span>
           <span className="research-vision">Understanding Human Cognition Through AI</span>
         </p>
-        <p>I am a master’s student in Brain and Cognitive Engineering at Korea University, working in the <ExternalLink href="http://pr.korea.ac.kr/">Pattern Recognition and Machine Learning (PRML) Lab</ExternalLink>, supervised by Prof. Seong-Whan Lee.</p>
+        <p>I study how the brain represents and transforms cognitive information — and how computational models can decode, simulate, and extend that understanding. As a master’s researcher at Korea University’s <ExternalLink href="http://pr.korea.ac.kr/">PRML Lab</ExternalLink>, supervised by Prof. Seong-Whan Lee, I build neural decoding models across EEG and ECoG signals, working toward representations that generalize across subjects, tasks, and recording modalities.</p>
       </div>
     </div>
     <div className="research-interests" aria-labelledby="research-interests-heading">
-      <h2 id="research-interests-heading">Research Interests</h2>
+      <h2 id="research-interests-heading">Research Trajectory</h2>
       <div className="research-interests-list">{portfolio.researchInterests.map(interest =>
-        <div className="research-interest" key={interest.title}><h3>{interest.title}</h3><p>{interest.description}</p></div>
+        <div className="research-interest" key={interest.title}>
+          <h3>{interest.title}</h3>
+          <p>{interest.description}</p>
+          {interest.raisedQuestion && <p className="raised-question">→ {interest.raisedQuestion}</p>}
+        </div>
       )}</div>
     </div>
   </header>;
@@ -184,4 +188,24 @@ export function Awards() {
 
 export function Timeline({ id, title, entries }: { id: string; title: string; entries: TimelineEntry[] }) {
   return <section id={id}><h2>{title}</h2><table className="timeline"><tbody>{entries.map(entry => <tr key={entry.title}><td><h3>{entry.title}</h3><p>{entry.description}</p></td><td>{entry.date}</td></tr>)}</tbody></table></section>;
+}
+
+export function FutureDirections() {
+  return (
+    <section id="future" aria-labelledby="future-heading">
+      <h2 id="future-heading">Future Directions</h2>
+      <div className="future-grid">
+        {portfolio.futureDirections.map(dir => (
+          <div className="future-card" key={dir.label}>
+            <span className="future-label">Direction {dir.label}</span>
+            <h3 className="future-title">{dir.title}</h3>
+            <p className="future-description">{dir.description}</p>
+            <ul className="future-tags">
+              {dir.tags.map(tag => <li key={tag}>{tag}</li>)}
+            </ul>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
 }

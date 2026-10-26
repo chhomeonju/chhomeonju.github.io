@@ -3,7 +3,7 @@ import type { Navigate } from '../components/Content';
 
 export const sections = [
   ['about', 'About'], ['publications', 'Publications'],
-  ['presentations', 'Presentations'], ['projects', 'Projects'], ['activities', 'Activities'],
+  ['presentations', 'Presentations'], ['projects', 'Projects'], ['future', 'Future'], ['activities', 'Activities'],
   ['patents', 'Patents'], ['awards', 'Awards'],
 ] as const;
 

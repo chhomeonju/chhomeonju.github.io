@@ -26,8 +26,10 @@ export interface TimelineEntry { title: string; description: string; date: strin
 export type NewsCategory = 'Paper' | 'Award' | 'Career' | 'Education' | 'Activity';
 export interface NewsItem { date: string; category: NewsCategory; title: string; detail?: string; }
 export interface Competency { title: string; description: string; methods: string[]; }
+export interface FutureDirection { label: string; title: string; description: string; tags: string[]; }
 export interface PortfolioData {
-  researchInterests: { title: string; description: string }[];
+  researchInterests: { title: string; description: string; raisedQuestion?: string }[];
+  futureDirections: FutureDirection[];
   technicalSkills: { category: string; skills: string[] }[];
   activities: { title: string; role: string; date: string | null; description: string }[];
   patents: { title: string; inventors: string[]; date: string; number: string; status: string }[];
