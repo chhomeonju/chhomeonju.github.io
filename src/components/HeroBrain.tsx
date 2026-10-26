@@ -66,7 +66,7 @@ export function HeroBrain() {
       }
 
       let paused = matchMedia('(prefers-reduced-motion: reduce)').matches;
-      let elapsed = 3.2, last = 0, lastDraw = 0, px = 0, py = 0, dirty = true;
+      let elapsed = 3.2, last = 0, lastDraw = 0, userAngle = 0, velocity = 0, lastPointerX: number | null = null, dirty = true;
 
       function mkShader(type: number, src: string) {
         const s = gl!.createShader(type)!;
@@ -114,8 +114,8 @@ export function HeroBrain() {
         if (canvas!.width !== w || canvas!.height !== h) { canvas!.width = w; canvas!.height = h; }
         gl!.viewport(0, 0, w, h);
         gl!.clear(gl!.COLOR_BUFFER_BIT | gl!.DEPTH_BUFFER_BIT);
-        gl!.uniform1f(uAngle, 0.38 + Math.sin(elapsed * 0.16) * 0.13 + px * 0.2);
-        gl!.uniform1f(uTilt, -0.18 + py * 0.12);
+        gl!.uniform1f(uAngle, 0.38 + userAngle + Math.sin(elapsed * 0.16) * 0.06);
+        gl!.uniform1f(uTilt, -0.18);
         gl!.uniform1f(uAspect, w / h);
         gl!.uniform1f(uTime, elapsed);
         for (const m of geometry) {
@@ -134,6 +134,11 @@ export function HeroBrain() {
         if (disposed) { return; }
         if (last && !paused && !document.hidden) elapsed += Math.min((stamp - last) / 1000, 0.1);
         last = stamp;
+        if (lastPointerX === null && Math.abs(velocity) > 0.0002) {
+          userAngle += velocity;
+          velocity *= 0.90;
+          dirty = true;
+        }
         if (stamp - lastDraw > 33 && !document.hidden && (!paused || dirty)) {
           draw(); lastDraw = stamp; dirty = false;
         }
@@ -141,12 +146,16 @@ export function HeroBrain() {
       }
 
       const onMove = (e: PointerEvent) => {
-        const r = canvas!.getBoundingClientRect();
-        dirty = true;
-        px = (e.clientX - r.left) / r.width - 0.5;
-        py = (e.clientY - r.top) / r.height - 0.5;
+        if (lastPointerX !== null) {
+          const r = canvas!.getBoundingClientRect();
+          const dx = (e.clientX - lastPointerX) / r.width * 2.5;
+          userAngle += dx;
+          velocity = dx;
+          dirty = true;
+        }
+        lastPointerX = e.clientX;
       };
-      const onLeave = () => { px = 0; py = 0; dirty = true; };
+      const onLeave = () => { lastPointerX = null; };
       canvas.addEventListener('pointermove', onMove);
       canvas.addEventListener('pointerleave', onLeave);
       const ro = new ResizeObserver(() => { dirty = true; });
