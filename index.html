@@ -1,15 +1,15 @@
 <!DOCTYPE HTML>
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="author" content="Myeongju Cho"><meta name="description" content="Myeongju Cho — academic portfolio, publications, presentations, and projects.">
-<title>Myeongju Cho</title><link rel="stylesheet" href="stylesheet.css"><link rel="stylesheet" href="custom.css?v=4"></head>
-<body><main><nav class="section-nav" aria-label="Page sections">
+<title>Myeongju Cho</title><link rel="stylesheet" href="stylesheet.css"><link rel="stylesheet" href="custom.css?v=5"></head>
+<body><main><div class="site-nav"><div class="mobile-menu"><span>Myeongju Cho</span><button class="menu-toggle" type="button" aria-expanded="false" aria-controls="section-navigation">Menu</button></div><nav id="section-navigation" class="section-nav" aria-label="Page sections">
 <a href="#about">About</a><a href="#publications">Publications</a><a href="#presentations">Presentations</a><a href="#projects">Projects</a><a href="#awards">Awards</a><a href="#education">Education</a><a href="#experience">Experience</a>
-</nav><header id="about"><table class="intro"><tbody><tr>
-<td class="bio"><p class="name">Myeongju Cho</p>
+</nav></div><header id="about"><div class="intro">
+<div class="bio"><p class="name">Myeongju Cho</p>
 <p>I am a master’s student in Brain and Cognitive Engineering at Korea University, working in the <a href="http://pr.korea.ac.kr/" rel="noopener" target="_blank">Pattern Recognition and Machine Learning (PRML) Lab</a>, supervised by Prof. Seong-Whan Lee.</p>
-<p class="contact"><a href="mailto:mj_cho@korea.ac.kr">Email</a><span>/</span><a href="https://github.com/Myeongjuuu" rel="noopener" target="_blank">GitHub</a><span>/</span><a href="https://www.linkedin.com/in/myeongju-cho-a690a0387/" rel="noopener" target="_blank">LinkedIn</a></p></td>
-<td class="portrait-cell"><div class="portrait" role="img" aria-label="Profile photo to be added">Profile photo<br><small>To be added</small></div></td>
-</tr></tbody></table></header><section id="publications">
+<p class="contact"><a href="mailto:mj_cho@korea.ac.kr">Email</a><span>/</span><a href="https://github.com/Myeongjuuu" rel="noopener" target="_blank">GitHub</a><span>/</span><a href="https://www.linkedin.com/in/myeongju-cho-a690a0387/" rel="noopener" target="_blank">LinkedIn</a></p></div>
+<div class="portrait-cell"><div class="portrait" role="img" aria-label="Profile photo to be added">Profile photo<br><small>To be added</small></div></div>
+</div></header><section id="publications">
 <h2>Publications</h2>
 <p class="contribution">* Equal contribution · † Corresponding author</p>
 <div class="publication-list">
@@ -35,6 +35,25 @@
 <details class="project-card" id="project-neurodecoder">
 <summary><span class="project-topline"><span class="project-category">Brain–computer interfaces</span><span class="project-number">06</span></span><span class="project-name">NeuroDecoder</span><span class="project-subtitle">Imagined Speech for Alternative Communication</span><span class="project-date">Mar. 2023 – Nov. 2023</span><span class="project-teaser">Imagined speech decoding research for alternative communication in individuals with aphasia.</span><span class="project-tags"><span>Imagined speech</span><span>Alternative communication</span><span>BCI</span></span><span class="project-toggle"><span class="when-closed">Explore project</span><span class="when-open">Close details</span><span class="toggle-symbol" aria-hidden="true">+</span></span></summary>
 <div class="project-detail"><div class="project-detail-grid"><div><h4>Research / project goal</h4><p>Explore imagined speech BCI for alternative communication.</p></div><div><h4>My contribution</h4><ul><li>Designed and conducted imagined-speech EEG experiments.</li><li>Performed EEG signal preprocessing.</li><li>Extracted signal features for alternative communication and BCI development.</li></ul></div></div><h4>Approach</h4><ol class="project-steps"><li><span>01</span>Experiment design</li><li><span>02</span>EEG preprocessing</li><li><span>03</span>Feature extraction</li></ol><div class="project-resources"><a class="project-permalink" href="#project-neurodecoder">Link to this project ↗</a></div></div></details></div></section><section id="awards"><h2>Honors and Awards</h2><table class="entries"><tbody><tr><td><p class="mj-status">Nov. 2024</p><span class="papertitle">Teamwork Award</span><p>Capstone Design Competition</p><p class="mj-small">Department of Computer and Artificial Intelligence Engineering, Pukyong National University</p></td></tr><tr><td><p class="mj-status">Feb. 2024</p><span class="papertitle">Proud Student Award</span><p>College of Information Technology and Convergence, Pukyong National University</p></td></tr><tr><td><p class="mj-status">Sep. 2023</p><span class="papertitle">Best Presentation Award</span><p>2023 KSEE Annual Conference</p><p class="mj-small">Korean Society for Engineering Education</p></td></tr></tbody></table></section><section id="education"><h2>Education</h2><table class="timeline"><tbody><tr><td><h3>Korea University</h3><p>M.S. in Brain and Cognitive Engineering</p></td><td>Sep. 2025 – Present</td></tr><tr><td><h3>Pukyong National University</h3><p>B.S. in Computer Engineering</p></td><td>Mar. 2020 – Feb. 2025</td></tr></tbody></table></section><section id="experience"><h2>Research Experience</h2><table class="timeline"><tbody><tr><td><h3>Graduate Researcher · PRML Lab</h3><p>Korea University · Prof. Seong-Whan Lee</p></td><td>Aug. 2025 – Present</td></tr><tr><td><h3>Undergraduate Researcher · Brain-inspired eXpainable Artificial Intelligence Lab</h3><p>Pukyong National University · Prof. Hoon-Hee Kim</p></td><td>Mar. 2023 – Jan. 2025</td></tr></tbody></table></section><footer><p>Copyright ©Myeongju Cho</p></footer></main><script>
+const siteNavigation = document.querySelector('.site-nav');
+const menuToggle = document.querySelector('.menu-toggle');
+function setMenu(open) {
+  siteNavigation.classList.toggle('is-open', open);
+  menuToggle.setAttribute('aria-expanded', String(open));
+  menuToggle.textContent = open ? 'Close menu' : 'Menu';
+}
+menuToggle.addEventListener('click', () => {
+  setMenu(menuToggle.getAttribute('aria-expanded') !== 'true');
+  measureLayout();
+});
+siteNavigation.addEventListener('keydown', event => {
+  if (event.key === 'Escape' && menuToggle.getAttribute('aria-expanded') === 'true') {
+    setMenu(false);
+    menuToggle.focus();
+    measureLayout();
+  }
+});
+
 const navigation = document.querySelector('.section-nav');
 const sectionLinks = [...navigation.querySelectorAll('a')];
 const sections = [...document.querySelectorAll('main > header[id], main > section[id]')];
@@ -48,7 +67,7 @@ function setCurrent(id) {
   });
 }
 function measureLayout() {
-  navigationOffset = Math.ceil(navigation.getBoundingClientRect().height) + 20;
+  navigationOffset = Math.ceil(siteNavigation.getBoundingClientRect().height) + 20;
   document.documentElement.style.setProperty('--section-offset', navigationOffset + 'px');
   // Leave enough space to align even the final sections below the fixed menu.
   const footerHeight = document.querySelector('footer').getBoundingClientRect().height;
@@ -66,6 +85,7 @@ sectionLinks.forEach(link => {
   link.addEventListener('click', event => {
     if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
     event.preventDefault();
+    setMenu(false);
     if (location.hash !== link.hash) history.pushState(null, '', link.hash);
     navigateToHash();
   });
@@ -82,10 +102,10 @@ function updateNavigation() {
 window.addEventListener('scroll', () => {
   if (!pending) { pending = true; requestAnimationFrame(updateNavigation); }
 }, { passive: true });
-window.addEventListener('resize', () => { measureLayout(); updateNavigation(); });
+window.addEventListener('resize', () => { if (window.innerWidth > 680) setMenu(false); measureLayout(); updateNavigation(); });
 window.addEventListener('hashchange', navigateToHash);
 window.addEventListener('popstate', () => { if (location.hash) navigateToHash(); else window.scrollTo({top:0,behavior:'instant'}); });
-new ResizeObserver(measureLayout).observe(navigation);
+new ResizeObserver(measureLayout).observe(siteNavigation);
 new ResizeObserver(measureLayout).observe(lastSection);
 measureLayout();
 updateNavigation();

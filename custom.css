@@ -148,3 +148,53 @@ main { max-width: 900px; }
   .project-detail-grid { grid-template-columns: 1fr; }
   .project-subtitle, .project-teaser, .project-detail p, .project-detail li { font-size: 16px; }
 }
+
+/* Reflow content at smaller widths instead of reducing the entire page. */
+*, *::before, *::after { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+main { width: 100%; max-width: 1040px; min-width: 0; }
+img { max-width: 100%; height: auto; }
+section, header, footer { padding-left: clamp(20px, 4vw, 40px); padding-right: clamp(20px, 4vw, 40px); }
+section, .bio, .mj-paper-copy, .project-detail, .project-steps li { min-width: 0; overflow-wrap: anywhere; }
+.site-nav { position: sticky; top: 0; z-index: 20; background: rgba(255,255,255,.98); }
+.site-nav .section-nav { position: static; margin: 0 20px 10px; padding: 8px 0; gap: 6px 22px; }
+.mobile-menu { display: none; }
+.intro { display: grid; grid-template-columns: minmax(0, 1fr) minmax(160px, 240px); gap: clamp(24px, 4vw, 48px); align-items: center; padding: 30px 0; }
+.bio, .portrait-cell { width: auto; padding: 0; }
+.portrait { max-width: 220px; margin: 0 auto; }
+.name { padding-top: 0; }
+.project-grid { grid-template-columns: repeat(auto-fit, minmax(min(100%, 340px), 1fr)); }
+.entries, .timeline { table-layout: fixed; }
+.timeline td:last-child { width: 190px; white-space: normal; }
+#publications .mj-paper { grid-template-columns: clamp(180px, 26vw, 240px) minmax(0, 1fr); }
+@media (min-width: 681px) and (max-width: 900px) {
+  .site-nav .section-nav { gap: 4px 16px; }
+  .intro { grid-template-columns: minmax(0, 1fr) 180px; gap: 24px; }
+  .project-detail-grid { grid-template-columns: minmax(0, 1fr); gap: 8px; }
+}
+@media (max-width: 680px) {
+  .mobile-menu { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 8px 20px; border-bottom: 1px solid #e7e9ed; }
+  .mobile-menu > span { font-size: 16px; font-weight: 700; }
+  .menu-toggle { min-height: 44px; padding: 8px 14px; font-size: 15px; color: #25282d; background: #fff; border: 1px solid #d9dee4; border-radius: 5px; cursor: pointer; }
+  .menu-toggle:focus-visible { outline: 2px solid #1772d0; outline-offset: 3px; }
+  .site-nav .section-nav { display: none; margin: 0; padding: 8px 20px 12px; gap: 2px 14px; }
+  .site-nav.is-open .section-nav { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .site-nav .section-nav a { justify-content: flex-start; min-height: 44px; font-size: 15px; }
+  .site-nav .section-nav a[aria-current="location"] { box-shadow: none; font-weight: 700; }
+  .intro { grid-template-columns: minmax(0, 1fr); gap: 22px; padding: 26px 0; }
+  .portrait-cell { grid-row: 1; }
+  .portrait { width: 140px; }
+  .bio { padding: 0; }
+  .name { font-size: 32px; }
+  #publications .mj-paper { grid-template-columns: minmax(0, 1fr); gap: 18px; padding: 24px 0; }
+  #publications .mj-figure { grid-row: 2; width: 100%; max-width: 480px; justify-self: center; }
+  #publications .mj-paper h2 { font-size: 16px; line-height: 1.5; }
+  #publications .mj-authors, #publications .mj-venue, #publications .mj-links a { font-size: 14px; }
+  .project-grid, .project-detail-grid { grid-template-columns: minmax(0, 1fr); }
+  .project-detail-grid { gap: 8px; }
+  .project-steps { grid-template-columns: minmax(0, 1fr); }
+  .project-resources { align-items: flex-start; flex-direction: column; }
+  .timeline, .timeline tbody, .timeline tr, .timeline td { display: block; width: auto; }
+  .timeline td:last-child { width: auto; text-align: left; padding: 0 0 10px; color: #555; }
+  .timeline td:first-child { padding-bottom: 3px; }
+}
