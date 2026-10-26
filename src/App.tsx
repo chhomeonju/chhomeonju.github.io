@@ -93,6 +93,7 @@ function HomePage() {
           <ResearchTrajectory />
           <FutureDirections />
         </div>
+        <footer><p>Copyright ©Myeongju Cho</p></footer>
       </>
     ) : (
       <>
