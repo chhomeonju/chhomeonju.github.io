@@ -17,6 +17,12 @@ export default function App({ projectId }: { projectId?: string } = {}) {
 function HomePage() {
   const navigation = useSectionNavigation();
 
+  const [view, setView] = useState<'home' | 'portfolio'>(() => {
+    if (typeof window === 'undefined') return 'home';
+    const hash = window.location.hash.slice(1);
+    return !hash ? 'home' : 'portfolio';
+  });
+
   const [dark, setDark] = useState(() => {
     try { return localStorage.getItem('theme') === 'dark'; } catch { return false; }
   });
@@ -43,7 +49,22 @@ function HomePage() {
       obs.observe(el);
     });
     return () => obs.disconnect();
-  }, []);
+  }, [view]);
+
+  const goHome = (event: React.MouseEvent) => {
+    if ((event as React.MouseEvent<HTMLAnchorElement>).button !== 0) return;
+    if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    window.history.pushState(null, '', window.location.pathname);
+    window.scrollTo({ top: 0, behavior: 'instant' });
+    setView('home');
+  };
+
+  const goSection = (event: React.MouseEvent<HTMLAnchorElement>, id: string) => {
+    setView('portfolio');
+    navigation.navigate(event, id);
+  };
+
   return <><CustomCursor /><main className="homepage" ref={navigation.mainRef}>
     <a className="skip-link" href="#about">Skip to content</a>
     <div ref={navigation.navRef} className={`site-nav${navigation.menuOpen ? ' is-open' : ''}`} onKeyDown={event => {
@@ -52,25 +73,42 @@ function HomePage() {
         navigation.navRef.current?.querySelector<HTMLButtonElement>('button')?.focus();
       }
     }}>
-      <a className="site-name" href="#about" onClick={event => navigation.navigate(event, 'about')}>Myeongju Cho</a>
+      <a className="site-name" href="/" onClick={goHome}>Myeongju Cho</a>
       <div className="mobile-menu"><span>Myeongju Cho</span><button className="menu-toggle" type="button" aria-expanded={navigation.menuOpen} aria-controls="section-navigation" onClick={() => navigation.setMenuOpen(open => !open)}>{navigation.menuOpen ? 'Close menu' : 'Menu'}</button></div>
-      <nav id="section-navigation" className="section-nav" aria-label="Page sections">{sections.map(([id, label]) => <a key={id} href={`#${id}`} aria-current={navigation.active === id ? 'location' : undefined} onClick={event => navigation.navigate(event, id)}>{label}</a>)}</nav>
+      <nav id="section-navigation" className="section-nav" aria-label="Page sections">
+        <a href="/" aria-current={view === 'home' ? 'location' : undefined} onClick={goHome}>Home</a>
+        {sections.map(([id, label]) => (
+          <a key={id} href={`#${id}`}
+            aria-current={view === 'portfolio' && navigation.active === id ? 'location' : undefined}
+            onClick={event => goSection(event, id)}>{label}</a>
+        ))}
+      </nav>
       <button className="theme-toggle" onClick={() => setDark(d => !d)} aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'}>{dark ? <Sun size={15} /> : <Moon size={15} />}</button>
     </div>
-    <HeroBrain />
-    <div className="about-area">
-      <ResearchTrajectory />
-      <FutureDirections />
-      <About />
-      <Competencies />
-      <News />
-      <Timeline id="experience" title="Research Experience" entries={portfolio.experience} />
-      <Timeline id="education" title="Education" entries={portfolio.education} />
-      <TechnicalSkills />
-    </div>
-    <Publications /><Presentations />
-    <ProjectsSection navigate={navigation.navigate} />
-    <Activities /><Patents /><Awards />
-    <footer><p>Copyright ©Myeongju Cho</p></footer>
+
+    {view === 'home' ? (
+      <>
+        <HeroBrain />
+        <div className="about-area">
+          <ResearchTrajectory />
+          <FutureDirections />
+        </div>
+      </>
+    ) : (
+      <>
+        <div className="about-area">
+          <About />
+          <Competencies />
+          <News />
+          <Timeline id="experience" title="Research Experience" entries={portfolio.experience} />
+          <Timeline id="education" title="Education" entries={portfolio.education} />
+          <TechnicalSkills />
+        </div>
+        <Publications /><Presentations />
+        <ProjectsSection navigate={navigation.navigate} />
+        <Activities /><Patents /><Awards />
+        <footer><p>Copyright ©Myeongju Cho</p></footer>
+      </>
+    )}
   </main></>;
 }
