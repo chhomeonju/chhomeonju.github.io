@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { About, Activities, Awards, Competencies, GitHubCard, Patents, Presentations, ProjectCard, Publications, Timeline, TechnicalSkills } from './components/Content';
+import { ProjectsSection } from './components/ProjectsSection';
 import { CustomCursor } from './components/CustomCursor';
 import { News } from './components/News';
 import { ProjectPage } from './components/ProjectPage';
@@ -64,7 +65,7 @@ function HomePage() {
       <TechnicalSkills />
     </div>
     <Publications /><Presentations />
-    <section id="projects"><div className="projects-heading"><h2>Projects</h2><p>Research and applied work, from neural signals to language.</p></div><div className="project-grid">{portfolio.projects.map(project => <ProjectCard key={project.id} project={project} navigate={navigation.navigate} />)}</div></section>
+    <ProjectsSection navigate={navigation.navigate} />
     <Activities /><Patents /><Awards />
     <footer><p>Copyright ©Myeongju Cho</p></footer>
   </main></>;

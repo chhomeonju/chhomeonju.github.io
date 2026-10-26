@@ -39,8 +39,8 @@ export function CustomCursor() {
       if (dotRef.current) {
         dotRef.current.style.transform = `translate(${mouseX}px,${mouseY}px)`;
       }
-      ringX += (mouseX - ringX) * 0.14;
-      ringY += (mouseY - ringY) * 0.14;
+      ringX += (mouseX - ringX) * 0.22;
+      ringY += (mouseY - ringY) * 0.22;
       if (ringRef.current) {
         ringRef.current.style.transform = `translate(${ringX}px,${ringY}px)`;
       }

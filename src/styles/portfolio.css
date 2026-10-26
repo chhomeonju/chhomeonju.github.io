@@ -24,15 +24,15 @@ body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(
     z-index: 10000; will-change: transform; opacity: 0;
   }
   .cursor-ring {
-    position: fixed; top: -16px; left: -16px;
-    width: 32px; height: 32px; border-radius: 50%;
+    position: fixed; top: -12px; left: -12px;
+    width: 24px; height: 24px; border-radius: 50%;
     border: 1.5px solid var(--ink); pointer-events: none;
     z-index: 9999; will-change: transform; opacity: 0;
-    transition: width .15s, height .15s, top .15s, left .15s, opacity .2s, border-color .15s;
+    transition: width .12s, height .12s, top .12s, left .12s, opacity .2s, border-color .12s;
   }
   .cursor-ring--hover {
-    top: -22px; left: -22px;
-    width: 44px; height: 44px;
+    top: -18px; left: -18px;
+    width: 36px; height: 36px;
     border-color: var(--accent);
   }
 }
@@ -128,9 +128,14 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
 .homepage > section > h2,
 .about-area > section > h2,
 .projects-heading h2 { font-family: var(--font-display); font-size: clamp(1.6rem, 2.3vw, 1.9rem); font-weight: 800; letter-spacing: -.035em; margin-bottom: 28px; padding-bottom: 16px; border-bottom: 2px solid var(--rule); }
-.projects-heading { margin-bottom: 28px; }
+.projects-heading { margin-bottom: 0; }
 .projects-heading h2 { margin-bottom: 10px; }
 .projects-heading p, .activities-intro { font-size: .9rem; line-height: 1.8; color: var(--muted); max-width: 75ch; }
+.projects-filter { display: flex; flex-wrap: wrap; gap: 6px; margin: 20px 0 28px; }
+.projects-filter-btn { padding: 5px 14px; border: 1px solid var(--rule); border-radius: 20px; background: transparent; color: var(--muted); font-size: .74rem; font-weight: 500; transition: color .12s, border-color .12s, background .12s; font-family: inherit; }
+.projects-filter-btn:hover { color: var(--ink); border-color: #a5b4fc; }
+.projects-filter-btn.active { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
+[data-theme="dark"] .projects-filter-btn.active { background: #1e1b4b; }
 
 /* Paper titles carry the emphasis; venues and figures provide context. */
 .contribution { color: var(--muted); font-size: .72rem; margin: -14px 0 15px; }
