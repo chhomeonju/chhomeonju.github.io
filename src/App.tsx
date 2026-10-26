@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { About, Activities, Awards, Competencies, GitHubCard, Patents, Presentations, ProjectCard, Publications, Timeline, TechnicalSkills } from './components/Content';
+import { CustomCursor } from './components/CustomCursor';
 import { News } from './components/News';
 import { ProjectPage } from './components/ProjectPage';
 import { portfolio } from './data/portfolio';
@@ -41,7 +42,7 @@ function HomePage() {
     });
     return () => obs.disconnect();
   }, []);
-  return <main className="homepage" ref={navigation.mainRef}>
+  return <><CustomCursor /><main className="homepage" ref={navigation.mainRef}>
     <a className="skip-link" href="#about">Skip to content</a>
     <div ref={navigation.navRef} className={`site-nav${navigation.menuOpen ? ' is-open' : ''}`} onKeyDown={event => {
       if (event.key === 'Escape' && navigation.menuOpen) {
@@ -66,5 +67,5 @@ function HomePage() {
     <section id="projects"><div className="projects-heading"><h2>Projects</h2><p>Research and applied work, from neural signals to language.</p></div><div className="project-grid">{portfolio.projects.map(project => <ProjectCard key={project.id} project={project} navigate={navigation.navigate} />)}</div></section>
     <Activities /><Patents /><Awards />
     <footer><p>Copyright ©Myeongju Cho</p></footer>
-  </main>;
+  </main></>;
 }

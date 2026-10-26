@@ -13,6 +13,29 @@
 *, *::before, *::after { box-sizing: border-box; }
 html { font-size: clamp(16px, calc(14px + .16vw), 19px); text-size-adjust: 100%; -webkit-text-size-adjust: 100%; }
 body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--font-body); line-height: 1.7; }
+
+/* Custom cursor — only on pointer (mouse) devices */
+@media (pointer: fine) {
+  * { cursor: none !important; }
+  .cursor-dot {
+    position: fixed; top: -4px; left: -4px;
+    width: 8px; height: 8px; border-radius: 50%;
+    background: var(--ink); pointer-events: none;
+    z-index: 10000; will-change: transform; opacity: 0;
+  }
+  .cursor-ring {
+    position: fixed; top: -16px; left: -16px;
+    width: 32px; height: 32px; border-radius: 50%;
+    border: 1.5px solid var(--ink); pointer-events: none;
+    z-index: 9999; will-change: transform; opacity: 0;
+    transition: width .15s, height .15s, top .15s, left .15s, opacity .2s, border-color .15s;
+  }
+  .cursor-ring--hover {
+    top: -22px; left: -22px;
+    width: 44px; height: 44px;
+    border-color: var(--accent);
+  }
+}
 button, input, select, textarea { font: inherit; }
 h1, h2, h3, p, figure { margin: 0; }
 h1, h2, h3 { line-height: 1.3; }
