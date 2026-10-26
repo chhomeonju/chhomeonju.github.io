@@ -4,6 +4,7 @@ import App from './App';
 import './styles/stylesheet.css';
 import './styles/custom.css';
 import './styles/projects.css';
+import './styles/interests.css';
 
 const root = document.getElementById('root');
 if (!root) throw new Error('Missing page root');

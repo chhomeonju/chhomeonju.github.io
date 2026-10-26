@@ -1,6 +1,20 @@
 import type { PortfolioData } from '../types';
 
 export const portfolio: PortfolioData = {
+  researchInterests: [
+    {
+      title: 'Neural Representation Learning',
+      description: 'Learning transferable representations from EEG and ECoG through self-supervised learning and latent predictive modeling.',
+    },
+    {
+      title: 'Brain–Language Alignment',
+      description: 'Aligning neural signals with language representations for semantic decoding and EEG–language foundation models.',
+    },
+    {
+      title: 'Brain–Computer Interfaces',
+      description: 'Decoding imagined speech and motor imagery, with an interest in speech reconstruction and alternative communication.',
+    },
+  ],
   "publications": [
     {
       "title": "Multi-Scale Temporal Fusion Network with Encoding-Guided Reciprocal Re-ranking for ECoG-to-Text Semantic Decoding",

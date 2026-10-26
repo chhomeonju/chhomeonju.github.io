@@ -20,6 +20,11 @@ export function About() {
       <p className="contact"><a href="mailto:mj_cho@korea.ac.kr">Email</a><span>/</span><ExternalLink href="https://github.com/Myeongjuuu">GitHub</ExternalLink><span>/</span><ExternalLink href="https://www.linkedin.com/in/myeongju-cho-a690a0387/">LinkedIn</ExternalLink></p>
     </div>
     <div className="portrait-cell"><div className="portrait" role="img" aria-label="Profile photo to be added">Profile photo<br /><small>To be added</small></div></div>
+  </div><div className="research-interests" aria-labelledby="research-interests-heading">
+    <h2 id="research-interests-heading">Research Interests</h2>
+    <div className="research-interests-list">{portfolio.researchInterests.map(interest =>
+      <div className="research-interest" key={interest.title}><h3>{interest.title}</h3><p>{interest.description}</p></div>
+    )}</div>
   </div></header>;
 }
 
