@@ -58,7 +58,6 @@ function HomePage() {
       <About />
       <Competencies />
       <News />
-      <GitHubCard />
       <Timeline id="experience" title="Research Experience" entries={portfolio.experience} />
       <Timeline id="education" title="Education" entries={portfolio.education} />
       <TechnicalSkills />
