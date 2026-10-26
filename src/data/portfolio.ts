@@ -107,7 +107,8 @@ export const portfolio: PortfolioData = {
       "teaser": "A unified EEG–language model that predicts answer embeddings across heterogeneous decoding tasks.",
       "tags": [
         "EEG",
-        "Foundation models",
+        "Foundation Model",
+        "Decoding",
         "Representation learning"
       ],
       "goal": "Can continuous EEG representations support diverse decoding tasks through a shared language-semantic prediction space?",
@@ -136,8 +137,9 @@ export const portfolio: PortfolioData = {
       "date": "Jan. 2026 – May 2026",
       "teaser": "A continuous EEG encoder that explores latent representation prediction as a self-supervised approach to learning transferable semantic neural representations.",
       "tags": [
-        "Continuous EEG",
-        "Self-supervised learning"
+        "EEG",
+        "Self-supervised learning",
+        "Representation learning"
       ],
       "goal": "Explore self-supervised latent prediction for generalizable continuous EEG representations.",
       "contributionLabel": "Research focus",
@@ -166,8 +168,7 @@ export const portfolio: PortfolioData = {
       "teaser": "A multi-scale ECoG-to-text decoding implementation combining temporal encoding, shared response alignment, and encoding-guided reciprocal re-ranking.",
       "tags": [
         "ECoG",
-        "Semantic decoding",
-        "Multi-scale modeling"
+        "Decoding"
       ],
       "goal": "Decode semantic information from ECoG using multiple temporal scales and encoding-guided re-ranking.",
       "contributionLabel": "Implementation",
@@ -204,10 +205,10 @@ export const portfolio: PortfolioData = {
       "date": "Feb. 2024 – Jan. 2025",
       "teaser": "Voice reconstruction using imagined and spoken speech EEG, extending the NeuroTalk speech synthesis pipeline.",
       "tags": [
-        "Imagined speech",
         "EEG",
-        "GAN",
-        "Mel-spectrograms"
+        "Imagined Speech",
+        "Brain-to-Speech",
+        "GAN"
       ],
       "goal": "Investigate voice reconstruction from imagined and spoken speech EEG.",
       "contributionLabel": "My contribution",
@@ -254,8 +255,7 @@ export const portfolio: PortfolioData = {
       "tags": [
         "NLP",
         "BERT",
-        "KoBART",
-        "News crawling"
+        "KoBART"
       ],
       "goal": "Turn financial news into sentiment signals and concise summaries.",
       "contributionLabel": "My contribution",
@@ -286,7 +286,7 @@ export const portfolio: PortfolioData = {
       "teaser": "A fine-tuned large language model for non-invasive EEG motor imagery task classification.",
       "tags": [
         "EEG",
-        "Motor imagery",
+        "Motor Imagery",
         "LLM fine-tuning"
       ],
       "goal": "Develop and evaluate an LLM-based approach to EEG motor imagery classification.",
@@ -327,9 +327,9 @@ export const portfolio: PortfolioData = {
       "date": "Mar. 2023 – Nov. 2023",
       "teaser": "Imagined speech decoding research for alternative communication in individuals with aphasia.",
       "tags": [
-        "Imagined speech",
-        "Alternative communication",
-        "BCI"
+        "EEG",
+        "Imagined Speech",
+        "Decoding"
       ],
       "goal": "Explore imagined speech BCI for alternative communication.",
       "contributionLabel": "My contribution",
@@ -370,9 +370,9 @@ export const portfolio: PortfolioData = {
       "date": "",
       "teaser": "A reproducible analysis pipeline for the public Inner Speech EEG dataset, covering preprocessing, grouped CSP classification, and exploratory task/rest connectivity.",
       "tags": [
+        "EEG",
         "Inner speech",
-        "Functional connectivity",
-        "Public EEG data"
+        "Functional connectivity"
       ],
       "goal": "Analyze inner-speech EEG with auditable preprocessing and run-held-out classification.",
       "contributionLabel": "Implementation",
