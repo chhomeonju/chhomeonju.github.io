@@ -122,6 +122,25 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 90px);
 .timeline h3 { font-size: 17px; }
 .mj-status, .mj-small, .contribution { color: #4d5660; }
 footer p, footer a { font-size: 13px; }
+
+/* Compact publication rows with larger representative figures. */
+main { max-width: 900px; }
+#publications .contribution { font-size: 12px; margin: 0 0 7px; }
+#publications .mj-paper { display: grid; grid-template-columns: 240px minmax(0, 1fr); align-items: center; gap: 26px; padding: 28px 0; }
+#publications .mj-paper.mj-without-image { grid-template-columns: minmax(0, 1fr); }
+#publications .mj-paper-copy { min-width: 0; }
+#publications .mj-figure { margin: 0; min-width: 0; }
+#publications .mj-figure img { display: block; width: 100%; height: auto; }
+#publications .mj-paper h2 { margin: 0 0 9px; font-size: 15px; font-weight: 700; line-height: 1.45; color: #22262b; }
+#publications .mj-authors { margin: 0 0 6px; font-size: 13px; line-height: 1.55; color: #59626d; }
+#publications .mj-authors strong { font-size: inherit; line-height: inherit; color: #22262b; text-decoration: underline; text-underline-offset: 2px; }
+#publications .mj-venue { margin: 0; font-size: 13px; line-height: 1.55; color: #59626d; font-style: italic; }
+#publications .mj-links { display: flex; gap: 14px; margin-top: 12px; }
+#publications .mj-links a { display: inline-block; padding: 3px 0; font-size: 13px; color: #23658b; }
+@media (max-width: 680px) {
+  #publications .mj-paper { grid-template-columns: minmax(0, 1fr); gap: 17px; }
+  #publications .mj-figure { grid-row: 2; width: 240px; max-width: 100%; }
+}
 @media (max-width:560px) {
   .section-nav { gap: 0 14px; padding: 6px 12px; }
   .section-nav a { font-size: 14px; min-height: 44px; }
