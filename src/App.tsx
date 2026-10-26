@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { About, Activities, Awards, Competencies, FutureDirections, GitHubCard, Patents, Presentations, ProjectCard, Publications, Timeline, TechnicalSkills } from './components/Content';
+import { HeroBrain } from './components/HeroBrain';
 import { ProjectsSection } from './components/ProjectsSection';
 import { CustomCursor } from './components/CustomCursor';
 import { News } from './components/News';
@@ -56,8 +57,10 @@ function HomePage() {
       <nav id="section-navigation" className="section-nav" aria-label="Page sections">{sections.map(([id, label]) => <a key={id} href={`#${id}`} aria-current={navigation.active === id ? 'location' : undefined} onClick={event => navigation.navigate(event, id)}>{label}</a>)}</nav>
       <button className="theme-toggle" onClick={() => setDark(d => !d)} aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'}>{dark ? <Sun size={15} /> : <Moon size={15} />}</button>
     </div>
+    <HeroBrain />
     <div className="about-area">
       <About />
+      <FutureDirections />
       <Competencies />
       <News />
       <Timeline id="experience" title="Research Experience" entries={portfolio.experience} />
@@ -66,7 +69,6 @@ function HomePage() {
     </div>
     <Publications /><Presentations />
     <ProjectsSection navigate={navigation.navigate} />
-    <FutureDirections />
     <Activities /><Patents /><Awards />
     <footer><p>Copyright ©Myeongju Cho</p></footer>
   </main></>;

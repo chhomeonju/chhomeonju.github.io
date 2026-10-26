@@ -2,8 +2,6 @@ import type { MouseEvent, ReactNode } from 'react';
 import { portfolio } from '../data/portfolio';
 import type { Project, TimelineEntry } from '../types';
 import { SkillIcon } from './SkillIcon';
-import { Mail, MapPin } from 'lucide-react';
-
 export type Navigate = (event: MouseEvent<HTMLAnchorElement>, id: string) => void;
 
 export function Authors({ children }: { children: string }) {
@@ -16,37 +14,20 @@ export function ExternalLink({ href, children, className }: { href: string; chil
 }
 
 export function About() {
-  return <header id="about">
-    <div className="intro">
-      <aside className="profile-sidebar" aria-label="Profile and contact">
-        <div className="portrait" role="img" aria-label="Profile photo to be added">Profile photo<br /><small>To be added</small></div>
-        <ul className="profile-links">
-          <li className="profile-location"><MapPin size={17} aria-hidden="true" /><span>Seoul, Republic of Korea</span></li>
-          <li><a href="mailto:mj_cho@korea.ac.kr"><Mail size={17} aria-hidden="true" /><span>Email</span></a></li>
-          <li><ExternalLink href="https://github.com/Myeongjuuu"><img src="assets/icons/contact-github.svg" alt="" aria-hidden="true" /><span>GitHub</span></ExternalLink></li>
-          <li><ExternalLink href="https://www.linkedin.com/in/myeongju-cho-a690a0387/"><img src="assets/icons/contact-linkedin.svg" alt="" aria-hidden="true" /><span>LinkedIn</span></ExternalLink></li>
-        </ul>
-      </aside>
-      <div className="bio">
-        <h1 className="name">Myeongju Cho</h1>
-        <p className="intro-role">
-          <span className="researcher-position">M.S. Researcher @ Korea University</span>
-          <span className="research-vision">Understanding Human Cognition Through AI</span>
-        </p>
-        <p>I study how the brain represents and transforms cognitive information — and how computational models can decode, simulate, and extend that understanding. As a master’s researcher at Korea University’s <ExternalLink href="http://pr.korea.ac.kr/">PRML Lab</ExternalLink>, supervised by Prof. Seong-Whan Lee, I build neural decoding models across EEG and ECoG signals, working toward representations that generalize across subjects, tasks, and recording modalities.</p>
+  return (
+    <section id="about">
+      <div className="research-interests" aria-labelledby="research-interests-heading">
+        <h2 id="research-interests-heading">Research Trajectory</h2>
+        <div className="research-interests-list">{portfolio.researchInterests.map(interest =>
+          <div className="research-interest" key={interest.title}>
+            <h3>{interest.title}</h3>
+            <p>{interest.description}</p>
+            {interest.raisedQuestion && <p className="raised-question">→ {interest.raisedQuestion}</p>}
+          </div>
+        )}</div>
       </div>
-    </div>
-    <div className="research-interests" aria-labelledby="research-interests-heading">
-      <h2 id="research-interests-heading">Research Trajectory</h2>
-      <div className="research-interests-list">{portfolio.researchInterests.map(interest =>
-        <div className="research-interest" key={interest.title}>
-          <h3>{interest.title}</h3>
-          <p>{interest.description}</p>
-          {interest.raisedQuestion && <p className="raised-question">→ {interest.raisedQuestion}</p>}
-        </div>
-      )}</div>
-    </div>
-  </header>;
+    </section>
+  );
 }
 
 export function Competencies() {
@@ -192,7 +173,7 @@ export function Timeline({ id, title, entries }: { id: string; title: string; en
 
 export function FutureDirections() {
   return (
-    <section id="future" aria-labelledby="future-heading">
+    <section aria-labelledby="future-heading">
       <h2 id="future-heading">Future Directions</h2>
       <div className="future-grid">
         {portfolio.futureDirections.map(dir => (
