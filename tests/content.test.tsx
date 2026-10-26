@@ -1,0 +1,38 @@
+import { test } from 'node:test';
+import assert from 'node:assert/strict';
+import { existsSync } from 'node:fs';
+import { renderToStaticMarkup } from 'react-dom/server';
+import App from '../src/App';
+import { portfolio } from '../src/data/portfolio';
+import { ProjectCard, Publications } from '../src/components/Content';
+
+test('all existing sections and project permalinks are present in initial HTML', () => {
+  const html = renderToStaticMarkup(<App />);
+  for (const id of ['about', 'publications', 'presentations', 'projects', 'awards', 'education', 'experience']) assert.ok(html.includes(`id="${id}"`));
+  for (const project of portfolio.projects) assert.ok(html.includes(`id="${project.id}"`));
+  assert.equal(portfolio.publications.length, 3);
+  assert.equal(portfolio.presentations.length, 3);
+  assert.equal(portfolio.projects.length, 6);
+  assert.ok(html.includes('Copyright ©Myeongju Cho'));
+});
+
+test('publication figures resolve locally and Multi-Scale remains text-only', () => {
+  const html = renderToStaticMarkup(<Publications />);
+  assert.equal((html.match(/<img /g) ?? []).length, 2);
+  assert.match(html, /class="mj-paper mj-without-image"/);
+  assert.equal(portfolio.publications[0].image, null);
+  for (const publication of portfolio.publications) if (publication.image) assert.ok(existsSync(`public/${publication.image}`));
+  assert.ok(html.includes('IEEE BCI 2027'));
+  assert.ok(html.includes('IEEE CW 2024'));
+});
+
+test('preview-only controls and removed explanatory copy stay absent', () => {
+  const html = renderToStaticMarkup(<App />);
+  for (const text of ['Submission information from CV', '그림 선택', '그림 없이 보기', '클릭하여 확대', 'TL;DR', '3 manuscripts &amp; papers']) assert.ok(!html.includes(text));
+});
+
+test('project cards support both expanded and collapsed initial render', () => {
+  const props = { project: portfolio.projects[0], index: 0, onToggle: () => {}, navigate: () => {} };
+  assert.match(renderToStaticMarkup(<ProjectCard {...props} open />), /<details[^>]* open=""/);
+  assert.ok(!/<details[^>]* open=""/.test(renderToStaticMarkup(<ProjectCard {...props} open={false} />)));
+});
