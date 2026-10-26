@@ -140,7 +140,7 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
 /* Paper titles carry the emphasis; venues and figures provide context. */
 .contribution { color: var(--muted); font-size: .72rem; margin: -14px 0 15px; }
 .mj-paper { display: grid; grid-template-columns: clamp(245px, 25vw, 340px) minmax(0, 1fr); align-items: center; gap: 36px; padding: 30px 0; border-bottom: 1px solid var(--rule); transition: background .1s; border-radius: 6px; }
-.mj-paper:first-child { border-top: 2px solid var(--ink); }
+.mj-paper:first-child { border-top: 1px solid var(--rule); }
 .mj-paper:hover { background: var(--wash); }
 .mj-without-image { grid-template-columns: minmax(0, 1fr); }
 .mj-paper-copy { min-width: 0; max-width: 78ch; }
