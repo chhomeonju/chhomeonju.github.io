@@ -125,3 +125,7 @@ footer p { color: #6b7786; }
   .skills-group { gap: 12px; }
   .skills-group li { font-size: .82rem; padding: 8px 10px; }
 }
+.neuro-logo { object-fit: contain; width: 28px; height: 26px; flex-basis: 28px; }
+.neuro-wordmark { width: 48px; flex-basis: 48px; }
+.eeglab-icon { position: relative; overflow: hidden; width: 28px; height: 28px; flex-basis: 28px; }
+.eeglab-icon img { position: absolute; width: 114px; height: 114px; max-width: none; left: -8px; top: -68px; }
