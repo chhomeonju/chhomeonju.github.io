@@ -11,6 +11,7 @@ export default function App() {
         navigation.navRef.current?.querySelector<HTMLButtonElement>('button')?.focus();
       }
     }}>
+      <a className="site-name" href="#about" onClick={event => navigation.navigate(event, 'about')}>Myeongju Cho</a>
       <div className="mobile-menu"><span>Myeongju Cho</span><button className="menu-toggle" type="button" aria-expanded={navigation.menuOpen} aria-controls="section-navigation" onClick={() => navigation.setMenuOpen(open => !open)}>{navigation.menuOpen ? 'Close menu' : 'Menu'}</button></div>
       <nav id="section-navigation" className="section-nav" aria-label="Page sections">{sections.map(([id, label]) => <a key={id} href={`#${id}`} aria-current={navigation.active === id ? 'location' : undefined} onClick={event => navigation.navigate(event, id)}>{label}</a>)}</nav>
     </div>

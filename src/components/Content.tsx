@@ -15,7 +15,7 @@ export function ExternalLink({ href, children, className }: { href: string; chil
 
 export function About() {
   return <header id="about"><div className="intro">
-    <div className="bio"><p className="name">Myeongju Cho</p>
+    <div className="bio"><p className="intro-role">M.S. Student · Korea University · PRML Lab</p><h1 className="name">Myeongju Cho</h1>
       <p>I am a master’s student in Brain and Cognitive Engineering at Korea University, working in the <ExternalLink href="http://pr.korea.ac.kr/">Pattern Recognition and Machine Learning (PRML) Lab</ExternalLink>, supervised by Prof. Seong-Whan Lee.</p>
       <p className="contact"><a href="mailto:mj_cho@korea.ac.kr">Email</a><span>/</span><ExternalLink href="https://github.com/Myeongjuuu">GitHub</ExternalLink><span>/</span><ExternalLink href="https://www.linkedin.com/in/myeongju-cho-a690a0387/">LinkedIn</ExternalLink></p>
     </div>
@@ -38,7 +38,7 @@ export function Publications() {
           width={p.image.includes('continuous-latent') ? 1482 : 945}
           height={p.image.includes('continuous-latent') ? 720 : 438}
         /></div></figure>}
-        <div className="mj-paper-copy"><h2>{p.title}</h2><p className="mj-authors"><Authors>{p.authors}</Authors></p><p className="mj-venue">{p.venue}</p>
+        <div className="mj-paper-copy"><h2>{p.title}</h2><p className="mj-authors"><Authors>{p.authors}</Authors></p><p className="mj-venue"><span className="venue-name">{p.venue.split(' · ')[0]}</span>{p.venue.includes(' · ') && <span className="venue-status">{` · ${p.venue.split(' · ').slice(1).join(' · ')}`}</span>}</p>
           {p.links.length > 0 && <div className="mj-links">{p.links.map(link => <ExternalLink key={link.href} href={link.href}>{link.label}</ExternalLink>)}</div>}
         </div>
       </article>

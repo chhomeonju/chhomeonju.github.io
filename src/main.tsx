@@ -5,6 +5,7 @@ import './styles/stylesheet.css';
 import './styles/custom.css';
 import './styles/projects.css';
 import './styles/interests.css';
+import './styles/theme.css';
 
 const root = document.getElementById('root');
 if (!root) throw new Error('Missing page root');
