@@ -16,30 +16,82 @@ export function ExternalLink({ href, children, className }: { href: string; chil
 }
 
 export function About() {
-  return <header id="about"><div className="intro">
-    <aside className="profile-sidebar" aria-label="Profile and contact">
-      <div className="portrait" role="img" aria-label="Profile photo to be added">Profile photo<br /><small>To be added</small></div>
-      <ul className="profile-links">
-        <li className="profile-location"><MapPin size={17} aria-hidden="true" /><span>Seoul, Republic of Korea</span></li>
-        <li><a href="mailto:mj_cho@korea.ac.kr"><Mail size={17} aria-hidden="true" /><span>Email</span></a></li>
-        <li><ExternalLink href="https://github.com/Myeongjuuu"><img src="assets/icons/contact-github.svg" alt="" aria-hidden="true" /><span>GitHub</span></ExternalLink></li>
-        <li><ExternalLink href="https://www.linkedin.com/in/myeongju-cho-a690a0387/"><img src="assets/icons/contact-linkedin.svg" alt="" aria-hidden="true" /><span>LinkedIn</span></ExternalLink></li>
-      </ul>
-    </aside>
-    <div className="bio"><h1 className="name">Myeongju Cho</h1><p className="intro-role"><span className="researcher-position">M.S. Researcher @ Korea University</span><span className="research-vision">Understanding Human Cognition Through AI</span></p>
-      <p>I am a master’s student in Brain and Cognitive Engineering at Korea University, working in the <ExternalLink href="http://pr.korea.ac.kr/">Pattern Recognition and Machine Learning (PRML) Lab</ExternalLink>, supervised by Prof. Seong-Whan Lee.</p>
+  return <header id="about">
+    <div className="intro">
+      <aside className="profile-sidebar" aria-label="Profile and contact">
+        <div className="portrait" role="img" aria-label="Profile photo to be added">Profile photo<br /><small>To be added</small></div>
+        <ul className="profile-links">
+          <li className="profile-location"><MapPin size={17} aria-hidden="true" /><span>Seoul, Republic of Korea</span></li>
+          <li><a href="mailto:mj_cho@korea.ac.kr"><Mail size={17} aria-hidden="true" /><span>Email</span></a></li>
+          <li><ExternalLink href="https://github.com/Myeongjuuu"><img src="assets/icons/contact-github.svg" alt="" aria-hidden="true" /><span>GitHub</span></ExternalLink></li>
+          <li><ExternalLink href="https://www.linkedin.com/in/myeongju-cho-a690a0387/"><img src="assets/icons/contact-linkedin.svg" alt="" aria-hidden="true" /><span>LinkedIn</span></ExternalLink></li>
+        </ul>
+      </aside>
+      <div className="bio">
+        <h1 className="name">Myeongju Cho</h1>
+        <p className="intro-role">
+          <span className="researcher-position">M.S. Researcher @ Korea University</span>
+          <span className="research-vision">Understanding Human Cognition Through AI</span>
+        </p>
+        <p>I am a master’s student in Brain and Cognitive Engineering at Korea University, working in the <ExternalLink href="http://pr.korea.ac.kr/">Pattern Recognition and Machine Learning (PRML) Lab</ExternalLink>, supervised by Prof. Seong-Whan Lee.</p>
+      </div>
     </div>
-  </div><div className="research-interests" aria-labelledby="research-interests-heading">
-    <h2 id="research-interests-heading">Research Interests</h2>
-    <div className="research-interests-list">{portfolio.researchInterests.map(interest =>
-      <div className="research-interest" key={interest.title}><h3>{interest.title}</h3><p>{interest.description}</p></div>
-    )}</div>
-  </div><div className="technical-skills" aria-labelledby="technical-skills-heading">
+    <div className="research-interests" aria-labelledby="research-interests-heading">
+      <h2 id="research-interests-heading">Research Interests</h2>
+      <div className="research-interests-list">{portfolio.researchInterests.map(interest =>
+        <div className="research-interest" key={interest.title}><h3>{interest.title}</h3><p>{interest.description}</p></div>
+      )}</div>
+    </div>
+  </header>;
+}
+
+export function Competencies() {
+  return <section id="competencies" className="competencies-section" aria-labelledby="competencies-heading">
+    <h2 id="competencies-heading">Research Competencies</h2>
+    <div className="competencies-grid">
+      {portfolio.competencies.map(c => (
+        <div className="competency-card" key={c.title}>
+          <h3>{c.title}</h3>
+          <p>{c.description}</p>
+          <ul className="competency-methods">
+            {c.methods.map(m => <li key={m}>{m}</li>)}
+          </ul>
+        </div>
+      ))}
+    </div>
+  </section>;
+}
+
+export function GitHubCard() {
+  return <section className="github-activity-section" aria-labelledby="github-activity-heading">
+    <h2 id="github-activity-heading">GitHub Activity</h2>
+    <div className="github-card">
+      <div className="github-card-header">
+        <ExternalLink href="https://github.com/Myeongjuuu" className="github-card-link">
+          <img src="assets/icons/contact-github.svg" alt="" aria-hidden="true" className="github-card-icon" />
+          <span>Myeongjuuu</span>
+          <span className="github-card-arrow">↗</span>
+        </ExternalLink>
+      </div>
+      <div className="github-chart-wrap">
+        <img
+          src="https://ghchart.rshah.org/4f46e5/Myeongjuuu"
+          alt="Myeongjuuu’s GitHub contribution graph"
+          className="github-chart"
+          loading="lazy"
+        />
+      </div>
+    </div>
+  </section>;
+}
+
+export function TechnicalSkills() {
+  return <section id="skills" className="technical-skills" aria-labelledby="technical-skills-heading">
     <h2 id="technical-skills-heading">Technical Skills</h2>
     <dl className="skills-list">{portfolio.technicalSkills.map(group =>
       <div className="skills-group" key={group.category}><dt>{group.category}</dt><dd><ul>{group.skills.map(skill => <li key={skill}><SkillIcon skill={skill} /><span>{skill}</span></li>)}</ul></dd></div>
     )}</dl>
-  </div></header>;
+  </section>;
 }
 
 export function Publications() {

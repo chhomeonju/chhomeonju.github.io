@@ -4,7 +4,7 @@ import type { Navigate } from '../components/Content';
 export const sections = [
   ['about', 'About'], ['publications', 'Publications'],
   ['presentations', 'Presentations'], ['projects', 'Projects'], ['activities', 'Activities'],
-  ['patents', 'Patents'], ['awards', 'Awards'], ['education', 'Education'], ['experience', 'Experience'],
+  ['patents', 'Patents'], ['awards', 'Awards'],
 ] as const;
 
 export function useSectionNavigation() {
@@ -17,7 +17,7 @@ export function useSectionNavigation() {
     const nav = navRef.current;
     const main = mainRef.current;
     if (!nav || !main) return;
-    const lastSection = main.querySelector<HTMLElement>('#experience');
+    const lastSection = main.querySelector<HTMLElement>('#awards');
     const footer = main.querySelector('footer');
     let disposed = false;
     let interacted = false;

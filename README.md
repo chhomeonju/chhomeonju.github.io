@@ -1,4 +1,4 @@
-# Myeongju Cho's academic homepage
+# Academic homepage
 
 React and TypeScript website built with Vite and published at https://chhomeonju.github.io/.
 The build generates full HTML before React hydrates it, keeping academic content readable

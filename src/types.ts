@@ -23,6 +23,9 @@ export interface Project {
 }
 export interface Award { date: string; title: string; organization: string; detail: string | null }
 export interface TimelineEntry { title: string; description: string; date: string }
+export type NewsCategory = 'Paper' | 'Award' | 'Career' | 'Education' | 'Activity';
+export interface NewsItem { date: string; category: NewsCategory; title: string; detail?: string; }
+export interface Competency { title: string; description: string; methods: string[]; }
 export interface PortfolioData {
   researchInterests: { title: string; description: string }[];
   technicalSkills: { category: string; skills: string[] }[];
@@ -30,4 +33,6 @@ export interface PortfolioData {
   patents: { title: string; inventors: string[]; date: string; number: string; status: string }[];
   publications: Publication[]; presentations: Presentation[]; projects: Project[];
   awards: Award[]; education: TimelineEntry[]; experience: TimelineEntry[];
+  news: NewsItem[];
+  competencies: Competency[];
 }

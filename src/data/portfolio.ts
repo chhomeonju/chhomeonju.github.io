@@ -442,5 +442,39 @@ export const portfolio: PortfolioData = {
       "description": "Pukyong National University · Prof. Hoon-Hee Kim",
       "date": "Mar. 2023 – Jan. 2025"
     }
-  ]
+  ],
+  "news": [
+    { "date": "Jan. 2026", "category": "Paper", "title": "Korean patent application filed", "detail": "Apparatus and Method for Learning Universal EEG Representations Based on Functional Connectivity Reconstruction." },
+    { "date": "Sep. 2025", "category": "Education", "title": "Started M.S. at Korea University", "detail": "Brain and Cognitive Engineering · PRML Lab · Supervised by Prof. Seong-Whan Lee." },
+    { "date": "Aug. 2025", "category": "Career", "title": "Joined PRML Lab as Graduate Researcher", "detail": "Korea University · Prof. Seong-Whan Lee." },
+    { "date": "Jul. 2025", "category": "Activity", "title": "Selected for LG Aimers 7th Cohort", "detail": "Worked on food and beverage demand prediction." },
+    { "date": "Nov. 2024", "category": "Award", "title": "Teamwork Award — Capstone Design Competition", "detail": "Department of Computer and Artificial Intelligence Engineering, Pukyong National University." },
+    { "date": "Oct. 2024", "category": "Paper", "title": "Poster at IEEE CW 2024", "detail": "Classification of Non-Invasive EEG Signals During Motor Imagery Tasks Using a Large Language Model. Kofu, Japan." },
+    { "date": "Feb. 2024", "category": "Award", "title": "Proud Student Award", "detail": "College of Information Technology and Convergence, Pukyong National University." },
+    { "date": "Nov. 2023", "category": "Paper", "title": "Poster at Society for Neuroscience (SfN 2023)", "detail": "Decoding electroencephalographic signals for inner speech words in brain-computer interface. Washington, DC, USA." },
+    { "date": "Sep. 2023", "category": "Award", "title": "Best Presentation Award — KSEE Annual Conference", "detail": "Korean Society for Engineering Education · Jeju, South Korea." },
+    { "date": "Mar. 2023", "category": "Career", "title": "Joined BEX-AI Lab as Undergraduate Researcher", "detail": "Pukyong National University · Prof. Hoon-Hee Kim." }
+  ],
+  competencies: [
+    {
+      title: 'Neural Signal Processing',
+      description: 'End-to-end preprocessing and feature extraction from multichannel EEG/ECoG recordings — filtering, artifact rejection, spatial filtering, and spectral analysis.',
+      methods: ['CSP', 'ICA', 'Band-power', 'wPLI / PLV', 'MNE-Python', 'EEGLAB'],
+    },
+    {
+      title: 'Self-Supervised Representation Learning',
+      description: 'Designing pretraining objectives for neural time-series: latent prediction with EMA teacher networks, contrastive alignment, and masked reconstruction.',
+      methods: ['Latent Predictive Modeling', 'Contrastive Learning', 'EMA Teacher', 'Masked Autoencoding', 'PyTorch'],
+    },
+    {
+      title: 'Brain–Language Decoding',
+      description: 'Aligning neural signals with language semantics — semantic embedding prediction, cross-modal retrieval, and instruction-conditioned EEG-to-text decoding.',
+      methods: ['Semantic Alignment', 'LoRA Fine-tuning', 'Llama / HuggingFace', 'Cross-modal Retrieval', 'PEFT'],
+    },
+    {
+      title: 'BCI System Design',
+      description: 'Building classification pipelines for imagined speech, motor imagery, and inner speech decoding tasks using classical and deep learning approaches.',
+      methods: ['Imagined Speech Decoding', 'Motor Imagery', 'Echo State Networks', 'LDA / SVM', 'Inner Speech EEG'],
+    },
+  ],
 };

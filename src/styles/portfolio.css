@@ -185,6 +185,62 @@ footer p { font-size: .76rem; color: var(--muted); letter-spacing: .01em; }
 @media (prefers-reduced-motion: reduce) {
   [data-hidden] { opacity: 1 !important; transform: none !important; transition: none !important; }
 }
+
+/* Dark mode toggle button */
+.theme-toggle { display: inline-flex; align-items: center; justify-content: center; width: 32px; height: 32px; flex-shrink: 0; border: 1px solid var(--rule); border-radius: 6px; background: transparent; color: var(--muted); cursor: pointer; transition: color .15s, border-color .15s, background .15s; }
+.theme-toggle:hover { color: var(--ink); border-color: var(--accent); background: var(--accent-soft); }
+
+/* Dark mode token overrides */
+[data-theme="dark"] {
+  --ink: #f1f5f9;
+  --accent: #818cf8;
+  --accent-soft: #1e1b4b;
+  --muted: #94a3b8;
+  --rule: #1e293b;
+  --wash: #1e293b;
+  --paper: #0c1322;
+}
+[data-theme="dark"] body { background: var(--paper); }
+[data-theme="dark"] .site-nav { background: rgba(12,19,34,0.88); border-bottom-color: rgba(30,41,59,0.8); }
+[data-theme="dark"] .project-card { background: #111827; border-color: #1e293b; }
+[data-theme="dark"] .project-card:hover { border-color: #4338ca; box-shadow: 0 4px 20px rgba(79,70,229,.18); }
+[data-theme="dark"] .skills-group li { background: #111827; border-color: #1e293b; color: var(--ink); }
+[data-theme="dark"] .skills-group li:hover { border-color: #4338ca; box-shadow: 0 1px 6px rgba(129,140,248,.15); }
+[data-theme="dark"] .menu-toggle { background: #111827; border-color: #1e293b; color: var(--accent); }
+[data-theme="dark"] .patent-entry { background: #111827; }
+
+/* News section */
+#news { margin-top: 78px; }
+.news-heading { display: flex; align-items: center; justify-content: space-between; gap: 20px; flex-wrap: wrap; padding-bottom: 16px; border-bottom: 2px solid var(--rule); margin-bottom: 0; }
+.news-heading h2 { padding-bottom: 0; border-bottom: 0; margin-bottom: 0; font-size: clamp(1.6rem, 2.3vw, 1.9rem); font-weight: 800; letter-spacing: -.035em; }
+.news-filters { display: flex; gap: 6px; flex-wrap: wrap; }
+.news-filter-btn { padding: 4px 13px; border: 1px solid var(--rule); border-radius: 20px; background: transparent; color: var(--muted); font-size: .74rem; font-weight: 500; cursor: pointer; transition: color .15s, border-color .15s, background .15s; font-family: inherit; }
+.news-filter-btn:hover { color: var(--ink); border-color: #a5b4fc; }
+.news-filter-btn.active { color: var(--accent); border-color: var(--accent); background: var(--accent-soft); }
+.news-list { margin-top: 0; }
+.news-item { display: grid; grid-template-columns: 100px 78px minmax(0,1fr); gap: 0 20px; padding: 16px 0; border-bottom: 1px solid var(--rule); align-items: baseline; }
+.news-date { font-size: .78rem; color: var(--muted); white-space: nowrap; }
+.news-tag { display: inline-block; font-size: .67rem; font-weight: 700; letter-spacing: .04em; padding: 2px 9px; border-radius: 20px; white-space: nowrap; font-family: inherit; }
+.cat-paper   { color: #4338ca; background: #eef2ff; }
+.cat-award   { color: #92400e; background: #fef3c7; }
+.cat-career  { color: #065f46; background: #d1fae5; }
+.cat-edu     { color: #1e40af; background: #dbeafe; }
+.cat-activity { color: #6b21a8; background: #f3e8ff; }
+.news-title { font-size: .9rem; font-weight: 600; color: var(--ink); line-height: 1.5; }
+.news-detail { font-size: .81rem; color: var(--muted); margin-top: 2px; line-height: 1.75; }
+[data-theme="dark"] .cat-paper    { color: #a5b4fc; background: #1e1b4b; }
+[data-theme="dark"] .cat-award    { color: #fcd34d; background: #1c1008; }
+[data-theme="dark"] .cat-career   { color: #6ee7b7; background: #052e16; }
+[data-theme="dark"] .cat-edu      { color: #93c5fd; background: #0f2e5e; }
+[data-theme="dark"] .cat-activity { color: #d8b4fe; background: #2e1065; }
+.news-more-btn { display: block; margin: 16px auto 0; padding: 7px 22px; border: 1px solid var(--rule); border-radius: 20px; background: transparent; color: var(--muted); font-size: .78rem; font-weight: 500; cursor: pointer; font-family: inherit; transition: color .15s, border-color .15s; }
+.news-more-btn:hover { color: var(--accent); border-color: var(--accent); }
+@media (max-width: 680px) {
+  #news { margin-top: 52px; }
+  .news-heading { gap: 14px; }
+  .news-item { grid-template-columns: minmax(0,1fr); gap: 5px; padding: 14px 0; }
+  .news-filters { gap: 5px; }
+}
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 
 @media (max-width: 1100px) and (min-width: 681px) {
@@ -262,4 +318,84 @@ footer p { font-size: .76rem; color: var(--muted); letter-spacing: .01em; }
 }
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after { scroll-behavior: auto !important; transition: none !important; }
+}
+
+/* ── About area wrapper ── */
+.about-area { display: contents; }
+.about-area > section,
+.about-area > header { scroll-margin-top: var(--section-offset, 100px); }
+
+/* ── Research Competencies ── */
+.competencies-section { margin-top: 56px; }
+.competencies-section h2 {
+  font-size: 1.6rem; font-weight: 800; letter-spacing: -.03em;
+  padding-bottom: 16px; border-bottom: 2px solid var(--rule); margin-bottom: 28px;
+}
+.competencies-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.competency-card {
+  background: var(--wash); border: 1px solid var(--rule); border-radius: 10px;
+  padding: 20px 22px; transition: box-shadow .2s, border-color .2s;
+}
+.competency-card:hover { box-shadow: 0 4px 20px rgba(79,70,229,.08); border-color: #c7d2fe; }
+.competency-card h3 {
+  font-size: .95rem; font-weight: 700; color: var(--ink);
+  margin-bottom: 8px; letter-spacing: -.01em;
+}
+.competency-card > p { font-size: .88rem; color: var(--muted); line-height: 1.75; margin-bottom: 14px; }
+.competency-methods {
+  display: flex; flex-wrap: wrap; gap: 6px; list-style: none; padding: 0; margin: 0;
+}
+.competency-methods li {
+  font-size: .78rem; font-weight: 600; padding: 3px 10px;
+  border: 1px solid var(--rule); border-radius: 20px;
+  color: var(--accent); background: var(--accent-soft);
+  transition: background .15s;
+}
+
+/* ── GitHub Activity ── */
+.github-activity-section { margin-top: 56px; }
+.github-activity-section h2 {
+  font-size: 1.6rem; font-weight: 800; letter-spacing: -.03em;
+  padding-bottom: 16px; border-bottom: 2px solid var(--rule); margin-bottom: 28px;
+}
+.github-card {
+  border: 1px solid var(--rule); border-radius: 10px; overflow: hidden; background: var(--paper);
+}
+.github-card-header {
+  padding: 14px 20px; border-bottom: 1px solid var(--rule); background: var(--wash);
+}
+.github-card-link {
+  display: inline-flex; align-items: center; gap: 8px; font-weight: 600;
+  font-size: .9rem; color: var(--ink); text-decoration: none;
+}
+.github-card-link:hover { color: var(--accent); text-decoration: none; }
+.github-card-icon { width: 20px; height: 20px; opacity: .7; }
+.github-card-arrow { color: var(--muted); font-size: .85rem; }
+.github-chart-wrap { padding: 20px 20px 16px; }
+.github-chart { width: 100%; height: auto; display: block; border-radius: 4px; }
+
+/* dark mode: invert the green contribution chart to an indigo palette */
+[data-theme="dark"] .github-chart {
+  filter: invert(1) hue-rotate(180deg) saturate(1.4) brightness(.9);
+}
+
+/* ── Dark mode: competencies + github ── */
+[data-theme="dark"] .competency-card {
+  background: #111827; border-color: #1e293b;
+}
+[data-theme="dark"] .competency-card:hover { border-color: #312e81; }
+[data-theme="dark"] .competency-methods li { background: #1e1b4b; border-color: #312e81; }
+[data-theme="dark"] .github-card { background: #111827; border-color: #1e293b; }
+[data-theme="dark"] .github-card-header { background: #0c1322; border-color: #1e293b; }
+[data-theme="dark"] .github-card-link { color: #f1f5f9; }
+
+/* ── Responsive ── */
+@media (max-width: 680px) {
+  .competencies-grid { grid-template-columns: minmax(0, 1fr); }
+  .competency-card { padding: 16px 18px; }
+  .github-chart-wrap { padding: 14px 14px 12px; }
 }

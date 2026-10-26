@@ -1,8 +1,10 @@
-import { useEffect } from 'react';
-import { About, Activities, Awards, Patents, Presentations, ProjectCard, Publications, Timeline } from './components/Content';
+import { useEffect, useState } from 'react';
+import { About, Activities, Awards, Competencies, GitHubCard, Patents, Presentations, ProjectCard, Publications, Timeline, TechnicalSkills } from './components/Content';
+import { News } from './components/News';
 import { ProjectPage } from './components/ProjectPage';
 import { portfolio } from './data/portfolio';
 import { sections, useSectionNavigation } from './hooks/useSectionNavigation';
+import { Moon, Sun } from 'lucide-react';
 
 export default function App({ projectId }: { projectId?: string } = {}) {
   const project = portfolio.projects.find(project => project.id === projectId);
@@ -11,6 +13,15 @@ export default function App({ projectId }: { projectId?: string } = {}) {
 
 function HomePage() {
   const navigation = useSectionNavigation();
+
+  const [dark, setDark] = useState(() => {
+    try { return localStorage.getItem('theme') === 'dark'; } catch { return false; }
+  });
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+    try { localStorage.setItem('theme', dark ? 'dark' : 'light'); } catch { /* ignore */ }
+  }, [dark]);
 
   useEffect(() => {
     const targets = document.querySelectorAll<HTMLElement>('section, .mj-paper, .project-card, .research-interest');
@@ -41,12 +52,20 @@ function HomePage() {
       <a className="site-name" href="#about" onClick={event => navigation.navigate(event, 'about')}>Myeongju Cho</a>
       <div className="mobile-menu"><span>Myeongju Cho</span><button className="menu-toggle" type="button" aria-expanded={navigation.menuOpen} aria-controls="section-navigation" onClick={() => navigation.setMenuOpen(open => !open)}>{navigation.menuOpen ? 'Close menu' : 'Menu'}</button></div>
       <nav id="section-navigation" className="section-nav" aria-label="Page sections">{sections.map(([id, label]) => <a key={id} href={`#${id}`} aria-current={navigation.active === id ? 'location' : undefined} onClick={event => navigation.navigate(event, id)}>{label}</a>)}</nav>
+      <button className="theme-toggle" onClick={() => setDark(d => !d)} aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'}>{dark ? <Sun size={15} /> : <Moon size={15} />}</button>
     </div>
-    <About /><Publications /><Presentations />
+    <div className="about-area">
+      <About />
+      <Competencies />
+      <News />
+      <GitHubCard />
+      <Timeline id="experience" title="Research Experience" entries={portfolio.experience} />
+      <Timeline id="education" title="Education" entries={portfolio.education} />
+      <TechnicalSkills />
+    </div>
+    <Publications /><Presentations />
     <section id="projects"><div className="projects-heading"><h2>Projects</h2><p>Research and applied work, from neural signals to language.</p></div><div className="project-grid">{portfolio.projects.map(project => <ProjectCard key={project.id} project={project} navigate={navigation.navigate} />)}</div></section>
     <Activities /><Patents /><Awards />
-    <Timeline id="education" title="Education" entries={portfolio.education} />
-    <Timeline id="experience" title="Research Experience" entries={portfolio.experience} />
     <footer><p>Copyright ©Myeongju Cho</p></footer>
   </main>;
 }
