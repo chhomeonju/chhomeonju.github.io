@@ -1,6 +1,12 @@
 import type { PortfolioData } from '../types';
 
 export const portfolio: PortfolioData = {
+  technicalSkills: [
+    { category: 'Programming & Scientific Computing', skills: ['Python', 'NumPy', 'SciPy', 'pandas'] },
+    { category: 'Deep Learning & Language Models', skills: ['PyTorch', 'OpenAI API', 'BERT', 'KoBART'] },
+    { category: 'Neural Signal Processing', skills: ['MNE', 'MNE-Connectivity', 'CSP', 'ICA', 'Time–frequency analysis'] },
+    { category: 'Machine Learning & Evaluation', skills: ['scikit-learn', 'LDA / SVM', 'Grouped cross-validation', 'SRM alignment'] },
+  ],
   researchInterests: [
     {
       title: 'Neural Representation Learning',

@@ -25,6 +25,11 @@ export function About() {
     <div className="research-interests-list">{portfolio.researchInterests.map(interest =>
       <div className="research-interest" key={interest.title}><h3>{interest.title}</h3><p>{interest.description}</p></div>
     )}</div>
+  </div><div className="technical-skills" aria-labelledby="technical-skills-heading">
+    <h2 id="technical-skills-heading">Technical Skills</h2>
+    <dl className="skills-list">{portfolio.technicalSkills.map(group =>
+      <div className="skills-group" key={group.category}><dt>{group.category}</dt><dd><ul>{group.skills.map(skill => <li key={skill}>{skill}</li>)}</ul></dd></div>
+    )}</dl>
   </div></header>;
 }
 

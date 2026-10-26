@@ -9,3 +9,5 @@ Technology badges reflect source dependencies and imports rather than a common a
 - **BLPM, CELP, NeuralSpeech, NeuroDecoder**: no language/framework badges are inferred. Existing descriptions and research methods remain visible until matching source code is supplied.
 
 Projects without a representative image use a text-only layout. Approach steps remain available in the optional research details.
+
+The About section's Technical Skills groups reuse the verified dependencies and methods above. BERT and KoBART come from ESSENTI's existing description. The website's own React/TypeScript implementation is not used as evidence of the portfolio owner's skills.

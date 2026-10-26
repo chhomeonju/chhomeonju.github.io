@@ -18,6 +18,7 @@ export interface Award { date: string; title: string; organization: string; deta
 export interface TimelineEntry { title: string; description: string; date: string }
 export interface PortfolioData {
   researchInterests: { title: string; description: string }[];
+  technicalSkills: { category: string; skills: string[] }[];
   publications: Publication[]; presentations: Presentation[]; projects: Project[];
   awards: Award[]; education: TimelineEntry[]; experience: TimelineEntry[];
 }
