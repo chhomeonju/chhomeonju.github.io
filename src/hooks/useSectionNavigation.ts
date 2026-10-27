@@ -17,14 +17,14 @@ export function useSectionNavigation() {
     const nav = navRef.current;
     const main = mainRef.current;
     if (!nav || !main) return;
-    const lastSection = main.querySelector<HTMLElement>('#awards');
-    const footer = main.querySelector('footer');
     let disposed = false;
     let interacted = false;
     let scrollFrame = 0;
     let alignmentFrame = 0;
     let offset = 80;
     function measure() {
+      const lastSection = main!.querySelector<HTMLElement>('#awards');
+      const footer = main!.querySelector('footer');
       if (!nav || !main || !lastSection || !footer) return;
       offset = Math.ceil(nav.getBoundingClientRect().height) + 20;
       document.documentElement.style.setProperty('--section-offset', `${offset}px`);
@@ -71,7 +71,6 @@ export function useSectionNavigation() {
     }
     const observer = new ResizeObserver(() => { measure(); updateActive(); });
     observer.observe(nav);
-    if (lastSection) observer.observe(lastSection);
     window.addEventListener('scroll', scroll, { passive: true });
     window.addEventListener('resize', resize);
     window.addEventListener('hashchange', hashChanged);

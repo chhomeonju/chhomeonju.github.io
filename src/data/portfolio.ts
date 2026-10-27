@@ -12,7 +12,7 @@ export const portfolio: PortfolioData = {
   patents: [
     {
       title: 'Apparatus and Method for Learning Universal Electroencephalogram Representations Based on Functional Connectivity Reconstruction',
-      inventors: ['Seong-Whan Lee', 'Myeong-Ju Cho', 'Hana Jo', 'Seo-Hyun Lee'],
+      inventors: ['Seong-Whan Lee', 'Myeong-Ju Cho', 'Hana Jo', 'and Seo-Hyun Lee'],
       date: 'Jan. 2026', number: '10-2026-0018395', status: 'Korean patent application · Filed',
     },
   ],
@@ -439,8 +439,8 @@ export const portfolio: PortfolioData = {
     {
       "date": "Nov. 2024",
       "title": "Teamwork Award",
-      "organization": "Capstone Design Competition",
-      "detail": "Department of Computer and Artificial Intelligence Engineering, Pukyong National University"
+      "organization": "2024 Capstone Design Competition, Department of Computer Engineering and Artificial Intelligence, Pukyong National University",
+      "detail": null
     },
     {
       "date": "Feb. 2024",
@@ -451,8 +451,8 @@ export const portfolio: PortfolioData = {
     {
       "date": "Sep. 2023",
       "title": "Best Presentation Award",
-      "organization": "2023 KSEE Annual Conference",
-      "detail": "Korean Society for Engineering Education"
+      "organization": "2023 KSEE Annual Conference · Korean Society for Engineering Education",
+      "detail": null
     }
   ],
   "education": [

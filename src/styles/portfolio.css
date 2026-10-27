@@ -215,10 +215,10 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
 
 /* Each major section has a clear beginning, without decorative heading rules. */
 .homepage > section,
-.about-area > section { margin-top: 78px; padding: 0; }
+.about-area > section { margin-top: 92px; padding: 0; }
 .homepage > section > h2,
 .about-area > section > h2,
-.projects-heading h2 { font-family: var(--font-display); font-size: clamp(1.6rem, 2.3vw, 1.9rem); font-weight: 800; letter-spacing: -.035em; margin-bottom: 28px; padding-bottom: 16px; border-bottom: 2px solid var(--rule); }
+.projects-heading h2 { font-family: var(--font-display); font-size: clamp(1.6rem, 2.3vw, 1.9rem); font-weight: 800; letter-spacing: -.035em; margin-bottom: 28px; padding-bottom: 0; border-bottom: none; }
 .projects-heading { margin-bottom: 0; }
 .projects-heading h2 { margin-bottom: 10px; }
 .projects-heading p, .activities-intro { font-size: .9rem; line-height: 1.8; color: var(--muted); max-width: 75ch; }
@@ -294,6 +294,14 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
 .entries .mj-small { color: var(--muted); font-size: .76rem; }
 #awards .papertitle { color: var(--accent); }
 #awards .entries td > p:not(.mj-status) { color: var(--muted); font-size: .88rem; }
+.award-list { list-style: none; padding: 0; margin: 0; }
+.award-entry { display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 0 28px; padding: 22px 0; border-top: 1px solid var(--rule); align-items: baseline; }
+.award-entry:first-child { border-top: 1px solid var(--rule); }
+.award-entry:last-child { border-bottom: 1px solid var(--rule); }
+.award-date { font-size: .78rem; color: #64748b; line-height: 1.5; padding-top: 2px; }
+.award-title { font-size: 1.04rem; font-weight: 700; color: var(--ink); line-height: 1.5; margin: 0 0 5px; }
+.award-org { font-size: .9rem; color: #1e293b; margin: 0 0 3px; }
+.award-detail { font-size: .84rem; color: #475569; margin: 0; }
 .activity-list { margin-top: 24px; }
 .activity-entry { display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 36px; padding: 23px 0; border-bottom: 1px solid var(--rule); }
 .activity-entry:first-child { border-top: 1px solid var(--rule); }
@@ -445,7 +453,7 @@ footer p { font-size: .76rem; color: var(--muted); letter-spacing: .01em; }
   .skills-group { grid-template-columns: minmax(0, 1fr); gap: 12px; padding: 15px 0; }
   .skills-group li { font-size: .82rem; padding: 8px 10px; }
   .homepage > section,
-  .about-area > section { margin-top: 52px; }
+  .about-area > section { margin-top: 64px; }
   .homepage > section > h2,
   .about-area > section > h2,
   .projects-heading h2 { font-size: 2rem; margin-bottom: 22px; }

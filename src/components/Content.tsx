@@ -201,7 +201,23 @@ export function ProjectCard({ project: p, navigate }: { project: Project; naviga
 }
 
 export function Awards() {
-  return <section id="awards"><h2>Honors and Awards</h2><table className="entries"><tbody>{portfolio.awards.map(award => <tr key={award.title}><td><p className="mj-status">{award.date}</p><span className="papertitle">{award.title}</span><p>{award.organization}</p>{award.detail && <p className="mj-small">{award.detail}</p>}</td></tr>)}</tbody></table></section>;
+  return (
+    <section id="awards">
+      <h2>Honors and Awards</h2>
+      <ul className="award-list">
+        {portfolio.awards.map(award => (
+          <li key={award.title} className="award-entry">
+            <span className="award-date">{award.date}</span>
+            <div className="award-body">
+              <p className="award-title">{award.title}</p>
+              <p className="award-org">{award.organization}</p>
+              {award.detail && <p className="award-detail">{award.detail}</p>}
+            </div>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
 }
 
 export function Timeline({ id, title, entries }: { id: string; title: string; entries: TimelineEntry[] }) {
