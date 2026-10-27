@@ -10,7 +10,7 @@ const phases = [
     num: '01',
     label: 'DECODING',
     sublabel: 'Neural Decoding',
-    period: '2023 – 2025',
+    period: '2023 – 2026',
     question: 'What can brain activity reveal about cognition?',
     entries: [
       { year: '2023', projectId: 'project-neurodecoder', desc: 'Imagined speech decoding for alternative communication' },
