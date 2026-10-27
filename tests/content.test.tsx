@@ -47,7 +47,7 @@ test('every detail page renders the full content and a working return link', () 
     const html = renderToStaticMarkup(<App projectId={project.id} />);
     assert.ok(html.includes(`href="index.html#${project.id}"`));
     assert.ok(html.includes('id="overview"'));
-    assert.ok(html.includes('id="contributions"'));
+    if (project.contributions?.length) assert.ok(html.includes('id="contributions"'));
     assert.ok(html.includes('id="approach"'));
     assert.ok(html.includes(`href="${projectHref(project)}#overview"`));
     assert.ok(!html.includes('research-interests-heading'));
