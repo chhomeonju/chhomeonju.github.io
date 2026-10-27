@@ -1,11 +1,12 @@
 import type { Project } from '../types';
 import { portfolio } from '../data/portfolio';
 import { ExternalLink, projectHref } from './Content';
+import { CustomCursor } from './CustomCursor';
 
 export function ProjectPage({ project: p }: { project: Project }) {
   const index = portfolio.projects.findIndex(project => project.id === p.id);
   const next = portfolio.projects[(index + 1) % portfolio.projects.length];
-  return <main className="project-page">
+  return <><CustomCursor /><main className="project-page">
     <nav className="project-page-nav" aria-label="Project navigation"><a className="detail-site-name" href="index.html#about">Myeongju Cho</a><a href={`index.html#${p.id}`}>← All projects</a></nav>
     <header className="project-page-hero">
       <div className="project-page-meta"><span>{p.category}</span>{p.date && <span>{p.date}</span>}</div>
@@ -34,5 +35,6 @@ export function ProjectPage({ project: p }: { project: Project }) {
     </div>
     <div className="project-page-bottom"><a href={`index.html#${p.id}`}>← Back to projects</a><a href={projectHref(next)}>Next project: {next.name} →</a></div>
     <footer><p>Copyright ©Myeongju Cho</p></footer>
-  </main>;
+  </main></>;
+
 }
