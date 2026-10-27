@@ -419,7 +419,7 @@ export const portfolio: PortfolioData = {
         "Grouped CSP classification",
         "Exploratory connectivity analysis"
       ],
-      "code": "https://github.com/Myeongjuuu/Inner_Speech_Decoding",
+      "code": "https://github.com/Myeongjuuu/EEG_Inner_Speech_FC",
       "relatedPublication": null,
       "stack": [
         "Python",
