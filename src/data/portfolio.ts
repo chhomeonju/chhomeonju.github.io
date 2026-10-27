@@ -341,42 +341,59 @@ export const portfolio: PortfolioData = {
       "name": "NeuroDecoder",
       "subtitle": "Imagined Speech for Alternative Communication",
       "date": "Mar. 2023 – Nov. 2023",
-      "teaser": "Imagined speech decoding research for alternative communication in individuals with aphasia.",
+      "teaser": "EEG-based imagined speech decoding for individuals with aphasia, using self-collected data, filter-bank feature extraction, and an Echo State Network classifier.",
       "tags": [
         "EEG",
         "Imagined Speech",
-        "Decoding"
+        "BCI",
+        "Echo State Network"
       ],
-      "goal": "Explore imagined speech BCI for alternative communication.",
-      "contributionLabel": "My contribution",
-      "contributions": [
-        "Designed and conducted imagined-speech EEG experiments.",
-        "Performed EEG signal preprocessing.",
-        "Extracted signal features for alternative communication and BCI development."
-      ],
+      "goal": "Speech is fundamental to communication, but conditions such as aphasia or motor disabilities can make verbal expression impossible. This project investigated whether EEG signals recorded during imagined speech — words mentally rehearsed but never spoken — could be decoded to identify the intended word, with the goal of enabling alternative communication for individuals who cannot speak.\n\nWe recruited 40 participants, collected 16-channel EEG in a shielded soundproof booth using OpenBCI, and built a complete decoding pipeline: frequency-domain feature extraction with a filter bank and CSP, followed by classification with an Echo State Network (ESN).",
       "steps": [
-        "Experiment design",
-        "EEG preprocessing",
-        "Feature extraction"
+        "Experiment design — recruited 40 healthy adults (aged 20–30); 10 imagined-speech target words; recorded in a shielded soundproof booth with a 16-ch OpenBCI Cyton system",
+        "Data — self-collected dataset (40 subjects, 10 words) supplemented by the Nieto et al. (2022) public inner-speech EEG dataset for pipeline validation",
+        "Preprocessing — MNE-Python: detrending to remove baseline drift → min-max normalization per channel",
+        "Feature extraction — filter bank decomposition (0–60 Hz, 30 bands at 2 Hz intervals); Fisher Ratio computed per band per channel to identify discriminative frequency–channel pairs; Common Spatial Pattern (CSP) to maximize spatial variance between word classes and rest",
+        "Decoding — Echo State Network (ESN) with a reservoir-based recurrent structure and online learning; winner-take-all readout trained over 10 word classes"
       ],
-      "code": null,
+      "code": "https://github.com/Myeongjuuu/Inner_Speech_Decoding",
       "relatedPublication": null,
-      "stack": [],
+      "stack": ["Python", "MNE-Python", "NumPy", "SciPy", "scikit-learn", "Matplotlib"],
       "image": null,
-      experimentalExperience: [
+      "datasetExperience": [
         {
-                "title": "Equipment",
-                "description": "OpenBCI, 16 EEG channels."
-        },
-        {
-                "title": "Experimental design & recording",
-                "description": "Designed and conducted imagined-speech EEG data-collection experiments."
-        },
-        {
-                "title": "Signal processing",
-                "description": "Preprocessed EEG recordings and extracted features for BCI experiments."
+          "title": "External dataset",
+          "description": "Due to noise from electronic devices in the recording environment, the self-collected data showed limited quality. A public inner-speech EEG dataset was incorporated to validate the pipeline on cleaner, higher-density recordings.",
+          "datasets": [
+            {
+              "name": "Nieto et al. (2022) — \"Thinking out loud\"",
+              "task": "Inner speech recognition · 136-ch EEG (128 EEG + 8 EXG), downsampled to 256 Hz, task vs. rest epochs (sub-01)"
+            }
+          ],
+          "source": {
+            "href": "https://doi.org/10.1038/s41597-022-01147-2",
+            "label": "Nieto et al., Scientific Data 2022"
+          }
         }
-]
+      ],
+      "experimentalExperience": [
+        {
+          "title": "Equipment",
+          "description": "16-channel OpenBCI Cyton board; shielded soundproof booth to minimize environmental noise."
+        },
+        {
+          "title": "Participants",
+          "description": "40 healthy adults (aged 20–30), recruited personally; none showed indications of psychiatric disorders."
+        },
+        {
+          "title": "Experimental protocol",
+          "description": "10 target words (8 device-control words + 2 condition words). Each trial: 60 s initial rest → repeated blocks of black dot (remain calm) → word display (recognition) → blue dot (imagined speech). 10 repetitions per word class."
+        },
+        {
+          "title": "Signal processing",
+          "description": "MNE-Python pipeline: detrending → min-max normalization → 30-band filter bank (0–60 Hz, 2 Hz steps) → Fisher Ratio feature selection → CSP spatial filtering → Echo State Network decoding with online learning."
+        }
+      ]
     },
     {
       "id": "project-inner-speech",

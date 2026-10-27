@@ -8,8 +8,8 @@ export interface Presentation {
 }
 export interface Project {
   id: string; category: string; name: string; subtitle: string; date: string;
-  teaser: string; tags: string[]; goal: string; contributionLabel: string;
-  contributions: string[]; steps: string[]; code: string | null;
+  teaser: string; tags: string[]; goal: string; contributionLabel?: string;
+  contributions?: string[]; steps: string[]; code: string | null;
   relatedPublication: { title: string; venue: string; url?: string } | null;
   datasetExperience?: {
     title: string; description: string; source: ResourceLink;
