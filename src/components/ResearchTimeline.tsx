@@ -1,17 +1,24 @@
+import { useState } from 'react';
 import { portfolio } from '../data/portfolio';
 
 function projectHrefById(id: string) {
   return `projects/${id.replace(/^project-/, '')}.html`;
 }
 
-const directions = [
+const phases = [
   {
     num: '01',
     label: 'DECODING',
     sublabel: 'Neural Decoding',
     period: '2021 – 2023',
     question: 'What can brain activity reveal about cognition?',
-    projectIds: ['project-neurodecoder', 'project-inner-speech', 'project-neuralspeech', 'project-eeg-llm', 'project-tada'],
+    entries: [
+      { year: '2021', projectId: 'project-neurodecoder', desc: 'Motor imagery BCI decoder' },
+      { year: '2022', projectId: 'project-inner-speech',  desc: 'Inner speech decoding from EEG' },
+      { year: '2022', projectId: 'project-neuralspeech',  desc: 'ECoG-to-text speech synthesis' },
+      { year: '2023', projectId: 'project-eeg-llm',       desc: 'LLM-augmented neural decoding' },
+      { year: '2023', projectId: 'project-tada',          desc: 'Multi-scale temporal fusion for ECoG' },
+    ],
     keywords: ['Imagined Speech', 'Motor Imagery', 'Inner Speech', 'ECoG-to-Text'],
     future: false,
   },
@@ -20,8 +27,11 @@ const directions = [
     label: 'REPRESENTATION',
     sublabel: 'Neural Representation Learning',
     period: '2023 – 2024',
-    question: 'Can we learn generalizable representations that bridge brain activity and language to enable unified decoding across cognitive tasks?',
-    projectIds: ['project-celp', 'project-blpm'],
+    question: 'Can we learn generalizable representations that bridge brain activity and language to enable unified decoding?',
+    entries: [
+      { year: '2023', projectId: 'project-celp', desc: 'Contrastive EEG–language pre-training' },
+      { year: '2024', projectId: 'project-blpm', desc: 'Brain–language pre-training model' },
+    ],
     keywords: ['EEG Foundation Models', 'Self-Supervised Learning', 'Brain–Language Alignment', 'Multi-task Decoding'],
     future: false,
   },
@@ -31,7 +41,7 @@ const directions = [
     sublabel: 'Neural Encoding',
     period: 'Upcoming',
     question: 'How does the brain encode cognitive information?',
-    projectIds: [],
+    entries: [],
     keywords: ['Neural Encoding', 'Stimulus-Evoked Responses', 'fMRI', 'Individual Variability'],
     future: true,
   },
@@ -41,79 +51,79 @@ export function ResearchTimeline() {
   const projectMap = Object.fromEntries(
     portfolio.projects.map(p => [p.id, p])
   );
+  const [open, setOpen] = useState<Record<string, boolean>>({ '01': true, '02': true, '03': true });
+
+  const toggle = (num: string) =>
+    setOpen(prev => ({ ...prev, [num]: !prev[num] }));
 
   return (
     <section className="research-timeline" aria-labelledby="rt-heading">
       <h2 id="rt-heading">Research Trajectory</h2>
 
-      {/* Fundamental scientific question — centered */}
-      <div className="rt-spine-wrap">
-        <div className="rt-spine-line" aria-hidden="true" />
+      {/* Fundamental question */}
+      <div className="rt-nf-hub">
+        <span className="rt-hub-eyebrow">Fundamental Scientific Question</span>
+        <p className="rt-hub-question">How does the human brain give rise to cognition?</p>
+        <span className="rt-hub-goal">→ Understanding Human Cognition</span>
+      </div>
 
-        <div className="rt-spine-hub-row">
-          <div className="rt-spine-hub">
-            <span className="rt-hub-eyebrow">Fundamental Scientific Question</span>
-            <p className="rt-hub-question">How does the human brain give rise to cognition?</p>
-            <span className="rt-hub-goal">→ Understanding Human Cognition</span>
-          </div>
-          <div className="rt-spine-node rt-spine-node--hub" aria-hidden="true" />
-        </div>
+      {/* Phase feed */}
+      <div className="rt-nf-feed">
+        {phases.map(ph => (
+          <div key={ph.num} className={`rt-nf-phase${ph.future ? ' rt-nf-phase--future' : ''}`}>
+            {/* Phase header row — clickable to collapse */}
+            <button
+              className="rt-nf-phase-hd"
+              onClick={() => toggle(ph.num)}
+              aria-expanded={open[ph.num]}
+              aria-controls={`rt-nf-body-${ph.num}`}
+            >
+              <span className="rt-dir-num">{ph.num}</span>
+              <span className="rt-dir-label">{ph.label}</span>
+              <span className="rt-dir-sublabel">{ph.sublabel}</span>
+              <span className="rt-nf-period">{ph.period}</span>
+              {ph.future && <span className="rt-upcoming-badge">Upcoming</span>}
+              <span className="rt-nf-chevron" aria-hidden="true">{open[ph.num] ? '▾' : '▸'}</span>
+            </button>
 
-        {/* Three research directions, alternating left / right */}
-        {directions.map((dir, i) => {
-          const isRight = i % 2 === 1;
-          const card = (
-            <div className={`rt-spine-card${dir.future ? ' rt-spine-card--future' : ''}`}>
-              <div className="rt-dir-top">
-                <span className="rt-dir-num">{dir.num}</span>
-                <span className="rt-dir-label">{dir.label}</span>
-                {dir.future && <span className="rt-upcoming-badge">Upcoming</span>}
-              </div>
-              <p className="rt-dir-sublabel">{dir.sublabel}</p>
-              <span className="rt-spine-period">{dir.period}</span>
-              <p className="rt-dir-question">{dir.question}</p>
+            {/* Phase body */}
+            {open[ph.num] && (
+              <div id={`rt-nf-body-${ph.num}`} className="rt-nf-body">
+                <p className="rt-nf-question">{ph.question}</p>
 
-              {dir.projectIds.length > 0 && (
-                <div className="rt-projects">
-                  {dir.projectIds.map(id => {
-                    const p = projectMap[id];
-                    if (!p) return null;
-                    return (
-                      <a key={id} href={projectHrefById(id)} className="rt-project-chip">
-                        {p.name}
-                      </a>
-                    );
-                  })}
+                {ph.entries.length > 0 && (
+                  <div className="rt-nf-entries">
+                    {ph.entries.map((e, i) => {
+                      const p = projectMap[e.projectId];
+                      return (
+                        <div key={i} className="rt-nf-entry">
+                          <span className="rt-nf-year">{e.year}</span>
+                          <span className="rt-nf-tick" aria-hidden="true" />
+                          <div className="rt-nf-entry-content">
+                            {p ? (
+                              <a href={projectHrefById(e.projectId)} className="rt-nf-proj-link">
+                                {p.name}
+                              </a>
+                            ) : (
+                              <span className="rt-nf-proj-name">{e.projectId}</span>
+                            )}
+                            <span className="rt-nf-desc">{e.desc}</span>
+                          </div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+
+                <div className="rt-keywords">
+                  {ph.keywords.map(kw => (
+                    <span key={kw} className="rt-keyword">{kw}</span>
+                  ))}
                 </div>
-              )}
-
-              <div className="rt-keywords">
-                {dir.keywords.map(kw => (
-                  <span key={kw} className="rt-keyword">{kw}</span>
-                ))}
               </div>
-            </div>
-          );
-
-          return (
-            <div key={dir.num} className={`rt-spine-row${isRight ? ' rt-spine-row--right' : ''}`}>
-              <div className="rt-spine-side rt-spine-side--left">
-                {!isRight && card}
-              </div>
-              <div className="rt-spine-mid" aria-hidden="true">
-                <div className={`rt-spine-node${dir.future ? ' rt-spine-node--future' : ''}`} />
-              </div>
-              <div className="rt-spine-side rt-spine-side--right">
-                {isRight && card}
-              </div>
-            </div>
-          );
-        })}
-
-        {/* Bottom node */}
-        <div className="rt-spine-bottom-row" aria-hidden="true">
-          <div className="rt-spine-node rt-spine-node--bottom" />
-        </div>
+            )}
+          </div>
+        ))}
       </div>
 
       {/* Research Roadmap */}
