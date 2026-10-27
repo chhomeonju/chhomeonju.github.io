@@ -561,10 +561,39 @@ footer p { font-size: .76rem; color: var(--muted); letter-spacing: .01em; }
    Research Timeline — center spine layout
    ───────────────────────────────────────────────────────────── */
 .research-timeline { padding: 64px 0 48px; }
-.research-timeline > h2 {
+
+/* heading + layout toggle row */
+.rt-header-row {
+  display: flex; align-items: center;
+  justify-content: space-between;
+  gap: 16px; margin-bottom: 28px;
+}
+.rt-header-row h2 {
   font-size: clamp(1.15rem, 1.05rem + .5vw, 1.45rem);
   font-weight: 700; letter-spacing: -.01em;
-  color: var(--ink); margin-bottom: 28px;
+  color: var(--ink); margin: 0;
+}
+.rt-layout-tabs {
+  display: flex;
+  border: 1.5px solid var(--rule);
+  border-radius: 8px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+.rt-layout-tab {
+  font-size: .72rem; font-weight: 700;
+  letter-spacing: .04em; text-transform: uppercase;
+  padding: 5px 14px;
+  background: none; border: none; cursor: pointer;
+  color: var(--muted);
+  transition: background .14s, color .14s;
+}
+.rt-layout-tab + .rt-layout-tab {
+  border-left: 1.5px solid var(--rule);
+}
+.rt-layout-tab--active {
+  background: var(--accent-soft);
+  color: var(--accent);
 }
 
 /* ── Shared text styles ── */
