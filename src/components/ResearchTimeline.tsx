@@ -9,6 +9,7 @@ const directions = [
     num: '01',
     label: 'DECODING',
     sublabel: 'Neural Decoding',
+    period: '2021 – 2023',
     question: 'What can brain activity reveal about cognition?',
     projectIds: ['project-neurodecoder', 'project-inner-speech', 'project-neuralspeech', 'project-eeg-llm', 'project-tada'],
     keywords: ['Imagined Speech', 'Motor Imagery', 'Inner Speech', 'ECoG-to-Text'],
@@ -18,6 +19,7 @@ const directions = [
     num: '02',
     label: 'REPRESENTATION',
     sublabel: 'Neural Representation Learning',
+    period: '2023 – 2024',
     question: 'Can we learn generalizable representations that bridge brain activity and language to enable unified decoding across cognitive tasks?',
     projectIds: ['project-celp', 'project-blpm'],
     keywords: ['EEG Foundation Models', 'Self-Supervised Learning', 'Brain–Language Alignment', 'Multi-task Decoding'],
@@ -27,6 +29,7 @@ const directions = [
     num: '03',
     label: 'ENCODING',
     sublabel: 'Neural Encoding',
+    period: 'Upcoming',
     question: 'How does the brain encode cognitive information?',
     projectIds: [],
     keywords: ['Neural Encoding', 'Stimulus-Evoked Responses', 'fMRI', 'Individual Variability'],
@@ -43,78 +46,77 @@ export function ResearchTimeline() {
     <section className="research-timeline" aria-labelledby="rt-heading">
       <h2 id="rt-heading">Research Trajectory</h2>
 
-      {/* Fundamental scientific question */}
-      <div className="rt-hub">
-        <span className="rt-hub-eyebrow">Fundamental Scientific Question</span>
-        <p className="rt-hub-question">
-          How does the human brain give rise to cognition?
-        </p>
-        <span className="rt-hub-goal">→ Understanding Human Cognition</span>
-      </div>
+      {/* Fundamental scientific question — centered */}
+      <div className="rt-spine-wrap">
+        <div className="rt-spine-line" aria-hidden="true" />
 
-      {/* Branch to 3 directions */}
-      <div className="rt-branch" aria-hidden="true">
-        <svg viewBox="0 0 300 44" preserveAspectRatio="none" className="rt-branch-svg">
-          <line x1="150" y1="0"  x2="150" y2="20" />
-          <line x1="50"  y1="20" x2="250" y2="20" />
-          <line x1="50"  y1="20" x2="50"  y2="44" />
-          <line x1="150" y1="20" x2="150" y2="44" />
-          <line x1="250" y1="20" x2="250" y2="44" />
-        </svg>
-        <p className="rt-branch-label">approached through three complementary research directions</p>
-      </div>
-
-      {/* Three directions */}
-      <div className="rt-directions">
-        {directions.map(dir => (
-          <div key={dir.num} className={`rt-dir${dir.future ? ' rt-dir--future' : ''}`}>
-            <div className="rt-dir-top">
-              <span className="rt-dir-num">{dir.num}</span>
-              <span className="rt-dir-label">{dir.label}</span>
-            </div>
-            <p className="rt-dir-sublabel">{dir.sublabel}</p>
-            <p className="rt-dir-question">{dir.question}</p>
-
-            {dir.projectIds.length > 0 && (
-              <div className="rt-projects">
-                {dir.projectIds.map(id => {
-                  const p = projectMap[id];
-                  if (!p) return null;
-                  return (
-                    <a key={id} href={projectHrefById(id)} className="rt-project-chip">
-                      {p.name}
-                    </a>
-                  );
-                })}
-              </div>
-            )}
-
-            {dir.future && (
-              <p className="rt-upcoming">Upcoming research direction</p>
-            )}
-
-            <div className="rt-keywords">
-              {dir.keywords.map(kw => (
-                <span key={kw} className="rt-keyword">{kw}</span>
-              ))}
-            </div>
+        <div className="rt-spine-hub-row">
+          <div className="rt-spine-hub">
+            <span className="rt-hub-eyebrow">Fundamental Scientific Question</span>
+            <p className="rt-hub-question">How does the human brain give rise to cognition?</p>
+            <span className="rt-hub-goal">→ Understanding Human Cognition</span>
           </div>
-        ))}
+          <div className="rt-spine-node rt-spine-node--hub" aria-hidden="true" />
+        </div>
+
+        {/* Three research directions, alternating left / right */}
+        {directions.map((dir, i) => {
+          const isRight = i % 2 === 1;
+          const card = (
+            <div className={`rt-spine-card${dir.future ? ' rt-spine-card--future' : ''}`}>
+              <div className="rt-dir-top">
+                <span className="rt-dir-num">{dir.num}</span>
+                <span className="rt-dir-label">{dir.label}</span>
+                {dir.future && <span className="rt-upcoming-badge">Upcoming</span>}
+              </div>
+              <p className="rt-dir-sublabel">{dir.sublabel}</p>
+              <span className="rt-spine-period">{dir.period}</span>
+              <p className="rt-dir-question">{dir.question}</p>
+
+              {dir.projectIds.length > 0 && (
+                <div className="rt-projects">
+                  {dir.projectIds.map(id => {
+                    const p = projectMap[id];
+                    if (!p) return null;
+                    return (
+                      <a key={id} href={projectHrefById(id)} className="rt-project-chip">
+                        {p.name}
+                      </a>
+                    );
+                  })}
+                </div>
+              )}
+
+              <div className="rt-keywords">
+                {dir.keywords.map(kw => (
+                  <span key={kw} className="rt-keyword">{kw}</span>
+                ))}
+              </div>
+            </div>
+          );
+
+          return (
+            <div key={dir.num} className={`rt-spine-row${isRight ? ' rt-spine-row--right' : ''}`}>
+              <div className="rt-spine-side rt-spine-side--left">
+                {!isRight && card}
+              </div>
+              <div className="rt-spine-mid" aria-hidden="true">
+                <div className={`rt-spine-node${dir.future ? ' rt-spine-node--future' : ''}`} />
+              </div>
+              <div className="rt-spine-side rt-spine-side--right">
+                {isRight && card}
+              </div>
+            </div>
+          );
+        })}
+
+        {/* Bottom node */}
+        <div className="rt-spine-bottom-row" aria-hidden="true">
+          <div className="rt-spine-node rt-spine-node--bottom" />
+        </div>
       </div>
 
-      {/* Converging connector to future */}
-      <div className="rt-toward" aria-hidden="true">
-        <svg viewBox="0 0 300 40" preserveAspectRatio="none" className="rt-branch-svg">
-          <line x1="50"  y1="0"  x2="50"  y2="20" />
-          <line x1="150" y1="0"  x2="150" y2="20" />
-          <line x1="250" y1="0"  x2="250" y2="20" />
-          <line x1="50"  y1="20" x2="250" y2="20" />
-          <line x1="150" y1="20" x2="150" y2="40" />
-        </svg>
-        <p className="rt-branch-label">toward</p>
-      </div>
-
-      {/* Future research directions */}
+      {/* Research Roadmap */}
       <div className="rt-future-section">
         <p className="rt-future-eyebrow">Research Roadmap</p>
         <div className="rt-future-grid">
