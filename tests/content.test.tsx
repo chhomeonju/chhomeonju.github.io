@@ -51,7 +51,7 @@ test('every detail page renders the full content and a working return link', () 
     assert.ok(html.includes('id="approach"'));
     assert.ok(html.includes(`href="${projectHref(project)}#overview"`));
     assert.ok(!html.includes('research-interests-heading'));
-    for (const contribution of project.contributions) assert.ok(html.includes(contribution.replaceAll('&', '&amp;')));
+    for (const contribution of (project.contributions ?? [])) assert.ok(html.includes(contribution.replaceAll('&', '&amp;')));
   }
 });
 

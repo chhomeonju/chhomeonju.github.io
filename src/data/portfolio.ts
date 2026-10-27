@@ -296,26 +296,29 @@ export const portfolio: PortfolioData = {
     {
       "id": "project-eeg-llm",
       "category": "EEG × language models",
-      "name": "EEG–LLM",
-      "subtitle": "Motor Imagery Classification with an LLM",
+      "name": "Fine-tuned LLM for EEG",
+      "subtitle": "Motor Imagery Classification with a Fine-tuned LLM",
       "date": "Apr. 2024 – Oct. 2024",
-      "teaser": "A fine-tuned large language model for non-invasive EEG motor imagery task classification.",
+      "teaser": "A fine-tuned large language model for non-invasive EEG motor imagery task classification, converting neural signals into structured text representations for LLM input.",
       "tags": [
         "EEG",
         "Motor Imagery",
         "LLM fine-tuning"
       ],
-      "goal": "Develop and evaluate an LLM-based approach to EEG motor imagery classification.",
+      "goal": "Large language models have shown remarkable pattern recognition capabilities across diverse domains beyond natural language. This project investigates whether an LLM — originally trained on text — can be adapted to classify EEG signals recorded during motor imagery tasks, where participants imagine performing movements (e.g., left hand, right hand, feet, tongue) without physically moving.\n\nThe key challenge is the modality gap: EEG signals are continuous multichannel time series, not text. We addressed this by designing a structured conversion pipeline that serialises extracted EEG features into a JSON-formatted text representation that the LLM can process. An OpenAI language model was then fine-tuned on these structured representations to predict the intended motor imagery class.",
       "contributionLabel": "My contribution",
       "contributions": [
-        "Performed neural signal preprocessing and designed model inputs.",
-        "Developed and evaluated a fine-tuned language model.",
-        "Conducted experiments and performance analysis."
+        "Performed EEG signal preprocessing and designed structured LLM-compatible feature representations.",
+        "Developed and fine-tuned a large language model for motor imagery classification.",
+        "Conducted experiments and evaluated performance against traditional ML baselines."
       ],
       "steps": [
-        "EEG preprocessing",
-        "LLM input design",
-        "Classification & evaluation"
+        "Dataset — publicly available motor imagery EEG benchmark dataset; 4-class paradigm (left hand, right hand, feet, tongue) recorded across multiple subjects",
+        "Preprocessing — MNE-Python: bandpass filtering (0.5–40 Hz), epoch extraction, baseline correction, artifact rejection, and per-channel normalisation",
+        "Feature extraction — frequency-band power (delta, theta, alpha, beta, gamma) computed per channel per epoch using Welch's method; features selected by discriminability across motor imagery classes",
+        "Input design — structured JSON conversion: each EEG epoch encoded as a dictionary mapping (channel, frequency band) → power value, serialised into a text string compatible with OpenAI fine-tuning format",
+        "Fine-tuning — OpenAI API fine-tuning on the JSON-formatted EEG feature data with class labels; hyperparameter search over learning rate and number of epochs",
+        "Evaluation — classification accuracy on held-out test data; comparison against traditional ML baselines (SVM, LDA) to quantify the benefit of LLM-based classification"
       ],
       "code": "https://github.com/Myeongjuuu/EEG-LLM",
       "relatedPublication": {
@@ -331,8 +334,8 @@ export const portfolio: PortfolioData = {
       ],
       "image": {
         "src": "assets/images/ieee-cw-2024-framework.png",
-        "alt": "EEG–LLM: feature extraction, JSON conversion, and LLM fine-tuning pipeline",
-        "caption": "EEG–LLM · IEEE CW 2024"
+        "alt": "Fine-tuned LLM for EEG: feature extraction, JSON conversion, and LLM fine-tuning pipeline",
+        "caption": "Fine-tuned LLM for EEG · IEEE CW 2024"
       }
     },
     {

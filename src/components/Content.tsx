@@ -191,7 +191,7 @@ export function ProjectCard({ project: p, navigate }: { project: Project; naviga
     <div className={`project-preview${p.image ? ' has-image' : ''}`}>
       <div className="project-copy">
         <p className="project-teaser">{p.teaser}</p>
-        <ul className="project-highlights" aria-label={p.contributionLabel}>{p.contributions.slice(0, 2).map(text => <li key={text}><ProjectContribution text={text} emphasis={projectEmphasis[p.id]} /></li>)}</ul>
+        {p.contributions && <ul className="project-highlights" aria-label={p.contributionLabel}>{p.contributions.slice(0, 2).map(text => <li key={text}><ProjectContribution text={text} emphasis={projectEmphasis[p.id]} /></li>)}</ul>}
         {p.stack.length > 0 && <p className="project-stack"><span className="project-stack-label">Stack</span>{p.stack.join(' · ')}</p>}
       </div>
       {p.image && <figure className="project-visual project-visual-image"><img src={p.image.src} alt={p.image.alt} loading="lazy" />{p.image.caption && <figcaption>{p.image.caption}</figcaption>}</figure>}
