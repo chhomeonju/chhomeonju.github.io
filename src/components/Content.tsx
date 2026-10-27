@@ -144,7 +144,7 @@ export function Presentations() {
 }
 
 export function Patents() {
-  return <section id="patents"><h2>Patents</h2><div className="patent-list">{portfolio.patents.map(patent =>
+  return <section id="patents"><h2>Patent</h2><div className="patent-list">{portfolio.patents.map(patent =>
     <article className="patent-entry" key={patent.number}>
       <div className="patent-meta"><span>{patent.status}</span><span>{patent.date}</span></div>
       <h3>{patent.title}</h3>

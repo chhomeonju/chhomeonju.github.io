@@ -4,7 +4,7 @@ import type { Navigate } from '../components/Content';
 export const sections = [
   ['about', 'About'], ['publications', 'Publications'],
   ['presentations', 'Presentations'], ['projects', 'Projects'], ['activities', 'Activities'],
-  ['patents', 'Patents'], ['awards', 'Awards'],
+  ['patents', 'Patent'], ['awards', 'Awards'],
 ] as const;
 
 export function useSectionNavigation() {
