@@ -90,7 +90,7 @@ function HomePage() {
     {view === 'home' ? (
       <>
         <HeroBrain />
-        <div className="about-area">
+        <div id="about" className="about-area">
           <ResearchTimeline />
         </div>
         <footer><p>Copyright ©Myeongju Cho</p></footer>
