@@ -210,7 +210,10 @@ export function HeroBrain() {
         <p className="hero-role">M.S. Researcher at Korea University · PRML Lab</p>
         <p className="hero-vision">Understanding Human Cognition<br />Through AI</p>
         <p className="hero-subjects">Brain–Computer Interfaces, Neural Decoding,<br />and EEG–Language Foundation Models</p>
-        <a className="hero-explore" href="#about">Explore my research <span aria-hidden="true">↓</span></a>
+        <a className="hero-explore" href="#about" onClick={e => {
+          e.preventDefault();
+          document.getElementById('about')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+        }}>Explore my research <span aria-hidden="true">↓</span></a>
       </div>
       <div className="hero-bottom">
         <span className="hero-place">
