@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
-import { About, Activities, Awards, Competencies, FutureDirections, GitHubCard, Patents, Presentations, ProjectCard, Publications, ResearchTrajectory, Timeline, TechnicalSkills } from './components/Content';
+import { About, Activities, Awards, Competencies, GitHubCard, Patents, Presentations, ProjectCard, Publications, Timeline, TechnicalSkills } from './components/Content';
+import { ResearchTimeline } from './components/ResearchTimeline';
 import { HeroBrain } from './components/HeroBrain';
 import { ProjectsSection } from './components/ProjectsSection';
 import { CustomCursor } from './components/CustomCursor';
@@ -90,8 +91,7 @@ function HomePage() {
       <>
         <HeroBrain />
         <div className="about-area">
-          <ResearchTrajectory />
-          <FutureDirections />
+          <ResearchTimeline />
         </div>
         <footer><p>Copyright ©Myeongju Cho</p></footer>
       </>

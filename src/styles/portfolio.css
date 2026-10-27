@@ -556,3 +556,216 @@ footer p { font-size: .76rem; color: var(--muted); letter-spacing: .01em; }
   .competency-card { padding: 16px 18px; }
   .github-chart-wrap { padding: 14px 14px 12px; }
 }
+
+/* ─────────────────────────────────────────────────────────────
+   Research Timeline
+   ───────────────────────────────────────────────────────────── */
+.research-timeline { padding: 64px 0 48px; }
+.research-timeline > h2 {
+  font-size: clamp(1.15rem, 1.05rem + .5vw, 1.45rem);
+  font-weight: 700; letter-spacing: -.01em;
+  color: var(--ink); margin-bottom: 28px;
+}
+
+/* ── Hub card ── */
+.rt-hub {
+  border: 1.5px solid var(--rule);
+  border-top: 3px solid var(--accent);
+  border-radius: 12px;
+  padding: 28px 32px 24px;
+  background: var(--wash);
+  display: flex; flex-direction: column; gap: 10px;
+}
+.rt-hub-eyebrow {
+  font-size: .67rem; font-weight: 800;
+  text-transform: uppercase; letter-spacing: .14em;
+  color: var(--accent);
+}
+.rt-hub-question {
+  font-size: clamp(1.1rem, 1rem + .45vw, 1.42rem);
+  font-weight: 700; line-height: 1.35;
+  color: var(--ink);
+}
+.rt-hub-goal {
+  font-size: .8rem; font-weight: 600;
+  color: var(--accent);
+  letter-spacing: .02em;
+}
+
+/* ── Branch SVG connector ── */
+.rt-branch {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 6px;
+  padding: 0;
+  margin: 0;
+}
+.rt-branch-svg {
+  display: block;
+  width: 100%;
+  height: 44px;
+}
+.rt-branch-svg line {
+  stroke: var(--rule);
+  stroke-width: 1.5;
+  vector-effect: non-scaling-stroke;
+}
+.rt-branch-label {
+  font-size: .68rem; color: var(--muted);
+  font-style: italic; text-align: center;
+  margin: 0 0 6px;
+}
+
+/* ── Three directions grid ── */
+.rt-directions {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+
+/* ── Direction card ── */
+.rt-dir {
+  border: 1.5px solid var(--rule);
+  border-radius: 14px;
+  padding: 26px 22px 22px;
+  background: var(--paper);
+  display: flex; flex-direction: column;
+  transition: border-color .18s, box-shadow .18s;
+}
+.rt-dir:not(.rt-dir--future):hover {
+  border-color: var(--accent);
+  box-shadow: 0 2px 16px 0 rgba(79,70,229,.07);
+}
+.rt-dir--future { border-style: dashed; }
+
+/* number + label row */
+.rt-dir-top {
+  display: flex; align-items: center; gap: 8px;
+  margin-bottom: 8px;
+}
+.rt-dir-num {
+  font-size: .66rem; font-weight: 800;
+  letter-spacing: .1em; color: var(--accent); opacity: .5;
+}
+.rt-dir-label {
+  font-size: .66rem; font-weight: 800;
+  text-transform: uppercase; letter-spacing: .1em;
+  color: var(--accent);
+}
+
+/* type name */
+.rt-dir-sublabel {
+  font-size: .82rem; font-weight: 700;
+  color: var(--ink); margin-bottom: 10px; line-height: 1.3;
+}
+
+/* research question */
+.rt-dir-question {
+  font-size: .83rem; color: var(--muted);
+  line-height: 1.65; margin-bottom: 18px; flex: 1;
+}
+
+/* project chips */
+.rt-projects {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  margin-bottom: 14px;
+}
+.rt-project-chip {
+  font-size: .75rem; font-weight: 700;
+  color: var(--ink);
+  padding: 4px 10px;
+  border: 1.5px solid var(--rule);
+  border-radius: 6px;
+  background: var(--wash);
+  text-decoration: none;
+  transition: border-color .14s, background .14s;
+}
+.rt-project-chip:hover {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  text-decoration: none;
+}
+
+/* upcoming */
+.rt-upcoming {
+  font-size: .72rem; color: var(--muted);
+  font-style: italic; margin-bottom: 12px;
+}
+
+/* keyword tags */
+.rt-keywords {
+  display: flex; flex-wrap: wrap; gap: 5px;
+  margin-top: auto;
+}
+.rt-keyword {
+  font-size: .67rem; color: var(--muted);
+  border: 1px solid var(--rule);
+  border-radius: 100px;
+  padding: 2px 8px;
+}
+
+/* ── Converging connector + future section ── */
+.rt-toward {
+  display: flex; flex-direction: column;
+  align-items: center; gap: 6px;
+  padding: 0; margin: 0;
+}
+.rt-future-section {
+  border: 1.5px solid var(--rule);
+  border-radius: 12px;
+  padding: 28px 28px 24px;
+  background: var(--wash);
+}
+.rt-future-eyebrow {
+  font-size: .67rem; font-weight: 800;
+  text-transform: uppercase; letter-spacing: .14em;
+  color: var(--accent); margin-bottom: 18px;
+}
+.rt-future-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+}
+.rt-future-card {
+  border: 1.5px solid var(--rule);
+  border-radius: 10px;
+  padding: 20px 20px 18px;
+  background: var(--paper);
+  display: flex; flex-direction: column; gap: 8px;
+}
+.rt-future-dir-label {
+  font-size: .68rem; font-weight: 700;
+  text-transform: uppercase; letter-spacing: .1em;
+  color: var(--muted);
+}
+.rt-future-title {
+  font-size: .92rem; font-weight: 700;
+  color: var(--ink); line-height: 1.3;
+}
+.rt-future-desc {
+  font-size: .8rem; color: var(--muted);
+  line-height: 1.7; flex: 1;
+}
+
+/* ── Dark mode ── */
+[data-theme="dark"] .rt-hub { background: #0f172a; border-color: #312e81; }
+[data-theme="dark"] .rt-hub-question { color: #f1f5f9; }
+[data-theme="dark"] .rt-future-section { background: #0f172a; border-color: #1e293b; }
+[data-theme="dark"] .rt-future-card { background: #111827; border-color: #1e293b; }
+[data-theme="dark"] .rt-future-title { color: #f1f5f9; }
+[data-theme="dark"] .rt-dir { background: #111827; border-color: #1e293b; }
+[data-theme="dark"] .rt-dir:not(.rt-dir--future):hover { border-color: #6366f1; box-shadow: none; }
+[data-theme="dark"] .rt-dir-sublabel { color: #f1f5f9; }
+[data-theme="dark"] .rt-project-chip { background: #0f172a; border-color: #1e293b; color: #f1f5f9; }
+[data-theme="dark"] .rt-project-chip:hover { border-color: #6366f1; background: #1e1b4b; }
+
+/* ── Responsive ── */
+@media (max-width: 860px) {
+  .rt-directions { grid-template-columns: minmax(0, 1fr); }
+  .rt-future-grid { grid-template-columns: minmax(0, 1fr); }
+  .rt-branch, .rt-toward { display: none; }
+}
+@media (max-width: 600px) {
+  .rt-hub { padding: 22px 20px 20px; }
+  .rt-dir { padding: 20px 16px 18px; }
+  .rt-future-section { padding: 22px 20px 20px; }
+}
