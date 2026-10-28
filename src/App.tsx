@@ -34,6 +34,15 @@ function HomePage() {
   }, [dark]);
 
   useEffect(() => {
+    if (view === 'home') {
+      document.body.classList.add('home-view');
+    } else {
+      document.body.classList.remove('home-view');
+    }
+    return () => { document.body.classList.remove('home-view'); };
+  }, [view]);
+
+  useEffect(() => {
     const targets = document.querySelectorAll<HTMLElement>('section, .mj-paper, .project-card, .research-interest');
     const obs = new IntersectionObserver(
       entries => entries.forEach(entry => {
@@ -88,10 +97,7 @@ function HomePage() {
     </div>
 
     {view === 'home' ? (
-      <>
-        <HeroBrain onExplore={e => goSection(e, 'about')} />
-        <footer><p>Copyright ©Myeongju Cho</p></footer>
-      </>
+      <HeroBrain onExplore={e => goSection(e, 'about')} />
     ) : (
       <>
         <div className="about-area">
