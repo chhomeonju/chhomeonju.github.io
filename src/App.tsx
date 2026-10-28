@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { About, Activities, Awards, Competencies, GitHubCard, Patents, Presentations, ProjectCard, Publications, Timeline, TechnicalSkills } from './components/Content';
+import { About, Activities, Awards, Competencies, GitHubCard, Patents, Presentations, ProjectCard, Publications, ResearchInterests, Timeline, TechnicalSkills } from './components/Content';
 import { ResearchTimeline } from './components/ResearchTimeline';
 import { HeroBrain } from './components/HeroBrain';
 import { FloatingTOC } from './components/FloatingTOC';
@@ -103,6 +103,7 @@ function HomePage() {
       <><FloatingTOC />
         <div className="about-area">
           <About />
+          <ResearchInterests />
           <ResearchTimeline />
           <Competencies />
           <News />
