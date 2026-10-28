@@ -37,7 +37,7 @@ export function About() {
     <section id="about">
       <div className="intro">
         <aside className="profile-sidebar" aria-label="Profile and contact">
-          <div className="portrait" role="img" aria-label="Profile photo to be added">Profile photo<br /><small>To be added</small></div>
+          <img className="portrait" src="assets/images/profile.webp" alt="Myeongju Cho" />
           <ul className="profile-links">
             <li className="profile-location"><MapPin size={17} aria-hidden="true" /><span>Seoul, Republic of Korea</span></li>
             <li><a href="mailto:mj_cho@korea.ac.kr"><Mail size={17} aria-hidden="true" /><span>Email</span></a></li>

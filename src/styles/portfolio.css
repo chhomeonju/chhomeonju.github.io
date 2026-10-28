@@ -177,7 +177,7 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
 #about { padding: 0; }
 .intro { display: grid; grid-template-columns: 200px minmax(0, 1fr); gap: clamp(50px, 7vw, 106px); padding: 64px 0 56px; align-items: center; }
 .profile-sidebar { align-self: start; }
-.portrait { width: 170px; aspect-ratio: 4 / 5; display: flex; flex-direction: column; align-items: center; justify-content: center; background: var(--wash); color: var(--muted); border-radius: 3px; font-size: .82rem; }
+.portrait { width: 170px; aspect-ratio: 4 / 5; display: block; background: var(--wash); border-radius: 3px; object-fit: cover; object-position: center top; }
 .portrait small { font-size: .7rem; }
 .profile-links { padding: 0; margin: 19px 0 0; list-style: none; display: flex; flex-direction: column; gap: 2px; }
 .profile-links li, .profile-links a { font-size: .78rem; color: var(--muted); }
