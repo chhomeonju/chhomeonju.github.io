@@ -186,12 +186,12 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
 .profile-links a:hover { color: var(--accent); }
 .profile-links svg, .profile-links img { width: 16px; height: 16px; flex: 0 0 16px; }
 .profile-links svg { color: #6b7e95; }
-.bio { max-width: 85ch; min-width: 0; }
+.bio { max-width: 75ch; min-width: 0; }
 .name { font-family: var(--font-display); font-size: clamp(2.9rem, 4.5vw, 4.1rem); font-weight: 800; letter-spacing: -.055em; margin-bottom: 18px; line-height: 1.06; }
 .intro-role { margin: 0 0 24px; }
 .researcher-position { display: block; color: var(--accent); font-size: .82rem; font-weight: 700; letter-spacing: .02em; margin-bottom: 12px; text-transform: uppercase; }
 .research-vision { display: block; font-size: clamp(1.05rem, 1.6vw, 1.22rem); line-height: 1.6; color: var(--ink); max-width: 40ch; font-weight: 500; }
-.bio > p { font-size: .97rem; color: var(--ink); line-height: 1.85; max-width: 85ch; }
+.bio > p { font-size: .97rem; color: var(--ink); line-height: 1.85; max-width: 75ch; }
 .bio > p:last-child a { text-decoration: underline; text-decoration-color: #c0cfe3; text-underline-offset: 4px; }
 
 /* Restore the owner's preferred research panel and grouped skill badges. */
