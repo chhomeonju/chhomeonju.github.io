@@ -192,7 +192,7 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
 .researcher-position { display: block; color: var(--accent); font-size: .82rem; font-weight: 700; letter-spacing: .02em; margin-bottom: 12px; text-transform: uppercase; }
 .research-vision { display: block; font-size: clamp(1.05rem, 1.6vw, 1.22rem); line-height: 1.6; color: var(--ink); max-width: 40ch; font-weight: 500; }
 .bio > p { font-size: .97rem; color: var(--ink); line-height: 1.85; max-width: 75ch; }
-.bio > p:first-of-type { margin-bottom: 1.8em; }
+.bio > p:nth-of-type(2) { margin-bottom: 1.8em; }
 .bio > p:last-child a { text-decoration: underline; text-decoration-color: #c0cfe3; text-underline-offset: 4px; }
 
 /* Restore the owner's preferred research panel and grouped skill badges. */
