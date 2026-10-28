@@ -52,6 +52,8 @@ export function About() {
             <span className="research-vision">Understanding Human Cognition Through AI</span>
           </p>
           <p>I am a master's student in Brain and Cognitive Engineering at Korea University, working in the <ExternalLink href="http://pr.korea.ac.kr/">Pattern Recognition and Machine Learning (PRML) Lab</ExternalLink>, supervised by Prof. Seong-Whan Lee.</p>
+          <p>My primary research interest lies in <strong>characterizing and modeling the neural mechanisms underlying human cognition and behavior</strong> through neural data analysis and computational modeling. To this end, I have investigated how information is represented in neural activity using neuroimaging and neurophysiological modalities, including <strong>EEG, ECoG, and fMRI</strong>, with a particular focus on <strong>neural decoding, representation learning, and brain–language modeling</strong>.</p>
+          <p>Moving forward, I aim to leverage <strong>advanced AI modeling approaches, particularly multimodal foundation models</strong>, to investigate <strong>brain encoding and brain network dynamics</strong>, with the goal of better understanding and predicting neural responses underlying human cognition and behavior.</p>
         </div>
       </div>
       <div className="research-interests" aria-labelledby="research-interests-heading">
