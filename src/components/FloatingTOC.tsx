@@ -12,7 +12,6 @@ const TOC_ITEMS = [
 
 export function FloatingTOC() {
   const [active, setActive] = useState<string>('');
-  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
     const observers: IntersectionObserver[] = [];
@@ -37,13 +36,8 @@ export function FloatingTOC() {
       observers.push(obs);
     });
 
-    const onScroll = () => setVisible(window.scrollY > 120);
-    window.addEventListener('scroll', onScroll, { passive: true });
-    onScroll();
-
     return () => {
       observers.forEach(o => o.disconnect());
-      window.removeEventListener('scroll', onScroll);
     };
   }, []);
 
@@ -53,7 +47,7 @@ export function FloatingTOC() {
   };
 
   return (
-    <nav className={`floating-toc${visible ? ' floating-toc--visible' : ''}`} aria-label="Page sections">
+    <nav className="floating-toc floating-toc--visible" aria-label="Page sections">
       <ul>
         {TOC_ITEMS.map(({ id, label }) => (
           <li key={id}>
