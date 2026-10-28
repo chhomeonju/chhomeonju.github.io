@@ -17,7 +17,7 @@ const INTERESTS = [
   },
   {
     title: 'Brain Encoding & Network Dynamics',
-    description: 'Leveraging multimodal foundation models and generative approaches to understand how distributed neural activity and functional connectivity give rise to human cognition and behavior.',
+    description: 'To understand how neural responses and dynamic interactions across brain networks give rise to human cognition, emotion, and behavior through advanced computational modeling approaches, such as multimodal and multi-scale foundation models.',
     tag: 'Network', tagClass: 'ri-tag--net',
   },
 ];
@@ -57,7 +57,8 @@ void main(){
  vec3 n=normalize(shadingNormal);
  float light=max(dot(n,normalize(vec3(-.6,.9,1.4))),0.);
  float side=max(dot(n,normalize(vec3(.7,-.1,.5))),0.);
- vec3 base=vec3(.85,.89,.94)*(.63+.31*light+.10*side);
+ /* Darker base gives activations more visual contrast */
+ vec3 base=vec3(.72,.76,.82)*(.60+.28*light+.12*side);
  float activity; vec3 highlight;
  if(mode<0.5){
   /* Decoding: Broca, Wernicke, SMA — left hemisphere speech areas */
@@ -100,42 +101,45 @@ void main(){
   /* SMN: bilateral S1/M1 strip + pre-SMA (superior convexity) */
   float gSmn=max(max(glow(vec3(-.30,.30,.18),.15),glow(vec3(.30,.30,.18),.15)),
                  glow(vec3(.00,.40,.14),.15));
-  /* VIS: V1/V2 mesial + MT/hMT+ + inferior temporal / lateral occipital cortex.
-     Spread across z to be visible at multiple rotation angles. */
-  float gVis=max(max(glow(vec3(.00,-.22,.02),.18),glow(vec3(.00,-.18,-.04),.17)),
-                 max(glow(vec3(-.44,-.06,.04),.17),glow(vec3(.44,-.06,.04),.17)));
+  /* VIS: lateral occipital-temporal cortex (MT/hMT+, LO) on surface (y>0) +
+     inferior temporal (z low) — positive y puts these on the visible lateral surface */
+  float gVis=max(max(glow(vec3(-.44,.10,.08),.18),glow(vec3(.44,.10,.08),.18)),
+                 max(glow(vec3(-.38,.08,-.06),.17),glow(vec3(.38,.08,-.06),.17)));
 
-  /* ── Stimulus-specific weights (match STIMULI[] array in JS) ── */
+  /* ── Stimulus-specific weights (match STIMULI[] array in JS: 0=Emotional, 1=Speech, 2=Visual) ── */
   float wDmn,wFpnl,wFpnr,wLan,wSan,wSmn,wVis;
   if(stimIdx<0.5){
-   /* Visual: VIS>FPNr>SAN>FPNl>SMN>DMN>LAN */
-   wVis=1.0;wSan=0.72;wFpnr=0.78;wFpnl=0.38;wSmn=0.18;wDmn=0.10;wLan=0.07;
+   /* Emotional: SAN>DMN>FPNl>FPNr>LAN>SMN>VIS */
+   wSan=1.0;wDmn=0.92;wFpnl=0.65;wFpnr=0.28;wLan=0.18;wSmn=0.10;wVis=0.08;
   }else if(stimIdx<1.5){
    /* Speech: LAN>FPNl>DMN>SMN>FPNr>SAN>VIS */
    wLan=1.0;wFpnl=0.88;wDmn=0.65;wSmn=0.42;wSan=0.20;wFpnr=0.22;wVis=0.06;
   }else{
-   /* Emotional: SAN>DMN>FPNl>FPNr>LAN>SMN>VIS */
-   wSan=1.0;wDmn=0.92;wFpnl=0.65;wFpnr=0.28;wLan=0.18;wSmn=0.10;wVis=0.08;
+   /* Visual: VIS>FPNr>SAN>FPNl>SMN>DMN>LAN */
+   wVis=1.0;wSan=0.72;wFpnr=0.78;wFpnl=0.38;wSmn=0.18;wDmn=0.10;wLan=0.07;
   }
 
   /* ── Weighted sum → total regional activation ── */
   float aNet=gDmn*wDmn+gFpnl*wFpnl+gFpnr*wFpnr+gLan*wLan+gSan*wSan+gSmn*wSmn+gVis*wVis;
-  activity=clamp(aNet*pulse,0.,1.);
+  /* Amplify: 2.5× boost + power curve → even moderate glow produces vivid color
+     pow(x,0.60): 0.1→0.22, 0.2→0.38, 0.4→0.60, 0.6→0.74, 1.0→1.0 */
+  float aBoosted=clamp(aNet*2.5,0.,1.);
+  activity=pow(aBoosted,.60)*pulse;
 
   /* ── Blend network colors proportionally (spatially coherent hue map) ── */
-  vec3 cDmn=vec3(.90,.22,.27);  /* DMN: red */
-  vec3 cFpn=vec3(.29,.56,.85);  /* FPN: blue */
-  vec3 cLan=vec3(.97,.49,.00);  /* LAN: orange */
-  vec3 cSan=vec3(.96,.60,.22);  /* SAN: amber */
-  vec3 cSmn=vec3(.18,.62,.31);  /* SMN: green */
-  vec3 cVis=vec3(.55,.22,.92);  /* VIS: purple */
+  vec3 cDmn=vec3(1.00,.18,.22);  /* DMN: vivid red */
+  vec3 cFpn=vec3(.22,.60,.98);   /* FPN: vivid blue */
+  vec3 cLan=vec3(1.00,.52,.00);  /* LAN: vivid orange */
+  vec3 cSan=vec3(1.00,.65,.12);  /* SAN: vivid amber */
+  vec3 cSmn=vec3(.12,.82,.38);   /* SMN: vivid green */
+  vec3 cVis=vec3(.68,.18,1.00);  /* VIS: vivid purple */
   float tw=max(aNet,.001);
   highlight=( cDmn*(gDmn*wDmn)+cFpn*(gFpnl*wFpnl+gFpnr*wFpnr)+
               cLan*(gLan*wLan)+cSan*(gSan*wSan)+
               cSmn*(gSmn*wSmn)+cVis*(gVis*wVis) )/tw;
-  highlight*=(.70+.30*light);
+  highlight*=(.80+.20*light);
  }
- gl_FragColor=vec4(mix(base,highlight,activity*.96),1.);
+ gl_FragColor=vec4(mix(base,highlight,activity),1.);
 }`;
 
 // ── Mode 0: EEG signal panel ──────────────────────────────────────────────
@@ -259,24 +263,24 @@ function LanguageOverlay() {
 // Positions in 360×310 space; brain center (180,155), visible radius ~70px
 // All nodes ON the brain surface — connections traverse through the brain
 const NETS = [
-  { id:'dmn',  label:'DMN', color:'#e63946', x:180, y: 88 }, // medial PFC / PCC
-  { id:'fpnl', label:'FPN', color:'#4a90d9', x:126, y:114 }, // L lateral prefrontal (dlPFC)
-  { id:'fpnr', label:'FPN', color:'#4a90d9', x:234, y:110 }, // R lateral prefrontal
-  { id:'lan',  label:'LAN', color:'#f77f00', x:112, y:158 }, // L temporal: Broca/Wernicke
-  { id:'san',  label:'SAN', color:'#f4a261', x:248, y:152 }, // R fronto-insular (amygdala)
-  { id:'smn',  label:'SMN', color:'#2d9a4f', x:158, y:100 }, // sensorimotor / premotor
-  { id:'vis',  label:'VIS', color:'#7c3aed', x:220, y:210 }, // occipital (V1-V5)
+  { id:'dmn',  label:'DMN',   color:'#e63946', x:180, y: 70 }, // medial PFC / PCC — moved up
+  { id:'fpnl', label:'FPN-L', color:'#4a90d9', x:110, y:108 }, // L lateral prefrontal (dlPFC)
+  { id:'fpnr', label:'FPN-R', color:'#4a90d9', x:250, y:105 }, // R lateral prefrontal
+  { id:'lan',  label:'LAN',   color:'#f77f00', x:96,  y:158 }, // L temporal: Broca/Wernicke
+  { id:'san',  label:'SAN',   color:'#f4a261', x:262, y:152 }, // R fronto-insular (amygdala)
+  { id:'smn',  label:'SMN',   color:'#2d9a4f', x:180, y:110 }, // sensorimotor / premotor — centered, below DMN
+  { id:'vis',  label:'VIS',   color:'#7c3aed', x:210, y:218 }, // occipital (V1-V5)
 ];
 
 // Stimulus types with scientifically grounded network activation weights
 // Weights based on meta-analytic activation likelihood estimates
 const STIMULI = [
   {
-    label: 'Visual',
-    sublabel: 'object / scene perception',
-    color: '#7c3aed',
-    // Primary: VIS (occipital-temporal stream); SAN (salience); FPN-R (dorsal attention)
-    weights: { vis:1.0, san:0.72, fpnr:0.78, fpnl:0.38, smn:0.18, dmn:0.10, lan:0.07 } as Record<string,number>,
+    label: 'Emotional',
+    sublabel: 'affective & social cognition',
+    color: '#e63946',
+    // Primary: SAN (amygdala-insula); DMN (vmPFC/mPFC social); FPN-L (emotion regulation)
+    weights: { san:1.0, dmn:0.92, fpnl:0.65, fpnr:0.28, lan:0.18, smn:0.10, vis:0.08 } as Record<string,number>,
   },
   {
     label: 'Speech',
@@ -286,11 +290,11 @@ const STIMULI = [
     weights: { lan:1.0, fpnl:0.88, dmn:0.65, smn:0.42, san:0.20, fpnr:0.22, vis:0.06 } as Record<string,number>,
   },
   {
-    label: 'Emotional',
-    sublabel: 'affective & social cognition',
-    color: '#e63946',
-    // Primary: SAN (amygdala-insula); DMN (vmPFC/mPFC social); FPN-L (emotion regulation)
-    weights: { san:1.0, dmn:0.92, fpnl:0.65, fpnr:0.28, lan:0.18, smn:0.10, vis:0.08 } as Record<string,number>,
+    label: 'Visual',
+    sublabel: 'object / scene perception',
+    color: '#7c3aed',
+    // Primary: VIS (occipital-temporal stream); SAN (salience); FPN-R (dorsal attention)
+    weights: { vis:1.0, san:0.72, fpnr:0.78, fpnl:0.38, smn:0.18, dmn:0.10, lan:0.07 } as Record<string,number>,
   },
 ];
 
@@ -596,7 +600,7 @@ export function ResearchInterestsBrain() {
         if (canvas!.width !== w || canvas!.height !== h) { canvas!.width = w; canvas!.height = h; }
         gl!.viewport(0, 0, w, h);
         gl!.clear(gl!.COLOR_BUFFER_BIT | gl!.DEPTH_BUFFER_BIT);
-        gl!.uniform1f(uAngle, 0.38 + userAngle - elapsed * 0.04 + Math.sin(elapsed * 0.16) * 0.06);
+        gl!.uniform1f(uAngle, 0.38 + userAngle - elapsed * 0.065 + Math.sin(elapsed * 0.22) * 0.08);
         gl!.uniform1f(uTilt, -0.18);
         gl!.uniform1f(uAspect, w / h);
         gl!.uniform1f(uTime, elapsed);
@@ -682,6 +686,12 @@ export function ResearchInterestsBrain() {
             {active === 0 && <DecodingOverlay />}
             {active === 1 && <LanguageOverlay />}
             {active === 2 && <ConnectomeCanvas stimIdx={stimIdx} />}
+            {active === 2 && (
+              <svg className="ri-net-pulse-ring" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+                <circle cx="50" cy="50" r="24" className="ri-net-ring-circle" style={{ stroke: STIMULI[stimIdx].color + '90' }} />
+                <circle cx="50" cy="50" r="24" className="ri-net-ring-circle ri-net-ring-circle--delay" style={{ stroke: STIMULI[stimIdx].color + '55' }} />
+              </svg>
+            )}
           </div>
 
           {active === 0 && (
@@ -697,7 +707,9 @@ export function ResearchInterestsBrain() {
 
         {active === 0 && <RepLearningPanel />}
 
-        <span className={`ri-mode-tag ${cur.tagClass}`}>{cur.tag}</span>
+        <span className={`ri-mode-tag ${cur.tagClass}`}>
+          {active === 2 ? `${STIMULI[stimIdx].label} Stimulus` : cur.tag}
+        </span>
       </div>
 
       <div className="ri-cards-col">
