@@ -464,23 +464,17 @@ function StimulusVisual({ label, color }: { label: string; color: string }) {
     );
   }
   if (label === 'Speech') {
-    // Speech amplitude waveform — static, looks like real audio signal
-    const pts = [
-      [2,17],[5,17],[7,12],[9,22],[11,7],[13,26],[15,4],[17,28],[19,8],[21,24],
-      [23,11],[25,21],[27,5],[29,29],[31,6],[33,27],[35,10],[37,23],[39,13],[41,21],
-      [43,9],[45,25],[47,14],[49,19],[51,16],[53,17],[55,17],
-    ];
-    const d = pts.map(([x,y],i) => `${i===0?'M':'L'}${x},${y}`).join(' ');
+    // Animated audio equalizer bars — lexical/phonological stimulus
+    const heights = [12, 22, 16, 28, 20, 26, 14, 24, 18, 10];
     return (
-      <svg viewBox="0 0 58 34" width="80" height="48" className="ri-stim-visual" aria-hidden="true">
-        <rect x="1" y="1" width="56" height="32" rx="4" fill={color} fillOpacity="0.07" stroke={color} strokeWidth="0.7" strokeOpacity="0.40"/>
-        {/* envelope bands */}
-        <path d="M2,17 L5,17 L7,9 L11,4 L15,2 L19,5 L23,8 L27,3 L31,3 L35,7 L39,10 L43,6 L47,11 L51,14 L55,16 L56,17"
-          fill="none" stroke={color} strokeWidth="0.6" strokeOpacity="0.30" strokeDasharray="2,2"/>
-        <path d="M2,17 L5,17 L7,25 L11,30 L15,32 L19,29 L23,26 L27,31 L31,31 L35,27 L39,24 L43,28 L47,23 L51,20 L55,18 L56,17"
-          fill="none" stroke={color} strokeWidth="0.6" strokeOpacity="0.30" strokeDasharray="2,2"/>
-        {/* waveform */}
-        <path d={d} fill="none" stroke={color} strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" opacity="0.80"/>
+      <svg viewBox="0 0 56 34" width="78" height="50" className="ri-stim-visual" aria-hidden="true">
+        {heights.map((h, i) => (
+          <rect key={i} className="ri-speech-bar"
+            x={i * 5.4 + 1} y={34 - h} width="4" height={h}
+            fill={color} opacity="0.78" rx="2"
+            style={{ animationDelay: `${i * 0.06}s`, animationDuration: `${0.52 + (i % 3) * 0.12}s` }}
+          />
+        ))}
       </svg>
     );
   }
