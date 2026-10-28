@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { CSSProperties, useEffect, useRef, useState } from 'react';
 
 declare global {
   interface Window { meshes: Array<{ p: string; n: string; i: string }> }
@@ -8,61 +8,21 @@ const INTERESTS = [
   {
     title: 'Neural Decoding & Representation Learning',
     description: 'Investigating how cognitive information is encoded in neural signals across EEG, ECoG, and fMRI — spanning classification, reconstruction, and learning representations that generalize across subjects, tasks, and recording modalities.',
-    mode: 0,
-    tag: 'Decoding',
-    tagClass: 'ri-tag--decode',
+    tag: 'Decoding', tagClass: 'ri-tag--decode',
   },
   {
     title: 'Brain–Language Modeling',
     description: 'Aligning neural representations with language semantics through self-supervised learning and cross-modal objectives, toward foundation models that bridge brain signals and natural language.',
-    mode: 1,
-    tag: 'Language',
-    tagClass: 'ri-tag--lang',
+    tag: 'Language', tagClass: 'ri-tag--lang',
   },
   {
     title: 'Brain Encoding & Network Dynamics',
     description: 'Leveraging multimodal foundation models and generative approaches to understand how distributed neural activity and functional connectivity give rise to human cognition and behavior.',
-    mode: 2,
-    tag: 'Network',
-    tagClass: 'ri-tag--net',
+    tag: 'Network', tagClass: 'ri-tag--net',
   },
 ];
 
-// Decoding overlay: speech-area nodes converging to readout center
-const DECODE_NODES = [
-  { x: 30, y: 37 }, // Broca's area (left inferior frontal)
-  { x: 22, y: 56 }, // Wernicke's area (left superior temporal)
-  { x: 46, y: 33 }, // Supplementary Motor Area
-];
-const DECODE_CX = 50, DECODE_CY = 52; // readout center
-
-// Brain region nodes for network overlay (%, % of canvas)
-const NET_NODES = [
-  { id: 'par',   x: 50, y: 24 },
-  { id: 'pfc-l', x: 35, y: 31 },
-  { id: 'pfc-r', x: 65, y: 31 },
-  { id: 'mot-l', x: 26, y: 44 },
-  { id: 'mot-r', x: 74, y: 44 },
-  { id: 'tmp-l', x: 19, y: 60 },
-  { id: 'tmp-r', x: 81, y: 60 },
-  { id: 'occ',   x: 50, y: 74 },
-];
-
-const NET_EDGES = [
-  { a: 'par',   b: 'pfc-l', w: 0.8 },
-  { a: 'par',   b: 'pfc-r', w: 0.8 },
-  { a: 'pfc-l', b: 'pfc-r', w: 0.9 },
-  { a: 'pfc-l', b: 'mot-l', w: 0.7 },
-  { a: 'pfc-r', b: 'mot-r', w: 0.7 },
-  { a: 'mot-l', b: 'mot-r', w: 0.85 },
-  { a: 'mot-l', b: 'tmp-l', w: 0.5 },
-  { a: 'mot-r', b: 'tmp-r', w: 0.5 },
-  { a: 'tmp-l', b: 'occ',   w: 0.55 },
-  { a: 'tmp-r', b: 'occ',   w: 0.55 },
-  { a: 'par',   b: 'mot-l', w: 0.45 },
-  { a: 'par',   b: 'mot-r', w: 0.45 },
-];
-
+// ── WebGL shaders ──────────────────────────────────────────────────────────
 const VERTEX = `
 attribute vec3 position; attribute vec3 normal;
 uniform float angle; uniform float tilt; uniform float aspect;
@@ -81,12 +41,17 @@ void main(){
 
 const FRAGMENT = `
 precision mediump float;
-uniform float time; uniform float mode;
+uniform float time; uniform float mode; uniform float stimIdx;
 varying vec3 point; varying vec3 shadingNormal;
 float wave(vec3 focus,float offset){
  float d=distance(point,focus);
- float r=mod(time*.22+offset,1.8);
- return exp(-pow((d-r)/.15,2.))*exp(-d*.6);
+ float r=mod(time*.24+offset,1.9);
+ return exp(-pow((d-r)/.13,2.))*exp(-d*.55);
+}
+/* Gaussian glow at anatomical focus — no ripple, just regional activation */
+float glow(vec3 focus,float sigma){
+ vec3 dv=point-focus;
+ return exp(-dot(dv,dv)/(2.*sigma*sigma));
 }
 void main(){
  vec3 n=normalize(shadingNormal);
@@ -95,35 +60,118 @@ void main(){
  vec3 base=vec3(.85,.89,.94)*(.63+.31*light+.10*side);
  float activity; vec3 highlight;
  if(mode<0.5){
-  /* Decoding: left hemisphere speech areas (Broca, Wernicke, SMA) */
-  float a=wave(vec3(-.38,.15,.30),0.);
-  float b=wave(vec3(-.40,-.20,.40),.50);
-  float c=wave(vec3(-.10,.35,.10),1.0);
-  activity=clamp(a*.9+b*.85+c*.6,0.,1.);
-  highlight=vec3(.14,.36,.65)*(.72+.28*light);
+  /* Decoding: Broca, Wernicke, SMA — left hemisphere speech areas */
+  float a=wave(vec3(-.38,.15,.30),0.0);
+  float b=wave(vec3(-.40,-.20,.42),.45);
+  float c=wave(vec3(-.12,.38,.12),.90);
+  activity=clamp(a*1.0+b*.95+c*.72,0.,1.);
+  highlight=vec3(.10,.33,.72)*(.72+.28*light);
  }else if(mode<1.5){
-  float a=wave(vec3(-.45,.15,.25),0.);
-  float b=wave(vec3(-.35,-.05,.40),.55);
-  float c=wave(vec3(-.50,.35,-.05),1.1);
-  activity=clamp(a*.9+b*.75+c*.55,0.,1.);
-  highlight=vec3(.48,.18,.80)*(.72+.28*light);
+  /* Language: fronto-temporal bilateral, left-dominant */
+  float a=wave(vec3(-.44,.12,.22),0.);
+  float b=wave(vec3(-.32,-.08,.38),.50);
+  float c=wave(vec3( .30, .10,.28),.85);
+  float d=wave(vec3(-.50,.32,-.08),1.20);
+  activity=clamp(a*.88+b*.80+c*.55+d*.65,0.,1.);
+  highlight=vec3(.46,.16,.82)*(.72+.28*light);
  }else{
-  float a=wave(vec3(.35,.42,.15),0.);
-  float b=wave(vec3(-.38,.30,-.22),.38);
-  float c=wave(vec3(.05,-.48,.38),.75);
-  float d=wave(vec3(-.28,-.42,-.28),1.15);
-  activity=clamp(a*.7+b*.7+c*.6+d*.55,0.,1.);
-  highlight=vec3(.85,.42,.08)*(.72+.28*light);
+  /* Network: stimulus-driven regional glow (no ripple wave) */
+  float pulse=0.76+0.24*sin(time*0.85); /* slow breath, no ripple */
+  if(stimIdx<0.5){
+   /* Visual: bilateral V1/V2 occipital + IPS dorsal parietal (ALE meta-analysis) */
+   float a=glow(vec3(.06,-.14,-.43),.10)*1.0;
+   float b=glow(vec3(-.06,-.12,-.43),.10)*.90;
+   float c=glow(vec3(.36,.28,-.14),.09)*.65;
+   float d=glow(vec3(-.34,.26,-.15),.09)*.58;
+   activity=clamp((a+b+c+d)*pulse*.90,0.,1.);
+   highlight=vec3(.49,.22,.88)*(.72+.28*light);
+  }else if(stimIdx<1.5){
+   /* Speech: L-IFG (Broca BA44/45), L-STG (Wernicke BA22), pre-SMA */
+   float a=glow(vec3(-.38,.15,.30),.10)*1.0;
+   float b=glow(vec3(-.40,-.20,.42),.10)*.92;
+   float c=glow(vec3(-.12,.40,.12),.09)*.68;
+   float d=glow(vec3(-.30,.05,.36),.08)*.52;
+   activity=clamp((a+b+c+d)*pulse*.90,0.,1.);
+   highlight=vec3(.96,.49,.05)*(.72+.28*light);
+  }else{
+   /* Emotional: bilateral amygdala-insula + vmPFC/OFC + ACC */
+   float a=glow(vec3(-.28,-.05,.28),.09)*1.0;
+   float b=glow(vec3(.28,-.05,.26),.09)*.88;
+   float c=glow(vec3(.02,.34,.15),.10)*.92;
+   float d=glow(vec3(.02,.20,.28),.08)*.75;
+   activity=clamp((a+b+c+d)*pulse*.90,0.,1.);
+   highlight=vec3(.90,.22,.28)*(.72+.28*light);
+  }
  }
- gl_FragColor=vec4(mix(base,highlight,activity*.82),1.);
+ gl_FragColor=vec4(mix(base,highlight,activity*.88),1.);
 }`;
+
+// ── Mode 0: EEG signal panel ──────────────────────────────────────────────
+// Amplitudes are in pixels directly; frequencies in cycles/pixel (3-6 cycles per canvas width)
+const EEG_CHS = [
+  { name: 'FC3', color: '#60a5fa', freqs: [{f:.046,a:5.5},{f:.098,a:2.5},{f:.021,a:1.8}] },
+  { name: 'C3', color: '#a78bfa', freqs: [{f:.052,a:6.5},{f:.112,a:2.8},{f:.014,a:2.2}] },
+  { name: 'T7', color: '#34d399', freqs: [{f:.038,a:5.0},{f:.085,a:3.0},{f:.025,a:1.5}] },
+  { name: 'P3', color: '#93c5fd', freqs: [{f:.044,a:4.5},{f:.095,a:2.0},{f:.018,a:1.8}] },
+];
+
+function EEGPanel() {
+  const ref = useRef<HTMLCanvasElement>(null);
+  useEffect(() => {
+    let raf = 0, t = 0;
+    // amplitude values are direct pixel offsets
+    function sig(freqs:{f:number;a:number}[], t:number, x:number) {
+      return freqs.reduce((s,{f,a})=>s+a*Math.sin(2*Math.PI*f*(t+x)), 0);
+    }
+    function draw() {
+      const cv = ref.current; if (!cv) return;
+      const ctx = cv.getContext('2d'); if (!ctx) return;
+      const W = cv.width, H = cv.height;
+      ctx.clearRect(0,0,W,H);
+      const chH = H / EEG_CHS.length;
+      const lw = 20;
+      EEG_CHS.forEach((ch, i) => {
+        const y0 = i*chH + chH/2;
+        ctx.font = 'bold 7px system-ui,sans-serif';
+        ctx.fillStyle = ch.color + 'bb';
+        ctx.fillText(ch.name, 1, y0+2.5);
+        ctx.strokeStyle = 'rgba(148,163,184,.10)';
+        ctx.lineWidth = 0.4;
+        ctx.beginPath(); ctx.moveTo(lw,y0); ctx.lineTo(W,y0); ctx.stroke();
+        ctx.strokeStyle = ch.color;
+        ctx.lineWidth = 1.2;
+        ctx.shadowColor = ch.color; ctx.shadowBlur = 2;
+        ctx.beginPath();
+        for (let px = 0; px < W-lw; px++) {
+          const sy = y0 + sig(ch.freqs, t, px);   // amplitude already in px
+          px===0 ? ctx.moveTo(lw+px, sy) : ctx.lineTo(lw+px, sy);
+        }
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+      });
+      t += 0.4;
+    }
+    function loop() { draw(); raf = requestAnimationFrame(loop); }
+    loop();
+    return () => cancelAnimationFrame(raf);
+  }, []);
+  return <canvas ref={ref} width={88} height={160} className="ri-eeg-canvas" aria-hidden="true" />;
+}
+
+// ── Mode 0: Decoding overlay (converging arrows to readout center) ─────────
+const DECODE_NODES = [
+  { x: 30, y: 37 }, // Broca's area
+  { x: 22, y: 56 }, // Wernicke's area
+  { x: 46, y: 33 }, // SMA
+];
+const DECODE_CX = 50, DECODE_CY = 52;
 
 function DecodingOverlay() {
   return (
     <svg className="ri-net-overlay" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
       <defs>
         <marker id="di-arrow" markerWidth="5" markerHeight="4" refX="4" refY="2" orient="auto">
-          <path d="M0,0 L5,2 L0,4 Z" fill="rgba(30,80,200,.8)" />
+          <path d="M0,0 L5,2 L0,4 Z" fill="rgba(30,80,200,.85)" />
         </marker>
         <filter id="di-glow" x="-60%" y="-60%" width="220%" height="220%">
           <feGaussianBlur stdDeviation="0.7" result="b" />
@@ -131,14 +179,13 @@ function DecodingOverlay() {
         </filter>
       </defs>
       {DECODE_NODES.map(({ x, y }, i) => {
-        const dx = DECODE_CX - x, dy = DECODE_CY - y;
-        const len = Math.sqrt(dx * dx + dy * dy);
-        const ex = DECODE_CX - (dx / len) * 5, ey = DECODE_CY - (dy / len) * 5;
+        const dx = DECODE_CX-x, dy = DECODE_CY-y;
+        const len = Math.sqrt(dx*dx+dy*dy);
+        const ex = DECODE_CX-(dx/len)*5, ey = DECODE_CY-(dy/len)*5;
         return (
-          <g key={i} style={{ '--di': `${i * 0.4}s` } as React.CSSProperties}>
+          <g key={i} style={{ '--di': `${i*0.4}s` } as CSSProperties}>
             <circle cx={x} cy={y} r={1.7} className="ri-decode-node" filter="url(#di-glow)" />
-            <line x1={x} y1={y} x2={ex} y2={ey}
-              className="ri-decode-edge" markerEnd="url(#di-arrow)" />
+            <line x1={x} y1={y} x2={ex} y2={ey} className="ri-decode-edge" markerEnd="url(#di-arrow)" />
           </g>
         );
       })}
@@ -148,59 +195,330 @@ function DecodingOverlay() {
   );
 }
 
-function NetworkOverlay() {
-  const nodeMap = Object.fromEntries(NET_NODES.map(n => [n.id, n]));
+// ── Mode 1: Language token overlay ────────────────────────────────────────
+const LANG_TOKENS = [
+  { word: 'speech',   x: 74, y: 16, delay: '0s' },
+  { word: 'imagined', x: 79, y: 33, delay: '.35s' },
+  { word: 'semantic', x: 76, y: 52, delay: '.7s' },
+  { word: 'neural',   x: 78, y: 68, delay: '1.1s' },
+  { word: 'language', x: 72, y: 83, delay: '.2s' },
+];
+
+function LanguageOverlay() {
   return (
-    <svg className="ri-net-overlay" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-      <defs>
-        <filter id="ri-glow" x="-50%" y="-50%" width="200%" height="200%">
-          <feGaussianBlur stdDeviation="0.8" result="blur" />
-          <feMerge><feMergeNode in="blur" /><feMergeNode in="SourceGraphic" /></feMerge>
-        </filter>
-      </defs>
-      {NET_EDGES.map(({ a, b, w }, i) => {
-        const na = nodeMap[a], nb = nodeMap[b];
-        return (
-          <line
-            key={`${a}-${b}`}
-            x1={na.x} y1={na.y} x2={nb.x} y2={nb.y}
-            className="ri-net-edge"
-            style={{ '--ew': w, '--ed': `${i * 0.13}s` } as React.CSSProperties}
-          />
-        );
-      })}
-      {NET_NODES.map((node, i) => (
-        <circle
-          key={node.id}
-          cx={node.x} cy={node.y} r={1.4}
-          className="ri-net-node"
-          style={{ '--nd': `${i * 0.09}s` } as React.CSSProperties}
-          filter="url(#ri-glow)"
-        />
+    <svg className="ri-net-overlay ri-lang-overlay" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+      {LANG_TOKENS.map(({ word, x, y, delay }) => (
+        <g key={word} style={{ '--ld': delay } as CSSProperties} className="ri-lang-token">
+          <line x1={54} y1={50} x2={x + word.length * 1.2} y2={y}
+            stroke="rgba(140,70,210,.22)" strokeWidth="0.35" strokeDasharray="2 2" />
+          <rect x={x - 1} y={y - 3.5} width={word.length * 2.55 + 2} height={7} rx={1.5}
+            fill="rgba(109,40,217,.13)" stroke="rgba(109,40,217,.40)" strokeWidth="0.35" />
+          <text x={x + (word.length*2.55/2)} y={y+1.5} textAnchor="middle"
+            fontSize="4.2" fill="rgba(167,139,250,1)" fontFamily="system-ui,sans-serif" fontWeight="600">
+            {word}
+          </text>
+        </g>
       ))}
     </svg>
   );
 }
 
+// ── Mode 2: Connectome with real resting-state networks ────────────────────
+// Positions in 360×310 space; brain center (180,155), visible radius ~70px
+// All nodes ON the brain surface — connections traverse through the brain
+const NETS = [
+  { id:'dmn',  label:'DMN', color:'#e63946', x:180, y: 88 }, // medial PFC / PCC
+  { id:'fpnl', label:'FPN', color:'#4a90d9', x:126, y:114 }, // L lateral prefrontal (dlPFC)
+  { id:'fpnr', label:'FPN', color:'#4a90d9', x:234, y:110 }, // R lateral prefrontal
+  { id:'lan',  label:'LAN', color:'#f77f00', x:112, y:158 }, // L temporal: Broca/Wernicke
+  { id:'san',  label:'SAN', color:'#f4a261', x:248, y:152 }, // R fronto-insular (amygdala)
+  { id:'smn',  label:'SMN', color:'#2d9a4f', x:158, y:100 }, // sensorimotor / premotor
+  { id:'vis',  label:'VIS', color:'#7c3aed', x:220, y:210 }, // occipital (V1-V5)
+];
+
+// Stimulus types with scientifically grounded network activation weights
+// Weights based on meta-analytic activation likelihood estimates
+const STIMULI = [
+  {
+    label: 'Visual',
+    sublabel: 'object / scene perception',
+    color: '#7c3aed',
+    // Primary: VIS (occipital-temporal stream); SAN (salience); FPN-R (dorsal attention)
+    weights: { vis:1.0, san:0.72, fpnr:0.78, fpnl:0.38, smn:0.18, dmn:0.10, lan:0.07 } as Record<string,number>,
+  },
+  {
+    label: 'Speech',
+    sublabel: 'lexical-phonological processing',
+    color: '#f77f00',
+    // Primary: LAN (Broca BA44/45, Wernicke BA22); FPN-L (phonological WM); DMN (semantic)
+    weights: { lan:1.0, fpnl:0.88, dmn:0.65, smn:0.42, san:0.20, fpnr:0.22, vis:0.06 } as Record<string,number>,
+  },
+  {
+    label: 'Emotional',
+    sublabel: 'affective & social cognition',
+    color: '#e63946',
+    // Primary: SAN (amygdala-insula); DMN (vmPFC/mPFC social); FPN-L (emotion regulation)
+    weights: { san:1.0, dmn:0.92, fpnl:0.65, fpnr:0.28, lan:0.18, smn:0.10, vis:0.08 } as Record<string,number>,
+  },
+];
+
+// [fromIdx, toIdx, baseWeight, freqHz, phaseRad]
+const FC: [number,number,number,number,number][] = [
+  [0,1, .55,.7, 0.0], [0,2, .55,.7, 0.5],
+  [0,3, .63,.6, 0.2], [0,4, .35,.8, 1.1],
+  [1,2, .72,.5, 0.0], [1,3, .60,.8, 0.6],
+  [1,4, .42,1.1,1.0], [1,5, .32,.7, 0.4],
+  [2,4, .52,.9, 1.5], [2,6, .30,.7, 0.9],
+  [3,5, .44,.9, 0.8], [4,6, .45,.7, 0.9],
+  [5,6, .50,1.0,0.6], [3,4, .28,.6, 1.4],
+];
+
+interface Pulse { ei: number; prog: number; spd: number; }
+
+function ConnectomeCanvas({ stimIdx }: { stimIdx: number }) {
+  const ref = useRef<HTMLCanvasElement>(null);
+  const stimIdxRef = useRef(stimIdx);
+  useEffect(() => { stimIdxRef.current = stimIdx; }, [stimIdx]);
+
+  useEffect(() => {
+    let raf = 0, t = 0;
+    const pulses: Pulse[] = FC.map((_, ei) => ({
+      ei, prog: Math.random(), spd: 0.003 + Math.random() * 0.004,
+    }));
+
+    function fcVal(ei: number, t: number): number {
+      const [,,base,freq,phase] = FC[ei];
+      return Math.max(0, Math.min(1, base + 0.28*Math.sin(2*Math.PI*freq*t + phase)));
+    }
+
+    function draw() {
+      const cv = ref.current; if (!cv) return;
+      const ctx = cv.getContext('2d'); if (!ctx) return;
+      const W = cv.width, H = cv.height;
+      ctx.clearRect(0,0,W,H);
+      const scx = W/360, scy = H/310;
+      const nx = (x:number) => x*scx;
+      const ny = (y:number) => y*scy;
+
+      const wt = STIMULI[stimIdxRef.current].weights;
+
+      // Edges modulated by stimulus-specific network activation
+      FC.forEach(([fi,ti], ei) => {
+        const from = NETS[fi], to = NETS[ti];
+        const edgeW = ((wt[from.id] ?? 0.1) + (wt[to.id] ?? 0.1)) / 2;
+        const fc = fcVal(ei, t) * edgeW;
+        if (fc < 0.08) return;
+        ctx.globalAlpha = fc * 0.65;
+        ctx.strokeStyle = from.color;
+        ctx.lineWidth = fc * 3.2;
+        ctx.shadowColor = from.color;
+        ctx.shadowBlur = fc * 6;
+        ctx.beginPath();
+        ctx.moveTo(nx(from.x), ny(from.y));
+        ctx.lineTo(nx(to.x), ny(to.y));
+        ctx.stroke();
+        ctx.shadowBlur = 0;
+        ctx.globalAlpha = 1;
+      });
+
+      // Traveling pulses — rate proportional to edge activation weight
+      for (const p of pulses) {
+        const [fi,ti] = FC[p.ei];
+        const edgeW = ((wt[NETS[fi].id] ?? 0.1) + (wt[NETS[ti].id] ?? 0.1)) / 2;
+        p.prog += p.spd * (0.3 + edgeW * 1.2);
+        if (p.prog > 1) {
+          p.prog = 0;
+          p.ei = Math.floor(Math.random()*FC.length);
+          p.spd = 0.003+Math.random()*0.004;
+        }
+        const fc = fcVal(p.ei, t) * edgeW;
+        if (fc < 0.12) continue;
+        const from = NETS[fi], to = NETS[ti];
+        const px = nx(from.x) + (nx(to.x)-nx(from.x))*p.prog;
+        const py = ny(from.y) + (ny(to.y)-ny(from.y))*p.prog;
+        ctx.globalAlpha = Math.sin(p.prog*Math.PI)*fc*0.92;
+        ctx.fillStyle = from.color;
+        ctx.shadowColor = from.color;
+        ctx.shadowBlur = 9;
+        ctx.beginPath(); ctx.arc(px, py, 2.5 + edgeW, 0, Math.PI*2); ctx.fill();
+        ctx.shadowBlur = 0;
+        ctx.globalAlpha = 1;
+      }
+      while (pulses.length < 22) {
+        pulses.push({ ei: Math.floor(Math.random()*FC.length), prog: 0, spd: 0.003+Math.random()*0.004 });
+      }
+
+      // Network nodes — size and brightness scale with activation weight
+      NETS.forEach((net, i) => {
+        const x = nx(net.x), y = ny(net.y);
+        const aw = wt[net.id] ?? 0.1;
+        const pulse = 0.5+0.5*Math.sin(t*(1.1+aw*0.7) + i*0.9);
+        const scale = 0.35 + aw * 1.1;
+
+        // halo — larger and brighter for active networks
+        ctx.globalAlpha = (0.10 + 0.14*pulse) * scale;
+        ctx.fillStyle = net.color;
+        ctx.beginPath(); ctx.arc(x, y, (7+3*pulse)*scale, 0, Math.PI*2); ctx.fill();
+        ctx.globalAlpha = 1;
+
+        // core
+        ctx.shadowColor = net.color; ctx.shadowBlur = 5 + 10*aw;
+        ctx.fillStyle = net.color;
+        ctx.globalAlpha = 0.45 + 0.55*aw;
+        ctx.beginPath(); ctx.arc(x, y, 5*scale, 0, Math.PI*2); ctx.fill();
+        ctx.shadowBlur = 0; ctx.globalAlpha = 1;
+
+        // label pill — only for networks with meaningful activation (≥0.15)
+        if (aw < 0.15) return;
+        const pillW = net.label.length * 5.2 + 5;
+        ctx.fillStyle = `rgba(10,15,25,${0.55 + 0.30*aw})`;
+        const lx = x-pillW/2, ly = y + 7*scale;
+        ctx.beginPath();
+        ctx.moveTo(lx+3,ly); ctx.lineTo(lx+pillW-3,ly);
+        ctx.quadraticCurveTo(lx+pillW,ly,lx+pillW,ly+3);
+        ctx.lineTo(lx+pillW,ly+10); ctx.quadraticCurveTo(lx+pillW,ly+13,lx+pillW-3,ly+13);
+        ctx.lineTo(lx+3,ly+13); ctx.quadraticCurveTo(lx,ly+13,lx,ly+10);
+        ctx.lineTo(lx,ly+3); ctx.quadraticCurveTo(lx,ly,lx+3,ly); ctx.closePath();
+        ctx.fill();
+        ctx.fillStyle = net.color;
+        ctx.font = `bold ${Math.round(7.5+aw*2)}px system-ui,sans-serif`;
+        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+        ctx.globalAlpha = 0.45 + 0.55*aw;
+        ctx.fillText(net.label, x, ly+6.5);
+        ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
+        ctx.globalAlpha = 1;
+      });
+
+      t += 0.016;
+    }
+
+    function loop() { draw(); raf = requestAnimationFrame(loop); }
+    loop();
+    return () => cancelAnimationFrame(raf);
+  }, []);
+  return (
+    <canvas ref={ref} width={280} height={240} className="ri-connectome-canvas" aria-hidden="true" />
+  );
+}
+
+// ── Mode 2: Stimulus input panel ──────────────────────────────────────────────
+function StimulusPanel({ stim }: { stim: typeof STIMULI[0] }) {
+  // Networks with activation weight ≥ 0.4, sorted highest first
+  const activeNets = [...NETS]
+    .filter(n => (stim.weights[n.id] ?? 0) >= 0.4)
+    .sort((a, b) => (stim.weights[b.id] ?? 0) - (stim.weights[a.id] ?? 0));
+  return (
+    <div className="ri-stim-panel" aria-hidden="true">
+      <div className="ri-stim-header">INPUT STIMULUS</div>
+      <div className="ri-stim-box" style={{ borderColor: stim.color + '80', background: stim.color + '14' }}>
+        <div className="ri-stim-icon" style={{ color: stim.color }}>
+          {stim.label === 'Visual' ? '👁' : stim.label === 'Speech' ? '🗣' : '💭'}
+        </div>
+        <div className="ri-stim-name" style={{ color: stim.color }}>{stim.label}</div>
+        <div className="ri-stim-sub">{stim.sublabel}</div>
+      </div>
+      <div className="ri-stim-arrow" style={{ color: stim.color }}>↓</div>
+      <div className="ri-stim-acts-label">Active Networks</div>
+      <div className="ri-stim-nets">
+        {activeNets.map(net => {
+          const w = stim.weights[net.id] ?? 0;
+          return (
+            <div key={net.id} className="ri-stim-net">
+              <span className="ri-stim-dot" style={{ background: net.color }} />
+              <span className="ri-stim-net-label" style={{ color: net.color }}>{net.id.toUpperCase()}</span>
+              <span className="ri-stim-bar-wrap">
+                <span className="ri-stim-bar" style={{ width: `${w * 100}%`, background: net.color + 'cc' }} />
+              </span>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+}
+
+// ── Representation Learning diagram (mode 0 only) ─────────────────────────
+const RL_INPUTS = [
+  { l: 'EEG',  x: 52,  c: '#3b82f6' },
+  { l: 'ECoG', x: 150, c: '#8b5cf6' },
+  { l: 'fMRI', x: 248, c: '#06b6d4' },
+];
+const RL_TASKS = [
+  { l: 'Decoding',   x: 52,  c: '#3b82f6' },
+  { l: 'Generation', x: 150, c: '#10b981' },
+  { l: 'Transfer',   x: 248, c: '#f59e0b' },
+];
+
+function RepLearningPanel() {
+  return (
+    <div className="ri-replearn" aria-hidden="true">
+      <div className="ri-rl-header">Foundation Model · Representation Learning</div>
+      <svg viewBox="0 0 300 88" className="ri-rl-svg" preserveAspectRatio="xMidYMid meet">
+        {RL_INPUTS.map(({ l, x, c }) => (
+          <g key={l}>
+            <rect x={x-20} y={1} width={40} height={14} rx={3.5}
+              fill="rgba(59,130,246,.10)" stroke={c} strokeWidth={0.85} strokeOpacity={0.5} />
+            <text x={x} y={11} textAnchor="middle" fontSize={7} fill={c}
+              fontFamily="system-ui,sans-serif" fontWeight={700}>{l}</text>
+            <line x1={x} y1={15} x2={x} y2={22} stroke={c}
+              strokeWidth={0.8} strokeOpacity={0.4} strokeDasharray="2 1.5" />
+          </g>
+        ))}
+        <path d="M52,22 Q52,26 150,28 M150,22 L150,28 M248,22 Q248,26 150,28"
+          stroke="rgba(99,102,241,.28)" strokeWidth={0.8} fill="none" strokeDasharray="2 1.5" />
+        <rect x={55} y={26} width={190} height={18} rx={5}
+          fill="rgba(79,70,229,.18)" stroke="rgba(99,102,241,.65)" strokeWidth={1} />
+        <text x={150} y={38} textAnchor="middle" fontSize={8} fill="rgba(199,210,254,.95)"
+          fontFamily="system-ui,sans-serif" fontWeight={700}>Foundation Encoder</text>
+        <line x1={150} y1={44} x2={150} y2={50} stroke="rgba(99,102,241,.45)" strokeWidth={0.9} />
+        <polygon points="146,50 154,50 150,54" fill="rgba(99,102,241,.45)" />
+        <rect x={65} y={53} width={170} height={14} rx={4}
+          fill="rgba(109,40,217,.14)" stroke="rgba(139,92,246,.52)" strokeWidth={0.85} />
+        <text x={150} y={63} textAnchor="middle" fontSize={7} fill="rgba(196,181,253,.9)"
+          fontFamily="system-ui,sans-serif" fontWeight={600}>Universal Representations z</text>
+        <path d="M120,67 Q52,70 52,75 M150,67 L150,75 M180,67 Q248,70 248,75"
+          stroke="rgba(139,92,246,.28)" strokeWidth={0.8} fill="none" strokeDasharray="2 1.5" />
+        {RL_TASKS.map(({ l, x, c }) => (
+          <g key={l}>
+            <rect x={x-28} y={74} width={56} height={13} rx={3}
+              fill={c + '18'} stroke={c} strokeWidth={0.8} strokeOpacity={0.45} />
+            <text x={x} y={83} textAnchor="middle" fontSize={6.5} fill={c}
+              fontFamily="system-ui,sans-serif" fontWeight={600} fillOpacity={0.88}>{l}</text>
+          </g>
+        ))}
+      </svg>
+    </div>
+  );
+}
+
+// ── Main component ─────────────────────────────────────────────────────────
 export function ResearchInterestsBrain() {
   const [active, setActive] = useState(0);
   const activeRef = useRef(0);
   const canvasRef = useRef<HTMLCanvasElement>(null);
+  const [stimIdx, setStimIdx] = useState(0);
+  const stimIdxRef = useRef(0);
 
-  const activate = (i: number) => {
-    activeRef.current = i;
-    setActive(i);
-  };
+  const activate = (i: number) => { activeRef.current = i; setActive(i); };
+
+  // Cycle stimulus every 3.5s while mode 2 is active
+  useEffect(() => {
+    if (active !== 2) return;
+    const timer = setInterval(() => {
+      const next = (stimIdxRef.current + 1) % STIMULI.length;
+      stimIdxRef.current = next;
+      setStimIdx(next);
+    }, 3500);
+    return () => clearInterval(timer);
+  }, [active]);
 
   useEffect(() => {
-    let rafId = 0;
-    let disposed = false;
+    let rafId = 0, disposed = false;
 
     function init() {
       if (disposed) return;
       const canvas = canvasRef.current;
       if (!canvas) return;
-
       const gl = canvas.getContext('webgl', { alpha: true, antialias: true });
       if (!gl) return;
 
@@ -208,8 +526,7 @@ export function ResearchInterestsBrain() {
       let userAngle = 0, velocity = 0, lastPointerX: number | null = null;
 
       function mkShader(type: number, src: string) {
-        const s = gl!.createShader(type)!;
-        gl!.shaderSource(s, src); gl!.compileShader(s); return s;
+        const s = gl!.createShader(type)!; gl!.shaderSource(s, src); gl!.compileShader(s); return s;
       }
       function decode(s: string, Ctor: typeof Float32Array | typeof Uint16Array) {
         return new Ctor(Uint8Array.from(atob(s), c => c.charCodeAt(0)).buffer);
@@ -220,28 +537,25 @@ export function ResearchInterestsBrain() {
       gl.attachShader(prog, mkShader(gl.FRAGMENT_SHADER, FRAGMENT));
       gl.linkProgram(prog); gl.useProgram(prog);
 
-      const aPos  = gl.getAttribLocation(prog, 'position');
+      const aPos = gl.getAttribLocation(prog, 'position');
       const aNorm = gl.getAttribLocation(prog, 'normal');
-      const uAngle  = gl.getUniformLocation(prog, 'angle');
-      const uTilt   = gl.getUniformLocation(prog, 'tilt');
+      const uAngle = gl.getUniformLocation(prog, 'angle');
+      const uTilt = gl.getUniformLocation(prog, 'tilt');
       const uAspect = gl.getUniformLocation(prog, 'aspect');
-      const uTime   = gl.getUniformLocation(prog, 'time');
-      const uMode   = gl.getUniformLocation(prog, 'mode');
+      const uTime = gl.getUniformLocation(prog, 'time');
+      const uMode = gl.getUniformLocation(prog, 'mode');
+      const uStimIdx = gl.getUniformLocation(prog, 'stimIdx');
 
       const geo = window.meshes.map(m => {
         const pb = gl.createBuffer()!, nb = gl.createBuffer()!, ib = gl.createBuffer()!;
         const idx = decode(m.i, Uint16Array) as Uint16Array;
-        gl.bindBuffer(gl.ARRAY_BUFFER, pb);
-        gl.bufferData(gl.ARRAY_BUFFER, decode(m.p, Float32Array), gl.STATIC_DRAW);
-        gl.bindBuffer(gl.ARRAY_BUFFER, nb);
-        gl.bufferData(gl.ARRAY_BUFFER, decode(m.n, Float32Array), gl.STATIC_DRAW);
-        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ib);
-        gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, idx, gl.STATIC_DRAW);
+        gl.bindBuffer(gl.ARRAY_BUFFER, pb); gl.bufferData(gl.ARRAY_BUFFER, decode(m.p, Float32Array), gl.STATIC_DRAW);
+        gl.bindBuffer(gl.ARRAY_BUFFER, nb); gl.bufferData(gl.ARRAY_BUFFER, decode(m.n, Float32Array), gl.STATIC_DRAW);
+        gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, ib); gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, idx, gl.STATIC_DRAW);
         return { pb, nb, ib, count: idx.length };
       });
 
-      gl.enable(gl.DEPTH_TEST);
-      gl.clearColor(0, 0, 0, 0);
+      gl.enable(gl.DEPTH_TEST); gl.clearColor(0, 0, 0, 0);
 
       function draw() {
         const r = canvas!.getBoundingClientRect();
@@ -255,15 +569,11 @@ export function ResearchInterestsBrain() {
         gl!.uniform1f(uAspect, w / h);
         gl!.uniform1f(uTime, elapsed);
         gl!.uniform1f(uMode, activeRef.current);
+        gl!.uniform1f(uStimIdx, stimIdxRef.current);
         for (const m of geo) {
-          gl!.bindBuffer(gl!.ARRAY_BUFFER, m.pb);
-          gl!.enableVertexAttribArray(aPos);
-          gl!.vertexAttribPointer(aPos, 3, gl!.FLOAT, false, 0, 0);
-          gl!.bindBuffer(gl!.ARRAY_BUFFER, m.nb);
-          gl!.enableVertexAttribArray(aNorm);
-          gl!.vertexAttribPointer(aNorm, 3, gl!.FLOAT, false, 0, 0);
-          gl!.bindBuffer(gl!.ELEMENT_ARRAY_BUFFER, m.ib);
-          gl!.drawElements(gl!.TRIANGLES, m.count, gl!.UNSIGNED_SHORT, 0);
+          gl!.bindBuffer(gl!.ARRAY_BUFFER, m.pb); gl!.enableVertexAttribArray(aPos); gl!.vertexAttribPointer(aPos, 3, gl!.FLOAT, false, 0, 0);
+          gl!.bindBuffer(gl!.ARRAY_BUFFER, m.nb); gl!.enableVertexAttribArray(aNorm); gl!.vertexAttribPointer(aNorm, 3, gl!.FLOAT, false, 0, 0);
+          gl!.bindBuffer(gl!.ELEMENT_ARRAY_BUFFER, m.ib); gl!.drawElements(gl!.TRIANGLES, m.count, gl!.UNSIGNED_SHORT, 0);
         }
       }
 
@@ -271,9 +581,7 @@ export function ResearchInterestsBrain() {
         if (disposed) return;
         if (last && !document.hidden) elapsed += Math.min((stamp - last) / 1000, 0.1);
         last = stamp;
-        if (lastPointerX === null && Math.abs(velocity) > 0.0002) {
-          userAngle += velocity; velocity *= 0.90;
-        }
+        if (lastPointerX === null && Math.abs(velocity) > 0.0002) { userAngle += velocity; velocity *= 0.90; }
         if (stamp - lastDraw > 33 && !document.hidden) { draw(); lastDraw = stamp; }
         rafId = requestAnimationFrame(frame);
       }
@@ -289,7 +597,7 @@ export function ResearchInterestsBrain() {
       const onLeave = () => { lastPointerX = null; };
       canvas.addEventListener('pointermove', onMove);
       canvas.addEventListener('pointerleave', onLeave);
-      const ro = new ResizeObserver(() => { /* next draw auto-resizes */ });
+      const ro = new ResizeObserver(() => {});
       ro.observe(canvas);
       rafId = requestAnimationFrame(frame);
       (canvas as any)._dispose = () => {
@@ -302,14 +610,8 @@ export function ResearchInterestsBrain() {
     function tryInit() {
       if (window.meshes) { init(); return; }
       const existing = document.querySelector('script[src="/mesh-data.js"]');
-      if (existing) {
-        existing.addEventListener('load', () => init(), { once: true });
-      } else {
-        const s = document.createElement('script');
-        s.src = '/mesh-data.js';
-        s.onload = () => init();
-        document.head.appendChild(s);
-      }
+      if (existing) { existing.addEventListener('load', () => init(), { once: true }); }
+      else { const s = document.createElement('script'); s.src = '/mesh-data.js'; s.onload = () => init(); document.head.appendChild(s); }
     }
     tryInit();
 
@@ -325,17 +627,44 @@ export function ResearchInterestsBrain() {
 
   return (
     <div className="ri-layout">
-      <div className="ri-brain-col">
-        <div className="ri-canvas-wrap">
-          <canvas
-            ref={canvasRef}
-            className="ri-canvas"
-            role="img"
-            aria-label="Brain activity visualization"
-          />
-          {active === 0 && <DecodingOverlay />}
-          {active === 2 && <NetworkOverlay />}
+      {/* Visualization panel — brain canvas ALWAYS inside ri-viz-main to preserve WebGL context */}
+      <div className={`ri-viz-panel ri-viz--mode${active}`}>
+        <div className="ri-viz-main">
+          {active === 0 && (
+            <div className="ri-eeg-col">
+              <span className="ri-signal-label">EEG channels</span>
+              <EEGPanel />
+              <span className="ri-paradigm-hint">4s covert articulation · no vocalization</span>
+            </div>
+          )}
+
+          {active === 2 && <StimulusPanel stim={STIMULI[stimIdx]} />}
+
+          <div className="ri-brain-wrap">
+            <canvas
+              ref={canvasRef}
+              className="ri-canvas"
+              role="img"
+              aria-label="Brain activity visualization"
+            />
+            {active === 0 && <DecodingOverlay />}
+            {active === 1 && <LanguageOverlay />}
+            {active === 2 && <ConnectomeCanvas stimIdx={stimIdx} />}
+          </div>
+
+          {active === 0 && (
+            <div className="ri-decode-out" aria-hidden="true">
+              <div className="ri-decode-arrow">→</div>
+              <div className="ri-decode-words">
+                <span className="ri-decoded-word">imagined</span>
+                <span className="ri-decoded-word">speech</span>
+              </div>
+            </div>
+          )}
         </div>
+
+        {active === 0 && <RepLearningPanel />}
+
         <span className={`ri-mode-tag ${cur.tagClass}`}>{cur.tag}</span>
       </div>
 

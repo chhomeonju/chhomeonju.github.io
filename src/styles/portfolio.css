@@ -254,41 +254,158 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
 
 /* ── Research Interests Brain ───────────────────────────────── */
 .ri-layout {
-  display: flex; gap: 40px; align-items: flex-start; margin-top: 24px;
+  display: flex; gap: 36px; align-items: flex-start; margin-top: 24px;
 }
-.ri-brain-col {
-  flex: 0 0 260px; display: flex; flex-direction: column; align-items: center; gap: 12px;
-  position: sticky; top: 100px;
+
+/* Visualization panel: left column, sticky */
+.ri-viz-panel {
+  flex: 0 0 360px; display: flex; flex-direction: column; align-items: center;
+  gap: 10px; position: sticky; top: 100px;
 }
-.ri-canvas-wrap {
-  width: 260px; height: 260px; position: relative; border-radius: 50%;
-  overflow: hidden; box-shadow: 0 2px 24px rgba(0,0,0,.10);
+
+/* ── Inner main area wrapper (always present, provides flex-row for mode 0) ── */
+.ri-viz-main { display: flex; align-items: center; gap: 8px; }
+
+/* ── Mode 0: EEG + brain + decode side by side, rep-learn panel below ── */
+.ri-viz--mode0 { align-items: center; gap: 10px; }
+.ri-viz--mode0 .ri-viz-main { flex-direction: row; }
+.ri-viz--mode0 .ri-brain-wrap { width: 180px; height: 180px; }
+
+/* Paradigm hint below EEG canvas */
+.ri-paradigm-hint {
+  font-size: .50rem; color: rgba(148,163,184,.68); text-align: center;
+  line-height: 1.4; max-width: 92px; margin-top: 2px;
 }
+
+/* Representation learning panel */
+.ri-replearn { width: 100%; max-width: 320px; }
+.ri-rl-header {
+  font-size: .54rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+  color: rgba(99,102,241,.58); text-align: center; margin-bottom: 4px;
+}
+.ri-rl-svg { width: 100%; height: auto; display: block; }
+
+.ri-eeg-col {
+  display: flex; flex-direction: column; align-items: center; gap: 4px; flex-shrink: 0;
+}
+.ri-signal-label {
+  font-size: .55rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase;
+  color: var(--muted); opacity: .65;
+}
+.ri-eeg-canvas { display: block; border-radius: 4px; }
+
+.ri-decode-out {
+  display: flex; flex-direction: column; align-items: center; gap: 3px; flex-shrink: 0;
+  animation: ri-decode-out-fade 2s ease-in-out infinite alternate;
+}
+.ri-decode-arrow {
+  font-size: .9rem; color: rgba(30,80,200,.6); line-height: 1;
+}
+.ri-decode-words {
+  display: flex; flex-direction: column; align-items: center;
+  background: rgba(20,54,101,.09); border: 1px solid rgba(30,80,200,.18);
+  border-radius: 5px; padding: 4px 8px; gap: 0;
+}
+.ri-decoded-word {
+  font-size: .60rem; font-weight: 700; color: #2563eb; letter-spacing: .03em; line-height: 1.5;
+}
+@keyframes ri-decode-out-fade {
+  0%,40% { opacity: .55; }
+  60%,100% { opacity: 1; }
+}
+
+/* ── Mode 1: centered brain ── */
+.ri-viz--mode1 .ri-brain-wrap { width: 250px; height: 250px; }
+
+/* ── Mode 2: stimulus panel + brain side by side ── */
+.ri-viz--mode2 .ri-viz-main { flex-direction: row; align-items: center; gap: 10px; }
+.ri-viz--mode2 .ri-brain-wrap { width: 240px; height: 240px; }
+.ri-viz--mode2 .ri-canvas {
+  position: absolute;
+  width: 175px; height: 175px;
+  left: 50%; top: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 1;
+  border-radius: 50%;
+  overflow: hidden;
+}
+
+/* ── Mode 2: Stimulus input panel ── */
+.ri-stim-panel {
+  display: flex; flex-direction: column; align-items: center; gap: 6px;
+  width: 108px; flex-shrink: 0;
+}
+.ri-stim-header {
+  font-size: .48rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+  color: rgba(148,163,184,.55); text-align: center;
+}
+.ri-stim-box {
+  width: 100%; border-radius: 8px; border: 1px solid transparent;
+  padding: 8px 6px; text-align: center;
+  transition: border-color .5s ease, background .5s ease;
+}
+.ri-stim-icon { font-size: 1.1rem; line-height: 1; margin-bottom: 2px; }
+.ri-stim-name {
+  font-size: .72rem; font-weight: 700; letter-spacing: .03em;
+  transition: color .5s ease; line-height: 1.3;
+}
+.ri-stim-sub {
+  font-size: .50rem; color: rgba(148,163,184,.7); margin-top: 2px;
+  line-height: 1.4;
+}
+.ri-stim-arrow {
+  font-size: .9rem; line-height: 1; transition: color .5s ease;
+}
+.ri-stim-acts-label {
+  font-size: .46rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase;
+  color: rgba(148,163,184,.45);
+}
+.ri-stim-nets {
+  width: 100%; display: flex; flex-direction: column; gap: 3px;
+}
+.ri-stim-net {
+  display: flex; align-items: center; gap: 4px; width: 100%;
+}
+.ri-stim-dot {
+  width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0;
+}
+.ri-stim-net-label {
+  font-size: .52rem; font-weight: 700; letter-spacing: .03em;
+  flex-shrink: 0; width: 28px;
+}
+.ri-stim-bar-wrap {
+  flex: 1; height: 3px; background: rgba(148,163,184,.12);
+  border-radius: 2px; overflow: hidden;
+}
+.ri-stim-bar {
+  display: block; height: 100%; border-radius: 2px;
+  transition: width .6s ease;
+}
+
+/* Brain canvas wrapper */
+.ri-brain-wrap {
+  position: relative; width: 250px; height: 250px;
+  border-radius: 50%; overflow: hidden;
+  box-shadow: 0 2px 20px rgba(0,0,0,.10);
+}
+/* Mode 2 wrap is not a circle — it's rectangular to hold the connectome */
+.ri-viz--mode2 .ri-brain-wrap {
+  border-radius: 12px; overflow: visible; box-shadow: none;
+}
+
 .ri-canvas { width: 100%; height: 100%; display: block; cursor: grab; }
 .ri-canvas:active { cursor: grabbing; }
 
-/* Network SVG overlay (mode 2) */
+/* Connectome canvas: fills the brain-wrap, behind nothing (bg transparent) */
+.ri-connectome-canvas {
+  position: absolute; inset: 0; width: 100%; height: 100%;
+  z-index: 2; pointer-events: none;
+  /* transparent background — WebGL brain shows through */
+}
+
+/* SVG overlays (decode / language) */
 .ri-net-overlay {
   position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none;
-}
-.ri-net-edge {
-  stroke: rgba(180, 80, 10, 0.55); stroke-width: 0.5;
-  opacity: calc(var(--ew, 0.5) * 0.6);
-  animation: ri-edge-pulse 2.2s ease-in-out infinite;
-  animation-delay: var(--ed, 0s);
-}
-.ri-net-node {
-  fill: rgb(210, 90, 15); opacity: 0.85;
-  animation: ri-node-pulse 1.8s ease-in-out infinite;
-  animation-delay: var(--nd, 0s);
-}
-@keyframes ri-edge-pulse {
-  0%,100% { opacity: calc(var(--ew, 0.5) * 0.25); }
-  50%      { opacity: calc(var(--ew, 0.5) * 0.9); }
-}
-@keyframes ri-node-pulse {
-  0%,100% { r: 1.1; opacity: 0.5; }
-  50%      { r: 1.8; opacity: 1.0; }
 }
 
 /* Decoding overlay */
@@ -298,8 +415,7 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
   animation-delay: var(--di, 0s);
 }
 .ri-decode-edge {
-  stroke: rgba(25, 75, 195, 0.65); stroke-width: 0.7;
-  stroke-dasharray: 3 2;
+  stroke: rgba(25, 75, 195, 0.65); stroke-width: 0.7; stroke-dasharray: 3 2;
   animation: ri-decode-flow 1.1s linear infinite;
   animation-delay: var(--di, 0s);
 }
@@ -328,7 +444,17 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
   100% { r: 7.0; opacity: 0.0; }
 }
 
-/* Mode label */
+/* Language token overlay */
+.ri-lang-token {
+  animation: ri-lang-token-fade 2.4s ease-in-out infinite alternate;
+  animation-delay: var(--ld, 0s);
+}
+@keyframes ri-lang-token-fade {
+  0%,30% { opacity: .45; }
+  70%,100% { opacity: 1; }
+}
+
+/* Mode label badge */
 .ri-mode-tag {
   font-size: .65rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
   padding: 3px 12px; border-radius: 20px; transition: background .2s, color .2s;
@@ -360,7 +486,7 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
 
 .ri-card-body { min-width: 0; }
 .ri-card-title {
-  font-size: .88rem; font-weight: 600; margin: 0 0 0; color: var(--ink); line-height: 1.45;
+  font-size: .88rem; font-weight: 600; margin: 0; color: var(--ink); line-height: 1.45;
 }
 .ri-card-desc {
   font-size: .8rem; color: var(--muted); margin: 0; line-height: 1.6;
@@ -369,13 +495,21 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
 }
 .ri-card--active .ri-card-desc { max-height: 180px; opacity: 1; margin-top: 7px; }
 
-@media (max-width: 800px) {
+@media (max-width: 900px) {
   .ri-layout { flex-direction: column; align-items: center; }
-  .ri-brain-col { position: static; flex: none; }
-  .ri-canvas-wrap { width: 220px; height: 220px; }
+  .ri-viz-panel { position: static; flex: none; }
+  .ri-viz--mode0, .ri-viz--mode1, .ri-viz--mode2 { width: 100%; max-width: 400px; }
+  .ri-viz--mode0 .ri-brain-wrap { width: 180px; height: 180px; }
+  .ri-viz--mode1 .ri-brain-wrap { width: 220px; height: 220px; }
+  .ri-viz--mode2 .ri-brain-wrap { width: 200px; height: 180px; }
+  .ri-viz--mode2 .ri-canvas { width: 110px; height: 110px; }
+  .ri-stim-panel { width: 90px; }
 }
 @media (max-width: 600px) {
-  .ri-canvas-wrap { width: 180px; height: 180px; }
+  .ri-viz--mode0 .ri-brain-wrap { width: 150px; height: 150px; }
+  .ri-viz--mode1 .ri-brain-wrap { width: 180px; height: 180px; }
+  .ri-viz--mode2 .ri-brain-wrap { width: 280px; height: 242px; }
+  .ri-viz--mode2 .ri-canvas { width: 120px; height: 120px; }
 }
 .skills-list { margin: 0; }
 .skills-group { display: grid; grid-template-columns: minmax(220px, 1fr) minmax(0, 2.1fr); gap: 26px; align-items: center; padding: 18px 0; border-bottom: 1px solid var(--rule); min-width: 0; }

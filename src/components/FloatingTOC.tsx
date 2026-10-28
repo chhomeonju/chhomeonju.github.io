@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 
 const TOC_ITEMS = [
-  { id: 'about', label: 'About' },
+  { id: 'about',  label: 'About' },
   { id: 'research-interests', label: 'Research Interests' },
   { id: 'research-trajectory', label: 'Research Trajectory' },
   { id: 'competencies', label: 'Competencies' },
