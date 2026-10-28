@@ -3,6 +3,7 @@ import { portfolio } from '../data/portfolio';
 import type { Project, TimelineEntry } from '../types';
 import { SkillIcon } from './SkillIcon';
 import { Mail, MapPin } from 'lucide-react';
+import { ResearchInterestsBrain } from './ResearchInterestsBrain';
 export type Navigate = (event: MouseEvent<HTMLAnchorElement>, id: string) => void;
 
 
@@ -57,12 +58,7 @@ export function About() {
       </div>
       <div id="research-interests" className="research-interests" aria-labelledby="research-interests-heading">
         <h2 id="research-interests-heading">Research Interests</h2>
-        <div className="research-interests-list">{portfolio.researchInterests.map(interest =>
-          <div className="research-interest" key={interest.title}>
-            <h3>{interest.title}</h3>
-            <p>{interest.description}</p>
-          </div>
-        )}</div>
+        <ResearchInterestsBrain />
       </div>
     </section>
   );

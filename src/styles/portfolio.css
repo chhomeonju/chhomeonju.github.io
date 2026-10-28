@@ -251,6 +251,132 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
 .research-interest p { font-size: .9rem; color: var(--muted); line-height: 1.75; margin: 0; }
 .technical-skills { margin: 32px 0 12px; }
 .technical-skills h2 { margin-bottom: 14px; }
+
+/* ── Research Interests Brain ───────────────────────────────── */
+.ri-layout {
+  display: flex; gap: 40px; align-items: flex-start; margin-top: 24px;
+}
+.ri-brain-col {
+  flex: 0 0 260px; display: flex; flex-direction: column; align-items: center; gap: 12px;
+  position: sticky; top: 100px;
+}
+.ri-canvas-wrap {
+  width: 260px; height: 260px; position: relative; border-radius: 50%;
+  overflow: hidden; box-shadow: 0 2px 24px rgba(0,0,0,.10);
+}
+.ri-canvas { width: 100%; height: 100%; display: block; cursor: grab; }
+.ri-canvas:active { cursor: grabbing; }
+
+/* Network SVG overlay (mode 2) */
+.ri-net-overlay {
+  position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none;
+}
+.ri-net-edge {
+  stroke: rgba(180, 80, 10, 0.55); stroke-width: 0.5;
+  opacity: calc(var(--ew, 0.5) * 0.6);
+  animation: ri-edge-pulse 2.2s ease-in-out infinite;
+  animation-delay: var(--ed, 0s);
+}
+.ri-net-node {
+  fill: rgb(210, 90, 15); opacity: 0.85;
+  animation: ri-node-pulse 1.8s ease-in-out infinite;
+  animation-delay: var(--nd, 0s);
+}
+@keyframes ri-edge-pulse {
+  0%,100% { opacity: calc(var(--ew, 0.5) * 0.25); }
+  50%      { opacity: calc(var(--ew, 0.5) * 0.9); }
+}
+@keyframes ri-node-pulse {
+  0%,100% { r: 1.1; opacity: 0.5; }
+  50%      { r: 1.8; opacity: 1.0; }
+}
+
+/* Decoding overlay */
+.ri-decode-node {
+  fill: rgb(25, 75, 195); opacity: 0.85;
+  animation: ri-decode-node-pulse 1.5s ease-in-out infinite;
+  animation-delay: var(--di, 0s);
+}
+.ri-decode-edge {
+  stroke: rgba(25, 75, 195, 0.65); stroke-width: 0.7;
+  stroke-dasharray: 3 2;
+  animation: ri-decode-flow 1.1s linear infinite;
+  animation-delay: var(--di, 0s);
+}
+.ri-decode-center {
+  fill: rgba(25, 75, 195, 0.45);
+  animation: ri-decode-center-pulse 1s ease-in-out infinite alternate;
+}
+.ri-decode-ring {
+  fill: none; stroke: rgba(25, 75, 195, 0.25); stroke-width: 0.5;
+  animation: ri-decode-ring-expand 1.8s ease-out infinite;
+}
+@keyframes ri-decode-node-pulse {
+  0%,100% { r: 1.3; opacity: 0.5; }
+  50%      { r: 2.1; opacity: 1.0; }
+}
+@keyframes ri-decode-flow {
+  from { stroke-dashoffset: 0; }
+  to   { stroke-dashoffset: -10; }
+}
+@keyframes ri-decode-center-pulse {
+  from { opacity: 0.35; r: 2.4; }
+  to   { opacity: 0.9;  r: 3.0; }
+}
+@keyframes ri-decode-ring-expand {
+  0%   { r: 2.8; opacity: 0.5; }
+  100% { r: 7.0; opacity: 0.0; }
+}
+
+/* Mode label */
+.ri-mode-tag {
+  font-size: .65rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+  padding: 3px 12px; border-radius: 20px; transition: background .2s, color .2s;
+}
+.ri-tag--decode { background: rgba(20,54,101,.10); color: #1d64c8; }
+.ri-tag--lang   { background: rgba(72,24,128,.10); color: #7c3aed; }
+.ri-tag--net    { background: rgba(194,87,10,.10);  color: #c2570a; }
+
+/* Cards column */
+.ri-cards-col {
+  flex: 1; display: flex; flex-direction: column; gap: 6px; min-width: 0;
+}
+.ri-card {
+  display: flex; gap: 14px; padding: 14px 18px;
+  background: none; border: 1px solid transparent; border-radius: 8px;
+  cursor: pointer; text-align: left; width: 100%;
+  transition: background .18s, border-color .18s;
+}
+.ri-card:hover { background: rgba(0,0,0,.025); border-color: var(--rule); }
+[data-theme="dark"] .ri-card:hover { background: rgba(255,255,255,.04); }
+.ri-card--active { background: rgba(0,0,0,.03); border-color: var(--accent); }
+[data-theme="dark"] .ri-card--active { background: rgba(255,255,255,.05); }
+
+.ri-card-num {
+  font-size: .62rem; font-weight: 700; letter-spacing: .06em;
+  color: var(--muted); padding-top: 3px; flex-shrink: 0; opacity: .55;
+}
+.ri-card--active .ri-card-num { color: var(--accent); opacity: 1; }
+
+.ri-card-body { min-width: 0; }
+.ri-card-title {
+  font-size: .88rem; font-weight: 600; margin: 0 0 0; color: var(--ink); line-height: 1.45;
+}
+.ri-card-desc {
+  font-size: .8rem; color: var(--muted); margin: 0; line-height: 1.6;
+  max-height: 0; overflow: hidden; opacity: 0;
+  transition: max-height .3s ease, opacity .25s ease, margin .3s ease;
+}
+.ri-card--active .ri-card-desc { max-height: 180px; opacity: 1; margin-top: 7px; }
+
+@media (max-width: 800px) {
+  .ri-layout { flex-direction: column; align-items: center; }
+  .ri-brain-col { position: static; flex: none; }
+  .ri-canvas-wrap { width: 220px; height: 220px; }
+}
+@media (max-width: 600px) {
+  .ri-canvas-wrap { width: 180px; height: 180px; }
+}
 .skills-list { margin: 0; }
 .skills-group { display: grid; grid-template-columns: minmax(220px, 1fr) minmax(0, 2.1fr); gap: 26px; align-items: center; padding: 18px 0; border-bottom: 1px solid var(--rule); min-width: 0; }
 .skills-group dt { font-size: .88rem; font-weight: 700; color: var(--ink); line-height: 1.6; }
