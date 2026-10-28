@@ -173,6 +173,37 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
   .hero-intro { overflow: visible; justify-content: center; padding: clamp(24px, 4vh, 48px) 0 32px; }
 }
 
+/* Floating table of contents */
+.floating-toc {
+  position: fixed; top: 50%; right: 20px; transform: translateY(-50%);
+  z-index: 15; opacity: 0; pointer-events: none;
+  transition: opacity .25s;
+}
+.floating-toc--visible { opacity: 1; pointer-events: auto; }
+.floating-toc ul { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 4px; }
+.ftoc-item {
+  display: flex; align-items: center; gap: 8px;
+  background: none; border: none; cursor: pointer; padding: 3px 0;
+  color: var(--muted); font-size: .72rem; line-height: 1;
+  white-space: nowrap;
+}
+.ftoc-item:hover .ftoc-label, .ftoc-item--active .ftoc-label { opacity: 1; }
+.ftoc-dot {
+  width: 5px; height: 5px; border-radius: 50%;
+  background: var(--muted); flex-shrink: 0;
+  transition: background .2s, transform .2s;
+}
+.ftoc-item--active .ftoc-dot { background: var(--accent); transform: scale(1.4); }
+.ftoc-label {
+  opacity: 0; transition: opacity .15s;
+  background: var(--paper); border: 1px solid var(--rule);
+  padding: 3px 8px; border-radius: 4px; font-size: .7rem;
+  color: var(--ink); pointer-events: none;
+}
+.ftoc-item:hover .ftoc-label { opacity: 1; }
+.ftoc-item--active .ftoc-label { opacity: 1; color: var(--accent); }
+@media (max-width: 1300px) { .floating-toc { display: none; } }
+
 /* A personal introduction, with contact information anchored to the portrait. */
 #about { padding: 0; }
 .intro { display: grid; grid-template-columns: 150px minmax(0, 1fr); gap: clamp(36px, 5vw, 72px); padding: 64px 0 56px; align-items: center; }

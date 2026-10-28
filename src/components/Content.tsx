@@ -55,7 +55,7 @@ export function About() {
           <p>Moving forward, I aim to leverage <strong>advanced AI modeling approaches, including multimodal foundation models and generative models</strong>, to pursue research on <strong>brain encoding and brain network dynamics</strong>, seeking to better understand how neural activity gives rise to human cognition and behavior.</p>
         </div>
       </div>
-      <div className="research-interests" aria-labelledby="research-interests-heading">
+      <div id="research-interests" className="research-interests" aria-labelledby="research-interests-heading">
         <h2 id="research-interests-heading">Research Interests</h2>
         <div className="research-interests-list">{portfolio.researchInterests.map(interest =>
           <div className="research-interest" key={interest.title}>

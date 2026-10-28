@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react';
 import { About, Activities, Awards, Competencies, GitHubCard, Patents, Presentations, ProjectCard, Publications, Timeline, TechnicalSkills } from './components/Content';
 import { ResearchTimeline } from './components/ResearchTimeline';
 import { HeroBrain } from './components/HeroBrain';
+import { FloatingTOC } from './components/FloatingTOC';
 import { ProjectsSection } from './components/ProjectsSection';
 import { CustomCursor } from './components/CustomCursor';
 import { News } from './components/News';
@@ -99,7 +100,7 @@ function HomePage() {
     {view === 'home' ? (
       <HeroBrain onExplore={e => goSection(e, 'about')} />
     ) : (
-      <>
+      <><FloatingTOC />
         <div className="about-area">
           <About />
           <ResearchTimeline />

@@ -206,7 +206,7 @@ export function ResearchTimeline() {
   const projectMap = Object.fromEntries(portfolio.projects.map(p => [p.id, p]));
 
   return (
-    <section className="research-timeline" aria-labelledby="rt-heading">
+    <section id="research-trajectory" className="research-timeline" aria-labelledby="rt-heading">
       <div className="rt-header-row">
         <h2 id="rt-heading">Research Trajectory</h2>
         <div className="rt-layout-tabs" role="group" aria-label="Layout style">
