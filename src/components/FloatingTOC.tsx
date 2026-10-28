@@ -60,9 +60,10 @@ export function FloatingTOC() {
             <button
               className={`ftoc-item${active === id ? ' ftoc-item--active' : ''}`}
               onClick={() => scrollTo(id)}
+              title={label}
             >
-              <span className="ftoc-dot" />
               <span className="ftoc-label">{label}</span>
+              <span className="ftoc-dot" />
             </button>
           </li>
         ))}
