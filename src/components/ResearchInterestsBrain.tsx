@@ -437,6 +437,81 @@ function ConnectomeCanvas({ stimIdx }: { stimIdx: number }) {
   );
 }
 
+// ── Mode 2: Per-stimulus visual representation ────────────────────────────────
+function StimulusVisual({ label, color }: { label: string; color: string }) {
+  if (label === 'Emotional') {
+    return (
+      <svg viewBox="0 0 52 52" width="72" height="72" className="ri-stim-visual" aria-hidden="true">
+        {/* happy */}
+        <g transform="translate(2,2)" className="ri-face-pulse" style={{ animationDelay: '0s' }}>
+          <circle cx="11" cy="11" r="10" fill={color} fillOpacity="0.12" stroke={color} strokeWidth="1.4" />
+          <circle cx="7.5" cy="9.5" r="1.6" fill={color} />
+          <circle cx="14.5" cy="9.5" r="1.6" fill={color} />
+          <path d="M7 14 Q11 18 15 14" fill="none" stroke={color} strokeWidth="1.4" strokeLinecap="round" />
+        </g>
+        {/* sad */}
+        <g transform="translate(28,2)" className="ri-face-pulse" style={{ animationDelay: '0.6s' }}>
+          <circle cx="11" cy="11" r="10" fill={color} fillOpacity="0.12" stroke={color} strokeWidth="1.4" />
+          <circle cx="7.5" cy="9.5" r="1.6" fill={color} />
+          <circle cx="14.5" cy="9.5" r="1.6" fill={color} />
+          <path d="M7 16.5 Q11 12.5 15 16.5" fill="none" stroke={color} strokeWidth="1.4" strokeLinecap="round" />
+        </g>
+        {/* fearful — wide eyes + open mouth */}
+        <g transform="translate(2,28)" className="ri-face-pulse" style={{ animationDelay: '1.2s' }}>
+          <circle cx="11" cy="11" r="10" fill={color} fillOpacity="0.12" stroke={color} strokeWidth="1.4" />
+          <ellipse cx="7.5" cy="9" rx="2.2" ry="2.8" fill={color} />
+          <ellipse cx="14.5" cy="9" rx="2.2" ry="2.8" fill={color} />
+          <ellipse cx="11" cy="14.5" rx="2.8" ry="2" fill="none" stroke={color} strokeWidth="1.3" />
+        </g>
+        {/* angry — furrowed brows */}
+        <g transform="translate(28,28)" className="ri-face-pulse" style={{ animationDelay: '1.8s' }}>
+          <circle cx="11" cy="11" r="10" fill={color} fillOpacity="0.12" stroke={color} strokeWidth="1.4" />
+          <line x1="4.5" y1="6.5" x2="9" y2="8.5" stroke={color} strokeWidth="1.5" strokeLinecap="round" />
+          <line x1="17.5" y1="6.5" x2="13" y2="8.5" stroke={color} strokeWidth="1.5" strokeLinecap="round" />
+          <circle cx="7.5" cy="10.5" r="1.6" fill={color} />
+          <circle cx="14.5" cy="10.5" r="1.6" fill={color} />
+          <path d="M7.5 15.5 Q11 13 14.5 15.5" fill="none" stroke={color} strokeWidth="1.4" strokeLinecap="round" />
+        </g>
+      </svg>
+    );
+  }
+  if (label === 'Speech') {
+    const heights = [12, 22, 16, 28, 20, 26, 14, 24, 18, 10];
+    return (
+      <svg viewBox="0 0 56 34" width="78" height="50" className="ri-stim-visual" aria-hidden="true">
+        {heights.map((h, i) => (
+          <rect key={i} className="ri-speech-bar"
+            x={i * 5.4 + 1} y={34 - h} width="4" height={h}
+            fill={color} opacity="0.78" rx="2"
+            style={{ animationDelay: `${i * 0.06}s`, animationDuration: `${0.52 + (i % 3) * 0.12}s` }}
+          />
+        ))}
+      </svg>
+    );
+  }
+  // Visual — drifting orientation grating (classic visual cortex localizer)
+  return (
+    <svg viewBox="0 0 66 50" width="80" height="60" className="ri-stim-visual" aria-hidden="true">
+      <defs>
+        <pattern id="vis-grating-pat" x="0" y="0" width="14" height="50" patternUnits="userSpaceOnUse">
+          <rect width="7" height="50" fill={color} opacity="0.58" />
+          <rect x="7" width="7" height="50" fill={color} opacity="0.06" />
+        </pattern>
+        <clipPath id="vis-grating-clip">
+          <rect x="2" y="2" width="62" height="46" rx="6" />
+        </clipPath>
+      </defs>
+      <rect x="2" y="2" width="62" height="46" rx="6" fill={color} fillOpacity="0.07" stroke={color} strokeWidth="0.9" strokeOpacity="0.45" />
+      <g clipPath="url(#vis-grating-clip)" className="ri-vis-grating-drift">
+        <rect x="-14" y="2" width="94" height="46" fill="url(#vis-grating-pat)" />
+      </g>
+      {/* fixation cross */}
+      <line x1="33" y1="21" x2="33" y2="29" stroke={color} strokeWidth="1.5" strokeOpacity="0.7" />
+      <line x1="29" y1="25" x2="37" y2="25" stroke={color} strokeWidth="1.5" strokeOpacity="0.7" />
+    </svg>
+  );
+}
+
 // ── Mode 2: Stimulus input panel ──────────────────────────────────────────────
 function StimulusPanel({ stim }: { stim: typeof STIMULI[0] }) {
   // Networks with activation weight ≥ 0.4, sorted highest first
@@ -447,8 +522,8 @@ function StimulusPanel({ stim }: { stim: typeof STIMULI[0] }) {
     <div className="ri-stim-panel" aria-hidden="true">
       <div className="ri-stim-header">INPUT STIMULUS</div>
       <div className="ri-stim-box" style={{ borderColor: stim.color + '80', background: stim.color + '14' }}>
-        <div className="ri-stim-icon" style={{ color: stim.color }}>
-          {stim.label === 'Visual' ? '👁' : stim.label === 'Speech' ? '🗣' : '💭'}
+        <div className="ri-stim-visual-wrap">
+          <StimulusVisual label={stim.label} color={stim.color} />
         </div>
         <div className="ri-stim-name" style={{ color: stim.color }}>{stim.label}</div>
         <div className="ri-stim-sub">{stim.sublabel}</div>

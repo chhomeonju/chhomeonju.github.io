@@ -333,7 +333,7 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
 /* ── Mode 2: Stimulus input panel ── */
 .ri-stim-panel {
   display: flex; flex-direction: column; align-items: center; gap: 8px;
-  width: 148px; flex-shrink: 0;
+  width: 162px; flex-shrink: 0;
 }
 .ri-stim-header {
   font-size: .62rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
@@ -344,7 +344,30 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
   padding: 10px 10px; text-align: center;
   transition: border-color .5s ease, background .5s ease;
 }
-.ri-stim-icon { font-size: 1.45rem; line-height: 1; margin-bottom: 3px; }
+.ri-stim-visual-wrap { display: flex; justify-content: center; align-items: center; margin-bottom: 4px; }
+.ri-stim-visual { display: block; overflow: visible; }
+.ri-speech-bar {
+  transform-box: fill-box; transform-origin: 50% 100%;
+  animation: ri-speech-bar-anim 0.52s ease-in-out infinite alternate;
+}
+@keyframes ri-speech-bar-anim {
+  from { transform: scaleY(0.25); opacity: 0.45; }
+  to   { transform: scaleY(1.0);  opacity: 0.85; }
+}
+.ri-face-pulse {
+  animation: ri-face-pulse-anim 2.4s ease-in-out infinite;
+}
+@keyframes ri-face-pulse-anim {
+  0%, 100% { opacity: 0.70; }
+  50%       { opacity: 1.00; }
+}
+.ri-vis-grating-drift {
+  animation: ri-vis-drift-anim 1.4s linear infinite;
+}
+@keyframes ri-vis-drift-anim {
+  from { transform: translateX(0px); }
+  to   { transform: translateX(14px); }
+}
 .ri-stim-name {
   font-size: .92rem; font-weight: 700; letter-spacing: .03em;
   transition: color .5s ease; line-height: 1.3;
