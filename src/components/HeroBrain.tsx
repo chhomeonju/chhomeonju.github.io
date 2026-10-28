@@ -114,7 +114,7 @@ export function HeroBrain({ onExplore }: { onExplore?: (e: MouseEvent<HTMLAnchor
         if (canvas!.width !== w || canvas!.height !== h) { canvas!.width = w; canvas!.height = h; }
         gl!.viewport(0, 0, w, h);
         gl!.clear(gl!.COLOR_BUFFER_BIT | gl!.DEPTH_BUFFER_BIT);
-        gl!.uniform1f(uAngle, 0.38 + userAngle - elapsed * 0.025 + Math.sin(elapsed * 0.16) * 0.06);
+        gl!.uniform1f(uAngle, 0.38 + userAngle - elapsed * 0.05 + Math.sin(elapsed * 0.16) * 0.06);
         gl!.uniform1f(uTilt, -0.18);
         gl!.uniform1f(uAspect, w / h);
         gl!.uniform1f(uTime, elapsed);
