@@ -440,74 +440,68 @@ function ConnectomeCanvas({ stimIdx }: { stimIdx: number }) {
 // ── Mode 2: Per-stimulus visual representation ────────────────────────────────
 function StimulusVisual({ label, color }: { label: string; color: string }) {
   if (label === 'Emotional') {
+    // 4 schematic face photographs — static, all visible at full opacity
+    const Face = ({ tx, ty, mouth, bL, bR, eyeRx = 1.5, eyeRy = 1.5 }:
+      { tx:number; ty:number; mouth?:string; bL?:number[]; bR?:number[]; eyeRx?:number; eyeRy?:number }) => (
+      <g transform={`translate(${tx},${ty})`}>
+        <rect width="22" height="24" rx="3" fill={color} fillOpacity="0.10" stroke={color} strokeWidth="0.8" strokeOpacity="0.45"/>
+        <ellipse cx="11" cy="11" rx="7" ry="8.5" fill={color} fillOpacity="0.20"/>
+        {bL && <line x1={bL[0]} y1={bL[1]} x2={bL[2]} y2={bL[3]} stroke={color} strokeWidth="1.2" strokeLinecap="round" opacity="0.85"/>}
+        {bR && <line x1={bR[0]} y1={bR[1]} x2={bR[2]} y2={bR[3]} stroke={color} strokeWidth="1.2" strokeLinecap="round" opacity="0.85"/>}
+        <ellipse cx="7.5" cy="10" rx={eyeRx} ry={eyeRy} fill={color} opacity="0.90"/>
+        <ellipse cx="14.5" cy="10" rx={eyeRx} ry={eyeRy} fill={color} opacity="0.90"/>
+        {mouth && <path d={mouth} fill="none" stroke={color} strokeWidth="1.3" strokeLinecap="round" opacity="0.90"/>}
+      </g>
+    );
     return (
-      <svg viewBox="0 0 52 52" width="72" height="72" className="ri-stim-visual" aria-hidden="true">
-        {/* happy */}
-        <g transform="translate(2,2)" className="ri-face-pulse" style={{ animationDelay: '0s' }}>
-          <circle cx="11" cy="11" r="10" fill={color} fillOpacity="0.12" stroke={color} strokeWidth="1.4" />
-          <circle cx="7.5" cy="9.5" r="1.6" fill={color} />
-          <circle cx="14.5" cy="9.5" r="1.6" fill={color} />
-          <path d="M7 14 Q11 18 15 14" fill="none" stroke={color} strokeWidth="1.4" strokeLinecap="round" />
-        </g>
-        {/* sad */}
-        <g transform="translate(28,2)" className="ri-face-pulse" style={{ animationDelay: '0.6s' }}>
-          <circle cx="11" cy="11" r="10" fill={color} fillOpacity="0.12" stroke={color} strokeWidth="1.4" />
-          <circle cx="7.5" cy="9.5" r="1.6" fill={color} />
-          <circle cx="14.5" cy="9.5" r="1.6" fill={color} />
-          <path d="M7 16.5 Q11 12.5 15 16.5" fill="none" stroke={color} strokeWidth="1.4" strokeLinecap="round" />
-        </g>
-        {/* fearful — wide eyes + open mouth */}
-        <g transform="translate(2,28)" className="ri-face-pulse" style={{ animationDelay: '1.2s' }}>
-          <circle cx="11" cy="11" r="10" fill={color} fillOpacity="0.12" stroke={color} strokeWidth="1.4" />
-          <ellipse cx="7.5" cy="9" rx="2.2" ry="2.8" fill={color} />
-          <ellipse cx="14.5" cy="9" rx="2.2" ry="2.8" fill={color} />
-          <ellipse cx="11" cy="14.5" rx="2.8" ry="2" fill="none" stroke={color} strokeWidth="1.3" />
-        </g>
-        {/* angry — furrowed brows */}
-        <g transform="translate(28,28)" className="ri-face-pulse" style={{ animationDelay: '1.8s' }}>
-          <circle cx="11" cy="11" r="10" fill={color} fillOpacity="0.12" stroke={color} strokeWidth="1.4" />
-          <line x1="4.5" y1="6.5" x2="9" y2="8.5" stroke={color} strokeWidth="1.5" strokeLinecap="round" />
-          <line x1="17.5" y1="6.5" x2="13" y2="8.5" stroke={color} strokeWidth="1.5" strokeLinecap="round" />
-          <circle cx="7.5" cy="10.5" r="1.6" fill={color} />
-          <circle cx="14.5" cy="10.5" r="1.6" fill={color} />
-          <path d="M7.5 15.5 Q11 13 14.5 15.5" fill="none" stroke={color} strokeWidth="1.4" strokeLinecap="round" />
-        </g>
+      <svg viewBox="0 0 50 54" width="68" height="74" className="ri-stim-visual" aria-hidden="true">
+        <Face tx={2}  ty={2}  mouth="M7 15 Q11 19 15 15" />
+        <Face tx={26} ty={2}  mouth="M7 17 Q11 13 15 17" />
+        <Face tx={2}  ty={28} mouth="M9 17 Q11 15 13 17" eyeRx={2.0} eyeRy={2.5} />
+        <Face tx={26} ty={28} mouth="M7.5 16 Q11 14 14.5 16"
+          bL={[5,7,9,9]} bR={[17,7,13,9]} />
       </svg>
     );
   }
   if (label === 'Speech') {
-    const heights = [12, 22, 16, 28, 20, 26, 14, 24, 18, 10];
+    // Speech amplitude waveform — static, looks like real audio signal
+    const pts = [
+      [2,17],[5,17],[7,12],[9,22],[11,7],[13,26],[15,4],[17,28],[19,8],[21,24],
+      [23,11],[25,21],[27,5],[29,29],[31,6],[33,27],[35,10],[37,23],[39,13],[41,21],
+      [43,9],[45,25],[47,14],[49,19],[51,16],[53,17],[55,17],
+    ];
+    const d = pts.map(([x,y],i) => `${i===0?'M':'L'}${x},${y}`).join(' ');
     return (
-      <svg viewBox="0 0 56 34" width="78" height="50" className="ri-stim-visual" aria-hidden="true">
-        {heights.map((h, i) => (
-          <rect key={i} className="ri-speech-bar"
-            x={i * 5.4 + 1} y={34 - h} width="4" height={h}
-            fill={color} opacity="0.78" rx="2"
-            style={{ animationDelay: `${i * 0.06}s`, animationDuration: `${0.52 + (i % 3) * 0.12}s` }}
-          />
-        ))}
+      <svg viewBox="0 0 58 34" width="80" height="48" className="ri-stim-visual" aria-hidden="true">
+        <rect x="1" y="1" width="56" height="32" rx="4" fill={color} fillOpacity="0.07" stroke={color} strokeWidth="0.7" strokeOpacity="0.40"/>
+        {/* envelope bands */}
+        <path d="M2,17 L5,17 L7,9 L11,4 L15,2 L19,5 L23,8 L27,3 L31,3 L35,7 L39,10 L43,6 L47,11 L51,14 L55,16 L56,17"
+          fill="none" stroke={color} strokeWidth="0.6" strokeOpacity="0.30" strokeDasharray="2,2"/>
+        <path d="M2,17 L5,17 L7,25 L11,30 L15,32 L19,29 L23,26 L27,31 L31,31 L35,27 L39,24 L43,28 L47,23 L51,20 L55,18 L56,17"
+          fill="none" stroke={color} strokeWidth="0.6" strokeOpacity="0.30" strokeDasharray="2,2"/>
+        {/* waveform */}
+        <path d={d} fill="none" stroke={color} strokeWidth="1.3" strokeLinecap="round" strokeLinejoin="round" opacity="0.80"/>
       </svg>
     );
   }
-  // Visual — drifting orientation grating (classic visual cortex localizer)
+  // Visual — naturalistic scene (mountain landscape)
   return (
-    <svg viewBox="0 0 66 50" width="80" height="60" className="ri-stim-visual" aria-hidden="true">
-      <defs>
-        <pattern id="vis-grating-pat" x="0" y="0" width="14" height="50" patternUnits="userSpaceOnUse">
-          <rect width="7" height="50" fill={color} opacity="0.58" />
-          <rect x="7" width="7" height="50" fill={color} opacity="0.06" />
-        </pattern>
-        <clipPath id="vis-grating-clip">
-          <rect x="2" y="2" width="62" height="46" rx="6" />
-        </clipPath>
-      </defs>
-      <rect x="2" y="2" width="62" height="46" rx="6" fill={color} fillOpacity="0.07" stroke={color} strokeWidth="0.9" strokeOpacity="0.45" />
-      <g clipPath="url(#vis-grating-clip)" className="ri-vis-grating-drift">
-        <rect x="-14" y="2" width="94" height="46" fill="url(#vis-grating-pat)" />
-      </g>
-      {/* fixation cross */}
-      <line x1="33" y1="21" x2="33" y2="29" stroke={color} strokeWidth="1.5" strokeOpacity="0.7" />
-      <line x1="29" y1="25" x2="37" y2="25" stroke={color} strokeWidth="1.5" strokeOpacity="0.7" />
+    <svg viewBox="0 0 70 52" width="82" height="60" className="ri-stim-visual" aria-hidden="true">
+      {/* frame */}
+      <rect x="1" y="1" width="68" height="50" rx="5" fill={color} fillOpacity="0.08" stroke={color} strokeWidth="0.8" strokeOpacity="0.45"/>
+      {/* sky */}
+      <rect x="2" y="2" width="66" height="27" rx="4" fill={color} fillOpacity="0.13"/>
+      {/* sun */}
+      <circle cx="57" cy="13" r="7" fill={color} fillOpacity="0.62"/>
+      {/* cloud */}
+      <ellipse cx="24" cy="13" rx="10" ry="5.5" fill={color} fillOpacity="0.22"/>
+      <ellipse cx="33" cy="11" rx="8" ry="4.5" fill={color} fillOpacity="0.22"/>
+      {/* mountain left (front) */}
+      <polygon points="2,51 24,20 44,51" fill={color} fillOpacity="0.42"/>
+      {/* mountain right (back, lighter) */}
+      <polygon points="34,51 56,17 70,51" fill={color} fillOpacity="0.28"/>
+      {/* ground / meadow */}
+      <rect x="2" y="42" width="66" height="9" rx="0 0 4 4" fill={color} fillOpacity="0.24"/>
     </svg>
   );
 }
