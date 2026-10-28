@@ -79,7 +79,7 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
   height: calc(100svh - 72px);
   display: flex;
   flex-direction: column;
-  padding: 0;
+  padding: 0 0 56px;
 }
 .hero-intro {
   flex: 1;
@@ -89,8 +89,8 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
   align-items: center;
   justify-content: center;
   text-align: center;
-  padding: 0 0 clamp(40px, 8vh, 100px);
-  overflow: hidden;
+  padding: 0 0 clamp(20px, 5vh, 60px);
+  overflow: visible;
 }
 .brain-canvas {
   width: 340px;
