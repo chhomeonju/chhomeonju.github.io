@@ -75,35 +75,67 @@ void main(){
   activity=clamp(a*.88+b*.80+c*.55+d*.65,0.,1.);
   highlight=vec3(.46,.16,.82)*(.72+.28*light);
  }else{
-  /* Network: stimulus-driven regional glow (no ripple wave) */
-  float pulse=0.76+0.24*sin(time*0.85); /* slow breath, no ripple */
+  /* Network: stimulus-driven, network-weight-based regional glow.
+     Each RSN painted at its canonical anatomical location.
+     Activation = network weight × spatial glow → same as StimulusPanel bars.
+     Sources: Menon 2011 (Nat Rev Neurosci), Power et al. 2011 (Neuron),
+     Yeo et al. 2011 (J Neurophysiol), Vigneau 2006 (NeuroImage). */
+  float pulse=0.82+0.18*sin(time*0.90);
+
+  /* ── Compute each network's spatial glow at canonical anatomical loci ──
+     sigma=0.16-0.18 gives a clearly visible blob spanning ~1/3 of brain width.
+     foci in brain-mesh coords (empirically calibrated from Broca/Wernicke/SMA). */
+  /* DMN: medial PFC + PCC + bilateral inferior parietal lobule */
+  float gDmn=max(max(glow(vec3(.00,.30,.16),.18),glow(vec3(.00,-.18,.42),.17)),
+                 max(glow(vec3(-.36,.06,.36),.14),glow(vec3(.36,.06,.36),.14)));
+  /* FPN-L: L dlPFC (lateral prefrontal) + L IPS/IPL */
+  float gFpnl=max(glow(vec3(-.40,.28,.20),.16),glow(vec3(-.42,.14,.36),.14));
+  /* FPN-R: R dlPFC + R IPS/IPL */
+  float gFpnr=max(glow(vec3(.40,.28,.20),.16),glow(vec3(.42,.14,.36),.14));
+  /* LAN: L IFG Broca BA44/45 + L posterior STG Wernicke BA22 */
+  float gLan=max(glow(vec3(-.44,.16,.30),.16),glow(vec3(-.48,-.18,.42),.16));
+  /* SAN: bilateral anterior insula + bilateral amygdala + dACC */
+  float gSan=max(max(glow(vec3(-.36,.12,.22),.15),glow(vec3(.36,.12,.22),.15)),
+                 max(glow(vec3(-.26,-.04,.26),.13),glow(vec3(.00,.22,.20),.14)));
+  /* SMN: bilateral S1/M1 strip + pre-SMA (superior convexity) */
+  float gSmn=max(max(glow(vec3(-.30,.30,.18),.15),glow(vec3(.30,.30,.18),.15)),
+                 glow(vec3(.00,.40,.14),.15));
+  /* VIS: V1/V2 mesial + MT/hMT+ + inferior temporal / lateral occipital cortex.
+     Spread across z to be visible at multiple rotation angles. */
+  float gVis=max(max(glow(vec3(.00,-.22,.02),.18),glow(vec3(.00,-.18,-.04),.17)),
+                 max(glow(vec3(-.44,-.06,.04),.17),glow(vec3(.44,-.06,.04),.17)));
+
+  /* ── Stimulus-specific weights (match STIMULI[] array in JS) ── */
+  float wDmn,wFpnl,wFpnr,wLan,wSan,wSmn,wVis;
   if(stimIdx<0.5){
-   /* Visual: bilateral V1/V2 occipital + IPS dorsal parietal (ALE meta-analysis) */
-   float a=glow(vec3(.06,-.14,-.43),.10)*1.0;
-   float b=glow(vec3(-.06,-.12,-.43),.10)*.90;
-   float c=glow(vec3(.36,.28,-.14),.09)*.65;
-   float d=glow(vec3(-.34,.26,-.15),.09)*.58;
-   activity=clamp((a+b+c+d)*pulse*.90,0.,1.);
-   highlight=vec3(.49,.22,.88)*(.72+.28*light);
+   /* Visual: VIS>FPNr>SAN>FPNl>SMN>DMN>LAN */
+   wVis=1.0;wSan=0.72;wFpnr=0.78;wFpnl=0.38;wSmn=0.18;wDmn=0.10;wLan=0.07;
   }else if(stimIdx<1.5){
-   /* Speech: L-IFG (Broca BA44/45), L-STG (Wernicke BA22), pre-SMA */
-   float a=glow(vec3(-.38,.15,.30),.10)*1.0;
-   float b=glow(vec3(-.40,-.20,.42),.10)*.92;
-   float c=glow(vec3(-.12,.40,.12),.09)*.68;
-   float d=glow(vec3(-.30,.05,.36),.08)*.52;
-   activity=clamp((a+b+c+d)*pulse*.90,0.,1.);
-   highlight=vec3(.96,.49,.05)*(.72+.28*light);
+   /* Speech: LAN>FPNl>DMN>SMN>FPNr>SAN>VIS */
+   wLan=1.0;wFpnl=0.88;wDmn=0.65;wSmn=0.42;wSan=0.20;wFpnr=0.22;wVis=0.06;
   }else{
-   /* Emotional: bilateral amygdala-insula + vmPFC/OFC + ACC */
-   float a=glow(vec3(-.28,-.05,.28),.09)*1.0;
-   float b=glow(vec3(.28,-.05,.26),.09)*.88;
-   float c=glow(vec3(.02,.34,.15),.10)*.92;
-   float d=glow(vec3(.02,.20,.28),.08)*.75;
-   activity=clamp((a+b+c+d)*pulse*.90,0.,1.);
-   highlight=vec3(.90,.22,.28)*(.72+.28*light);
+   /* Emotional: SAN>DMN>FPNl>FPNr>LAN>SMN>VIS */
+   wSan=1.0;wDmn=0.92;wFpnl=0.65;wFpnr=0.28;wLan=0.18;wSmn=0.10;wVis=0.08;
   }
+
+  /* ── Weighted sum → total regional activation ── */
+  float aNet=gDmn*wDmn+gFpnl*wFpnl+gFpnr*wFpnr+gLan*wLan+gSan*wSan+gSmn*wSmn+gVis*wVis;
+  activity=clamp(aNet*pulse,0.,1.);
+
+  /* ── Blend network colors proportionally (spatially coherent hue map) ── */
+  vec3 cDmn=vec3(.90,.22,.27);  /* DMN: red */
+  vec3 cFpn=vec3(.29,.56,.85);  /* FPN: blue */
+  vec3 cLan=vec3(.97,.49,.00);  /* LAN: orange */
+  vec3 cSan=vec3(.96,.60,.22);  /* SAN: amber */
+  vec3 cSmn=vec3(.18,.62,.31);  /* SMN: green */
+  vec3 cVis=vec3(.55,.22,.92);  /* VIS: purple */
+  float tw=max(aNet,.001);
+  highlight=( cDmn*(gDmn*wDmn)+cFpn*(gFpnl*wFpnl+gFpnr*wFpnr)+
+              cLan*(gLan*wLan)+cSan*(gSan*wSan)+
+              cSmn*(gSmn*wSmn)+cVis*(gVis*wVis) )/tw;
+  highlight*=(.70+.30*light);
  }
- gl_FragColor=vec4(mix(base,highlight,activity*.88),1.);
+ gl_FragColor=vec4(mix(base,highlight,activity*.96),1.);
 }`;
 
 // ── Mode 0: EEG signal panel ──────────────────────────────────────────────
@@ -305,14 +337,14 @@ function ConnectomeCanvas({ stimIdx }: { stimIdx: number }) {
       // Edges modulated by stimulus-specific network activation
       FC.forEach(([fi,ti], ei) => {
         const from = NETS[fi], to = NETS[ti];
-        const edgeW = ((wt[from.id] ?? 0.1) + (wt[to.id] ?? 0.1)) / 2;
+        const edgeW = ((wt[from.id] ?? 0.05) + (wt[to.id] ?? 0.05)) / 2;
         const fc = fcVal(ei, t) * edgeW;
-        if (fc < 0.08) return;
-        ctx.globalAlpha = fc * 0.65;
+        if (fc < 0.06) return;
+        ctx.globalAlpha = Math.min(0.92, fc * 0.88);
         ctx.strokeStyle = from.color;
-        ctx.lineWidth = fc * 3.2;
+        ctx.lineWidth = 0.5 + fc * 4.5;
         ctx.shadowColor = from.color;
-        ctx.shadowBlur = fc * 6;
+        ctx.shadowBlur = fc * 12;
         ctx.beginPath();
         ctx.moveTo(nx(from.x), ny(from.y));
         ctx.lineTo(nx(to.x), ny(to.y));
@@ -351,28 +383,28 @@ function ConnectomeCanvas({ stimIdx }: { stimIdx: number }) {
       // Network nodes — size and brightness scale with activation weight
       NETS.forEach((net, i) => {
         const x = nx(net.x), y = ny(net.y);
-        const aw = wt[net.id] ?? 0.1;
+        const aw = wt[net.id] ?? 0.05;
         const pulse = 0.5+0.5*Math.sin(t*(1.1+aw*0.7) + i*0.9);
-        const scale = 0.35 + aw * 1.1;
+        const scale = 0.28 + aw * 1.3;   // wider range: quiet=0.28, full=1.58
 
-        // halo — larger and brighter for active networks
-        ctx.globalAlpha = (0.10 + 0.14*pulse) * scale;
+        // outer halo — more pronounced for highly active nodes
+        ctx.globalAlpha = Math.min(0.55, (0.12 + 0.20*pulse) * (0.4 + aw));
         ctx.fillStyle = net.color;
-        ctx.beginPath(); ctx.arc(x, y, (7+3*pulse)*scale, 0, Math.PI*2); ctx.fill();
+        ctx.beginPath(); ctx.arc(x, y, (8+4*pulse)*scale, 0, Math.PI*2); ctx.fill();
         ctx.globalAlpha = 1;
 
-        // core
-        ctx.shadowColor = net.color; ctx.shadowBlur = 5 + 10*aw;
+        // core node
+        ctx.shadowColor = net.color; ctx.shadowBlur = 4 + 16*aw;
         ctx.fillStyle = net.color;
-        ctx.globalAlpha = 0.45 + 0.55*aw;
-        ctx.beginPath(); ctx.arc(x, y, 5*scale, 0, Math.PI*2); ctx.fill();
+        ctx.globalAlpha = Math.min(1, 0.35 + 0.65*aw);
+        ctx.beginPath(); ctx.arc(x, y, Math.max(2, 5*scale), 0, Math.PI*2); ctx.fill();
         ctx.shadowBlur = 0; ctx.globalAlpha = 1;
 
-        // label pill — only for networks with meaningful activation (≥0.15)
-        if (aw < 0.15) return;
+        // label pill — for all networks with activation ≥0.10
+        if (aw < 0.10) return;
         const pillW = net.label.length * 5.2 + 5;
-        ctx.fillStyle = `rgba(10,15,25,${0.55 + 0.30*aw})`;
-        const lx = x-pillW/2, ly = y + 7*scale;
+        ctx.fillStyle = `rgba(8,12,22,${0.60 + 0.32*aw})`;
+        const lx = x-pillW/2, ly = y + Math.max(6, 7*scale);
         ctx.beginPath();
         ctx.moveTo(lx+3,ly); ctx.lineTo(lx+pillW-3,ly);
         ctx.quadraticCurveTo(lx+pillW,ly,lx+pillW,ly+3);
@@ -381,9 +413,9 @@ function ConnectomeCanvas({ stimIdx }: { stimIdx: number }) {
         ctx.lineTo(lx,ly+3); ctx.quadraticCurveTo(lx,ly,lx+3,ly); ctx.closePath();
         ctx.fill();
         ctx.fillStyle = net.color;
-        ctx.font = `bold ${Math.round(7.5+aw*2)}px system-ui,sans-serif`;
+        ctx.font = `bold ${Math.round(7.5+aw*2.5)}px system-ui,sans-serif`;
         ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-        ctx.globalAlpha = 0.45 + 0.55*aw;
+        ctx.globalAlpha = Math.min(1, 0.50 + 0.50*aw);
         ctx.fillText(net.label, x, ly+6.5);
         ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
         ctx.globalAlpha = 1;

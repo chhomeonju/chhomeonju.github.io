@@ -318,11 +318,11 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
 .ri-viz--mode1 .ri-brain-wrap { width: 250px; height: 250px; }
 
 /* ── Mode 2: stimulus panel + brain side by side ── */
-.ri-viz--mode2 .ri-viz-main { flex-direction: row; align-items: center; gap: 10px; }
-.ri-viz--mode2 .ri-brain-wrap { width: 240px; height: 240px; }
+.ri-viz--mode2 .ri-viz-main { flex-direction: row; align-items: center; gap: 14px; }
+.ri-viz--mode2 .ri-brain-wrap { width: 260px; height: 260px; }
 .ri-viz--mode2 .ri-canvas {
   position: absolute;
-  width: 175px; height: 175px;
+  width: 195px; height: 195px;
   left: 50%; top: 50%;
   transform: translate(-50%, -50%);
   z-index: 1;
@@ -332,49 +332,49 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
 
 /* ── Mode 2: Stimulus input panel ── */
 .ri-stim-panel {
-  display: flex; flex-direction: column; align-items: center; gap: 6px;
-  width: 108px; flex-shrink: 0;
+  display: flex; flex-direction: column; align-items: center; gap: 7px;
+  width: 120px; flex-shrink: 0;
 }
 .ri-stim-header {
-  font-size: .48rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
-  color: rgba(148,163,184,.55); text-align: center;
+  font-size: .52rem; font-weight: 700; letter-spacing: .08em; text-transform: uppercase;
+  color: rgba(203,213,225,.80); text-align: center;
 }
 .ri-stim-box {
   width: 100%; border-radius: 8px; border: 1px solid transparent;
-  padding: 8px 6px; text-align: center;
+  padding: 9px 8px; text-align: center;
   transition: border-color .5s ease, background .5s ease;
 }
-.ri-stim-icon { font-size: 1.1rem; line-height: 1; margin-bottom: 2px; }
+.ri-stim-icon { font-size: 1.25rem; line-height: 1; margin-bottom: 3px; }
 .ri-stim-name {
-  font-size: .72rem; font-weight: 700; letter-spacing: .03em;
+  font-size: .80rem; font-weight: 700; letter-spacing: .03em;
   transition: color .5s ease; line-height: 1.3;
 }
 .ri-stim-sub {
-  font-size: .50rem; color: rgba(148,163,184,.7); margin-top: 2px;
+  font-size: .54rem; color: rgba(203,213,225,.85); margin-top: 3px;
   line-height: 1.4;
 }
 .ri-stim-arrow {
-  font-size: .9rem; line-height: 1; transition: color .5s ease;
+  font-size: 1.0rem; line-height: 1; transition: color .5s ease;
 }
 .ri-stim-acts-label {
-  font-size: .46rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase;
-  color: rgba(148,163,184,.45);
+  font-size: .50rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase;
+  color: rgba(203,213,225,.65);
 }
 .ri-stim-nets {
-  width: 100%; display: flex; flex-direction: column; gap: 3px;
+  width: 100%; display: flex; flex-direction: column; gap: 4px;
 }
 .ri-stim-net {
   display: flex; align-items: center; gap: 4px; width: 100%;
 }
 .ri-stim-dot {
-  width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0;
+  width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
 }
 .ri-stim-net-label {
-  font-size: .52rem; font-weight: 700; letter-spacing: .03em;
-  flex-shrink: 0; width: 28px;
+  font-size: .56rem; font-weight: 700; letter-spacing: .03em;
+  flex-shrink: 0; width: 30px;
 }
 .ri-stim-bar-wrap {
-  flex: 1; height: 3px; background: rgba(148,163,184,.12);
+  flex: 1; height: 4px; background: rgba(148,163,184,.18);
   border-radius: 2px; overflow: hidden;
 }
 .ri-stim-bar {
@@ -501,15 +501,15 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
   .ri-viz--mode0, .ri-viz--mode1, .ri-viz--mode2 { width: 100%; max-width: 400px; }
   .ri-viz--mode0 .ri-brain-wrap { width: 180px; height: 180px; }
   .ri-viz--mode1 .ri-brain-wrap { width: 220px; height: 220px; }
-  .ri-viz--mode2 .ri-brain-wrap { width: 200px; height: 180px; }
-  .ri-viz--mode2 .ri-canvas { width: 110px; height: 110px; }
-  .ri-stim-panel { width: 90px; }
+  .ri-viz--mode2 .ri-brain-wrap { width: 220px; height: 200px; }
+  .ri-viz--mode2 .ri-canvas { width: 130px; height: 130px; }
+  .ri-stim-panel { width: 100px; }
 }
 @media (max-width: 600px) {
   .ri-viz--mode0 .ri-brain-wrap { width: 150px; height: 150px; }
   .ri-viz--mode1 .ri-brain-wrap { width: 180px; height: 180px; }
-  .ri-viz--mode2 .ri-brain-wrap { width: 280px; height: 242px; }
-  .ri-viz--mode2 .ri-canvas { width: 120px; height: 120px; }
+  .ri-viz--mode2 .ri-brain-wrap { width: 300px; height: 260px; }
+  .ri-viz--mode2 .ri-canvas { width: 140px; height: 140px; }
 }
 .skills-list { margin: 0; }
 .skills-group { display: grid; grid-template-columns: minmax(220px, 1fr) minmax(0, 2.1fr); gap: 26px; align-items: center; padding: 18px 0; border-bottom: 1px solid var(--rule); min-width: 0; }
