@@ -181,7 +181,7 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
 .portrait small { font-size: .7rem; }
 .profile-links { padding: 0; margin: 19px 0 0; list-style: none; display: flex; flex-direction: column; gap: 2px; }
 .profile-links li, .profile-links a { font-size: .78rem; color: var(--muted); }
-.profile-location, .profile-links a { display: flex; align-items: center; gap: 10px; min-height: 33px; }
+.profile-location, .profile-links a { display: flex; align-items: center; gap: 10px; min-height: 33px; white-space: nowrap; }
 .profile-links a { width: fit-content; padding: 4px 0; background: transparent; transition: color .15s; }
 .profile-links a:hover { color: var(--accent); }
 .profile-links svg, .profile-links img { width: 16px; height: 16px; flex: 0 0 16px; }
