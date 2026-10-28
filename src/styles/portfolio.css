@@ -187,8 +187,8 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
 }
 .ftoc-dot {
   width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0;
-  background: color-mix(in srgb, var(--muted) 50%, transparent);
-  transition: background .2s, transform .2s;
+  background: color-mix(in srgb, var(--muted) 60%, transparent);
+  transition: background .2s, transform .2s, opacity .2s;
 }
 .ftoc-item--active .ftoc-dot { background: var(--accent); transform: scale(1.5); }
 .ftoc-item:hover .ftoc-dot { background: var(--muted); }
@@ -201,6 +201,15 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
 }
 .ftoc-item:hover .ftoc-label { opacity: 1; }
 .ftoc-item--active .ftoc-label { opacity: 1; color: var(--accent); font-weight: 500; }
+/* Dim when scrolled — all labels hidden; brighten everything on hover */
+.floating-toc--scrolled .ftoc-dot { opacity: 0.2; }
+.floating-toc--scrolled .ftoc-item--active .ftoc-dot { opacity: 0.35; }
+.floating-toc--scrolled .ftoc-label,
+.floating-toc--scrolled .ftoc-item--active .ftoc-label { opacity: 0; }
+.floating-toc--scrolled:hover .ftoc-dot { opacity: 1; }
+.floating-toc--scrolled:hover .ftoc-item--active .ftoc-dot { opacity: 1; }
+.floating-toc--scrolled:hover .ftoc-item:hover .ftoc-label { opacity: 1; }
+.floating-toc--scrolled:hover .ftoc-item--active .ftoc-label { opacity: 1; }
 @media (max-width: 900px) { .floating-toc { display: none; } }
 
 /* A personal introduction, with contact information anchored to the portrait. */
@@ -532,7 +541,11 @@ footer p { font-size: .76rem; color: var(--muted); letter-spacing: .01em; }
 /* ── About area wrapper ── */
 .about-area { display: contents; }
 .about-area > section,
-.about-area > header { scroll-margin-top: var(--section-offset, 100px); }
+.about-area > header { scroll-margin-top: var(--section-offset, 100px); padding-right: 52px; }
+@media (max-width: 900px) {
+  .about-area > section,
+  .about-area > header { padding-right: 0; }
+}
 
 /* ── Research Competencies ── */
 .competencies-section { margin-top: 56px; }

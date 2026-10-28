@@ -12,6 +12,8 @@ const TOC_ITEMS = [
 
 export function FloatingTOC() {
   const [active, setActive] = useState<string>('');
+  const [scrolled, setScrolled] = useState(false);
+  const [inAbout, setInAbout] = useState(true);
 
   useEffect(() => {
     const observers: IntersectionObserver[] = [];
@@ -36,8 +38,23 @@ export function FloatingTOC() {
       observers.push(obs);
     });
 
+    // Hide TOC once Publications section comes into view
+    const pubEl = document.getElementById('publications');
+    if (pubEl) {
+      const pubObs = new IntersectionObserver(
+        ([entry]) => setInAbout(!entry.isIntersecting),
+        { threshold: 0 }
+      );
+      pubObs.observe(pubEl);
+      observers.push(pubObs);
+    }
+
+    const onScroll = () => setScrolled(window.scrollY > 80);
+    window.addEventListener('scroll', onScroll, { passive: true });
+
     return () => {
       observers.forEach(o => o.disconnect());
+      window.removeEventListener('scroll', onScroll);
     };
   }, []);
 
@@ -47,7 +64,7 @@ export function FloatingTOC() {
   };
 
   return (
-    <nav className="floating-toc floating-toc--visible" aria-label="Page sections">
+    <nav className={`floating-toc${inAbout ? ' floating-toc--visible' : ''}${scrolled ? ' floating-toc--scrolled' : ''}`} aria-label="Page sections">
       <ul>
         {TOC_ITEMS.map(({ id, label }) => (
           <li key={id}>
