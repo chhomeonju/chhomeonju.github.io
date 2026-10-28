@@ -1,6 +1,5 @@
 import { useEffect, useRef } from 'react';
 import type { MouseEvent } from 'react';
-import { MapPin } from 'lucide-react';
 
 declare global {
   interface Window { meshes: Array<{ p: string; n: string; i: string }> }
@@ -215,8 +214,7 @@ export function HeroBrain({ onExplore }: { onExplore?: (e: MouseEvent<HTMLAnchor
       </div>
       <div className="hero-bottom">
         <span className="hero-place">
-          <MapPin size={14} aria-hidden="true" />
-          Seoul, Republic of Korea
+          Copyright © Myeongju Cho
         </span>
         <div className="hero-contacts">
           <a href="mailto:mj_cho@korea.ac.kr">Email</a>
