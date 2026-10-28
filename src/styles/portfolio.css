@@ -167,20 +167,9 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
   .hero-bottom { flex-direction: column; align-items: flex-start; gap: 12px; }
 }
 @media (max-height: 640px) {
-  .brain-canvas { width: 220px; height: 148px; margin-bottom: 14px; }
-  .hero-name { margin-bottom: 8px; }
-  .hero-role { margin-bottom: 12px; }
-  .hero-vision { margin-bottom: 8px; font-size: 1.1rem; }
-  .hero-explore { margin-top: 16px; }
-  .hero-intro { padding-bottom: clamp(48px, 8vh, 80px); }
-}
-@media (max-height: 500px) {
-  .brain-canvas { width: 160px; height: 108px; margin-bottom: 10px; }
-  .hero-name { font-size: 2rem; margin-bottom: 6px; }
-  .hero-role { margin-bottom: 8px; }
-  .hero-vision { font-size: 1rem; margin-bottom: 6px; }
-  .hero-subjects { line-height: 1.6; }
-  .hero-explore { margin-top: 12px; }
+  body.home-view { overflow-y: auto; }
+  .hero-brain { height: auto; min-height: calc(100svh - 72px); padding-bottom: 64px; }
+  .hero-intro { overflow: visible; padding-bottom: 20px; }
 }
 
 /* A personal introduction, with contact information anchored to the portrait. */
