@@ -209,7 +209,7 @@ export function HeroBrain({ onExplore }: { onExplore?: (e: MouseEvent<HTMLAnchor
         <h1 className="hero-name">Myeongju Cho</h1>
         <p className="hero-role">M.S. Researcher at Korea University · PRML Lab</p>
         <p className="hero-vision">Understanding Human Cognition<br />Through AI</p>
-        <p className="hero-subjects">Brain–Computer Interfaces, Neural Decoding,<br />and EEG–Language Foundation Models</p>
+        <p className="hero-subjects">Experienced in neural data processing &amp; analysis and designing<br />computational models for neural decoding to understand human cognition</p>
         <a className="hero-explore" href="#about" onClick={onExplore}>Explore my research</a>
       </div>
       <div className="hero-bottom">
