@@ -168,8 +168,9 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
 }
 @media (max-height: 640px) {
   body.home-view { overflow-y: auto; }
-  .hero-brain { height: auto; min-height: calc(100svh - 72px); padding-bottom: 64px; }
-  .hero-intro { overflow: visible; padding-bottom: 20px; }
+  body.home-view .hero-bottom { position: static; transform: none; width: auto; }
+  .hero-brain { height: auto; min-height: calc(100svh - 72px); padding: 0; }
+  .hero-intro { overflow: visible; justify-content: center; padding: clamp(24px, 4vh, 48px) 0 32px; }
 }
 
 /* A personal introduction, with contact information anchored to the portrait. */
