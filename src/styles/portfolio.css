@@ -195,7 +195,7 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
 .ftoc-item:hover .ftoc-dot { opacity: 0.8; }
 .ftoc-label {
   position: absolute; right: calc(100% + 10px); top: 50%; transform: translateY(-50%);
-  opacity: 0; transition: opacity .15s; pointer-events: none;
+  opacity: 0; transition: opacity .15s;
   background: var(--paper); border: 1px solid var(--rule);
   padding: 3px 10px; border-radius: 4px; font-size: .68rem; line-height: 1;
   color: var(--ink); white-space: nowrap;
