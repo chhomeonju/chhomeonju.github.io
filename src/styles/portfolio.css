@@ -444,18 +444,13 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
   100% { r: 7.0; opacity: 0.0; }
 }
 
-/* Mode 2: network pulse ring (same rhythm as mode-0 decode ring) */
+/* Mode 2: static circle outline around the brain */
 .ri-net-pulse-ring {
   position: absolute; inset: 0; width: 100%; height: 100%; z-index: 3; pointer-events: none;
 }
-.ri-net-ring-circle {
-  fill: none; stroke-width: 0.55;
-  animation: ri-net-ring-expand 2.4s ease-out infinite;
-}
-.ri-net-ring-circle--delay { animation-delay: 1.2s; }
-@keyframes ri-net-ring-expand {
-  0%   { r: 24; opacity: 0.60; }
-  100% { r: 46; opacity: 0.00; }
+.ri-net-ring-static {
+  fill: none; stroke-width: 0.7; opacity: 0.50;
+  transition: stroke .5s ease;
 }
 
 /* Language token overlay */

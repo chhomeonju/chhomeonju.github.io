@@ -688,8 +688,7 @@ export function ResearchInterestsBrain() {
             {active === 2 && <ConnectomeCanvas stimIdx={stimIdx} />}
             {active === 2 && (
               <svg className="ri-net-pulse-ring" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-                <circle cx="50" cy="50" r="24" className="ri-net-ring-circle" style={{ stroke: STIMULI[stimIdx].color + '90' }} />
-                <circle cx="50" cy="50" r="24" className="ri-net-ring-circle ri-net-ring-circle--delay" style={{ stroke: STIMULI[stimIdx].color + '55' }} />
+                <circle cx="50" cy="50" r="46" className="ri-net-ring-static" style={{ stroke: STIMULI[stimIdx].color + '70' }} />
               </svg>
             )}
           </div>
