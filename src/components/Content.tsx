@@ -24,7 +24,6 @@ export function ResearchTrajectory() {
           <div className="research-interest" key={interest.title}>
             <h3>{interest.title}</h3>
             <p>{interest.description}</p>
-            {interest.raisedQuestion && <p className="raised-question">→ {interest.raisedQuestion}</p>}
           </div>
         )}</div>
       </div>

@@ -26,18 +26,16 @@ export const portfolio: PortfolioData = {
   ],
   researchInterests: [
     {
-      title: 'Can we decode inner speech from EEG?',
-      description: 'Starting from motor imagery and imagined speech paradigms, I investigated whether inner language leaves decodable traces in EEG — building classification pipelines, GAN-based speech reconstruction, and analyzing functional connectivity patterns that distinguish imagined words.',
-      raisedQuestion: 'What representations enable decoding that generalizes across subjects and tasks?',
+      title: 'Neural Decoding & Representation Learning',
+      description: 'Investigating how cognitive information is encoded in neural signals across EEG, ECoG, and fMRI — spanning classification, reconstruction, and learning representations that generalize across subjects, tasks, and recording modalities.',
     },
     {
-      title: 'Can self-supervised learning yield transferable EEG representations?',
-      description: 'This question drove the development of EEG foundation models — designing latent predictive objectives and aligning EEG with language semantics to learn representations that transfer across subjects, datasets, and downstream tasks.',
-      raisedQuestion: 'How do temporal dynamics shape the emergence of semantic information in neural signals?',
+      title: 'Brain–Language Modeling',
+      description: 'Aligning neural representations with language semantics through self-supervised learning and cross-modal objectives, toward foundation models that bridge brain signals and natural language.',
     },
     {
-      title: 'How do temporal dynamics drive semantic decoding in ECoG?',
-      description: 'Working with high-resolution ECoG recordings, I developed multi-scale temporal fusion networks and encoding-guided re-ranking to capture how linguistic meaning emerges and propagates across neural time.',
+      title: 'Brain Encoding & Network Dynamics',
+      description: 'Leveraging multimodal foundation models and generative approaches to understand how distributed neural activity and functional connectivity give rise to human cognition and behavior.',
     },
   ],
   futureDirections: [
