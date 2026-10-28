@@ -89,16 +89,14 @@ function HomePage() {
 
     {view === 'home' ? (
       <>
-        <HeroBrain />
-        <div id="about" className="about-area">
-          <ResearchTimeline />
-        </div>
+        <HeroBrain onExplore={e => goSection(e, 'about')} />
         <footer><p>Copyright ©Myeongju Cho</p></footer>
       </>
     ) : (
       <>
         <div className="about-area">
           <About />
+          <ResearchTimeline />
           <Competencies />
           <News />
           <Timeline id="experience" title="Research Experience" entries={portfolio.experience} />

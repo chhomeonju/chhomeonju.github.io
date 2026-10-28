@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import type { MouseEvent } from 'react';
 import { MapPin } from 'lucide-react';
 
 declare global {
@@ -44,7 +45,7 @@ void main(){
  gl_FragColor=vec4(color,1.);
 }`;
 
-export function HeroBrain() {
+export function HeroBrain({ onExplore }: { onExplore?: (e: MouseEvent<HTMLAnchorElement>) => void }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
 
@@ -210,10 +211,7 @@ export function HeroBrain() {
         <p className="hero-role">M.S. Researcher at Korea University · PRML Lab</p>
         <p className="hero-vision">Understanding Human Cognition<br />Through AI</p>
         <p className="hero-subjects">Brain–Computer Interfaces, Neural Decoding,<br />and EEG–Language Foundation Models</p>
-        <a className="hero-explore" href="#about" onClick={e => {
-          e.preventDefault();
-          document.getElementById('about')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
-        }}>Explore my research <span aria-hidden="true">↓</span></a>
+        <a className="hero-explore" href="#about" onClick={onExplore}>Explore my research</a>
       </div>
       <div className="hero-bottom">
         <span className="hero-place">
