@@ -65,7 +65,7 @@ export function HeroBrain({ onExplore }: { onExplore?: (e: MouseEvent<HTMLAnchor
         return;
       }
 
-      let paused = matchMedia('(prefers-reduced-motion: reduce)').matches;
+      let paused = false;
       let elapsed = 3.2, last = 0, lastDraw = 0, userAngle = 0, velocity = 0, lastPointerX: number | null = null, dirty = true;
 
       function mkShader(type: number, src: string) {
