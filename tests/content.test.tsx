@@ -16,11 +16,10 @@ test('all existing sections and project permalinks are present in initial HTML',
   assert.ok(html.includes('Copyright ©Myeongju Cho'));
 });
 
-test('publication figures resolve locally and Multi-Scale remains text-only', () => {
+test('publication figures resolve locally and all three papers have images', () => {
   const html = renderToStaticMarkup(<Publications />);
-  assert.equal((html.match(/<img /g) ?? []).length, 2);
-  assert.match(html, /class="mj-paper mj-without-image"/);
-  assert.equal(portfolio.publications[0].image, null);
+  assert.equal((html.match(/<img /g) ?? []).length, 3);
+  assert.ok(!html.includes('class="mj-paper mj-without-image"'));
   for (const publication of portfolio.publications) if (publication.image) assert.ok(existsSync(`public/${publication.image}`));
   assert.ok(html.includes('IEEE BCI 2027'));
   assert.ok(html.includes('IEEE CW 2024'));

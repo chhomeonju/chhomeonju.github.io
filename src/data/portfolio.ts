@@ -61,8 +61,8 @@ export const portfolio: PortfolioData = {
       "title": "Multi-Scale Temporal Fusion Network with Encoding-Guided Reciprocal Re-ranking for ECoG-to-Text Semantic Decoding",
       "authors": "M.-J. Cho, S.-H. Lee, and S.-W. Lee†",
       "venue": "IEEE BCI 2027 · Planned submission",
-      "image": null,
-      "imageAlt": null,
+      "image": "/assets/images/tada-framework.webp",
+      "imageAlt": "TADA framework: multi-scale temporal decoder and encoding-guided reciprocal re-ranking for ECoG-to-text decoding",
       "links": [
         {
           "label": "Code ↗",
