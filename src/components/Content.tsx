@@ -139,10 +139,14 @@ export function Publications() {
 
 export function Presentations() {
   return <section id="presentations"><h2>Poster Presentations</h2>
-    <table className="entries"><tbody>{portfolio.presentations.map(p => <tr key={p.title + p.status}><td>
-      <p className="mj-status">{p.status}</p><span className="papertitle">{p.title}</span>
-      <p className="mj-authors"><Authors>{p.authors}</Authors></p><p className="mj-venue">{p.venue}</p><p className="mj-small">{p.location}</p>
-    </td></tr>)}</tbody></table>
+    <div className="presentation-list">{portfolio.presentations.map(p =>
+      <article className="presentation-entry" key={p.title + p.status}>
+        <div className="presentation-meta"><span>{p.status}</span><span>{p.location}</span></div>
+        <h3>{p.title}</h3>
+        <p className="presentation-authors"><Authors>{p.authors}</Authors></p>
+        <p className="presentation-venue">{p.venue}</p>
+      </article>
+    )}</div>
   </section>;
 }
 

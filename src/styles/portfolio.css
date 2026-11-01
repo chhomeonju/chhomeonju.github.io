@@ -625,11 +625,9 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
 .project-highlights strong { color: var(--ink); }
 .project-stack { color: var(--muted); font-size: .74rem; line-height: 1.8; }
 .project-stack-label { font-weight: 700; margin-right: 12px; }
-.project-visual { flex-shrink: 0; width: 200px; height: 160px; border-radius: 6px; background: var(--wash); display: flex; align-items: center; justify-content: center; }
+.project-visual { flex-shrink: 0; width: 200px; height: 160px; border-radius: 6px; background: transparent; display: flex; align-items: center; justify-content: center; }
 .project-visual img { display: block; max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; border-radius: 4px; }
 .project-visual figcaption { display: none; }
-#project-eeg-llm .project-preview.has-image { flex-direction: column; }
-#project-eeg-llm .project-visual { align-self: flex-start; }
 .project-card-footer { grid-column: 2; display: flex; justify-content: space-between; gap: 18px; align-items: center; border-top: 1px solid var(--rule); padding-top: 10px; }
 .project-read-more { color: var(--accent); font-size: .79rem; font-weight: 700; }
 .project-read-more > span { margin-left: 9px; }
@@ -674,6 +672,13 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
 .act-alt-sub { font-size: .83rem; font-weight: 600; color: var(--ink); margin-top: 5px; }
 .act-alt-role { font-size: .75rem; color: var(--muted); margin-top: 3px; }
 .act-alt-desc { font-size: .73rem; color: var(--muted); line-height: 1.75; margin: 5px 0 0; }
+.presentation-list { display: flex; flex-direction: column; gap: 14px; }
+.presentation-entry { background: var(--wash); padding: 24px 28px; border-left: 3px solid var(--accent); }
+.presentation-meta { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px 20px; color: var(--muted); font-size: .78rem; margin-bottom: 10px; }
+.presentation-entry h3 { font-size: 1.04rem; font-weight: 700; line-height: 1.6; max-width: 75ch; margin-bottom: 8px; }
+.presentation-authors { color: var(--muted); font-size: .84rem; margin-bottom: 5px; }
+.presentation-authors strong { color: var(--ink); }
+.presentation-venue { color: var(--muted); font-size: .82rem; }
 .patent-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 14px; }
 .patent-entry { background: var(--wash); padding: 24px 28px; border-left: 3px solid var(--accent); }
 .patent-meta { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px 20px; color: var(--muted); font-size: .78rem; margin-bottom: 10px; }
@@ -738,6 +743,7 @@ footer p { font-size: .76rem; color: var(--muted); letter-spacing: .01em; }
 [data-theme="dark"] .skills-group li:hover { border-color: var(--accent-muted); box-shadow: 0 1px 6px rgba(96,165,250,.15); }
 [data-theme="dark"] .menu-toggle { background: #111827; border-color: var(--rule); color: var(--accent); }
 [data-theme="dark"] .patent-entry { background: #111827; }
+[data-theme="dark"] .presentation-entry { background: #111827; }
 
 /* News section */
 #news { margin-top: 78px; }
@@ -846,6 +852,8 @@ footer p { font-size: .76rem; color: var(--muted); letter-spacing: .01em; }
   .activity-entry h3 { font-size: 1rem; }
   .patent-entry { padding: 20px 18px; }
   .patent-entry h3 { font-size: 1rem; }
+  .presentation-entry { padding: 20px 18px; }
+  .presentation-entry h3 { font-size: 1rem; }
   .timeline, .timeline tbody, .timeline tr, .timeline td { display: block; width: auto; }
   .timeline td:first-child { padding: 21px 0 6px; border-bottom: 0; }
   .timeline td:last-child { width: auto; text-align: left; padding: 0 0 21px; border-top: 0; }
