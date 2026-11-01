@@ -583,41 +583,96 @@ function DecodingCol({ taskIdx }: { taskIdx: number }) {
   );
 }
 
-// ── Mode 2: Neuromodulation overlay (tDCS/tACS electrodes + activation ramp) ──
+// ── Mode 2: TMS coil overlay on the brain ─────────────────────────────────
 function NeuromodOverlay() {
   return (
     <svg className="ri-net-overlay ri-neuromod-overlay" viewBox="0 0 100 100"
       preserveAspectRatio="none" aria-hidden="true">
-      {/* tDCS anode pad — forehead / prefrontal */}
-      <g className="ri-neuromod-electrode ri-neuromod-anode">
-        <rect x="34" y="5" width="18" height="10" rx="2.5"
-          fill="rgba(239,68,68,.18)" stroke="rgba(239,68,68,.75)" strokeWidth="0.8"/>
-        <text x="43" y="12.2" textAnchor="middle" fontSize="4.5"
-          fill="rgba(239,68,68,.90)" fontFamily="system-ui,sans-serif" fontWeight="700">+</text>
-        {/* wire down */}
-        <line x1="43" y1="15" x2="43" y2="22" stroke="rgba(239,68,68,.55)" strokeWidth="0.6" strokeDasharray="1.5 1"/>
-      </g>
-      {/* tDCS cathode pad — vertex/parietal */}
-      <g className="ri-neuromod-electrode ri-neuromod-cathode">
-        <rect x="60" y="8" width="18" height="10" rx="2.5"
-          fill="rgba(59,130,246,.18)" stroke="rgba(59,130,246,.75)" strokeWidth="0.8"/>
-        <text x="69" y="12.2" textAnchor="middle" fontSize="4.5"
-          fill="rgba(59,130,246,.90)" fontFamily="system-ui,sans-serif" fontWeight="700">−</text>
-        <line x1="69" y1="18" x2="69" y2="25" stroke="rgba(59,130,246,.55)" strokeWidth="0.6" strokeDasharray="1.5 1"/>
-      </g>
-      {/* Current flow arc between electrodes */}
-      <path d="M43,22 Q56,18 69,25" fill="none"
-        stroke="rgba(251,191,36,.50)" strokeWidth="0.7" strokeDasharray="2 1.5"
-        className="ri-neuromod-current"/>
-      {/* Activation halos — ramp up over time */}
-      <circle cx="50" cy="52" r="12" className="ri-neuromod-halo ri-neuromod-halo--1"/>
-      <circle cx="50" cy="52" r="20" className="ri-neuromod-halo ri-neuromod-halo--2"/>
-      <circle cx="50" cy="52" r="28" className="ri-neuromod-halo ri-neuromod-halo--3"/>
-      {/* Label */}
-      <text x="50" y="92" textAnchor="middle" fontSize="4.2"
-        fill="rgba(251,191,36,.78)" fontFamily="system-ui,sans-serif" fontWeight="700"
-        letterSpacing="0.06em">tDCS / tACS</text>
+      {/* Figure-8 TMS coil above the head */}
+      <ellipse cx="34" cy="10" rx="13" ry="7"
+        fill="rgba(239,68,68,.10)" stroke="rgba(239,68,68,.85)" strokeWidth="1.8"/>
+      <ellipse cx="56" cy="10" rx="13" ry="7"
+        fill="rgba(239,68,68,.10)" stroke="rgba(239,68,68,.85)" strokeWidth="1.8"/>
+      {/* Handle */}
+      <rect x="43" y="15" width="5" height="16" rx="2"
+        fill="rgba(60,60,90,.75)" stroke="rgba(130,130,170,.55)" strokeWidth="0.7"/>
+      <line x1="43" y1="20" x2="48" y2="20" stroke="rgba(180,180,210,.35)" strokeWidth="0.6"/>
+      <line x1="43" y1="24" x2="48" y2="24" stroke="rgba(180,180,210,.35)" strokeWidth="0.6"/>
+      {/* Magnetic field lines into cortex */}
+      <path d="M34,17 Q38,32 45,42" fill="none"
+        stroke="rgba(251,191,36,.60)" strokeWidth="0.9" strokeDasharray="2.5 1.5"
+        className="ri-nm-field"/>
+      <path d="M45,17 Q45,33 45,44" fill="none"
+        stroke="rgba(251,191,36,.60)" strokeWidth="0.9" strokeDasharray="2.5 1.5"
+        className="ri-nm-field" style={{animationDelay:'.25s'}}/>
+      <path d="M56,17 Q52,32 45,42" fill="none"
+        stroke="rgba(251,191,36,.60)" strokeWidth="0.9" strokeDasharray="2.5 1.5"
+        className="ri-nm-field" style={{animationDelay:'.50s'}}/>
+      {/* Cortical target flash */}
+      <circle cx="45" cy="44" r="4" className="ri-nm-target-pulse"/>
     </svg>
+  );
+}
+
+// ── Mode 2: Left panel — TMS device info ──────────────────────────────────
+function NeuromodDevicePanel() {
+  return (
+    <div className="ri-nm-device-panel">
+      <span className="ri-nm-device-title">TMS / tDCS</span>
+      <svg className="ri-nm-device-svg" viewBox="0 0 64 84" aria-hidden="true">
+        {/* Coil housing body */}
+        <rect x="4" y="6" width="56" height="22" rx="8"
+          fill="rgba(50,50,70,.55)" stroke="rgba(120,120,160,.60)" strokeWidth="1.2"/>
+        {/* Figure-8 imprint on housing */}
+        <ellipse cx="22" cy="17" rx="10" ry="6"
+          fill="none" stroke="rgba(239,68,68,.80)" strokeWidth="1.5"/>
+        <ellipse cx="42" cy="17" rx="10" ry="6"
+          fill="none" stroke="rgba(239,68,68,.80)" strokeWidth="1.5"/>
+        {/* Handle grip */}
+        <rect x="26" y="28" width="12" height="30" rx="5"
+          fill="rgba(40,40,60,.75)" stroke="rgba(100,100,140,.55)" strokeWidth="1"/>
+        <line x1="26" y1="35" x2="38" y2="35" stroke="rgba(160,160,200,.30)" strokeWidth="0.8"/>
+        <line x1="26" y1="42" x2="38" y2="42" stroke="rgba(160,160,200,.30)" strokeWidth="0.8"/>
+        <line x1="26" y1="49" x2="38" y2="49" stroke="rgba(160,160,200,.30)" strokeWidth="0.8"/>
+        {/* Power cable */}
+        <path d="M32,58 Q32,68 20,72" fill="none"
+          stroke="rgba(80,80,100,.70)" strokeWidth="2" strokeLinecap="round"/>
+        {/* Field pulse indicator */}
+        <circle cx="32" cy="6" r="3" className="ri-nm-coil-pulse"/>
+      </svg>
+      <div className="ri-nm-protocol">
+        <span>10 Hz rTMS</span>
+        <span>1800 pulses</span>
+      </div>
+    </div>
+  );
+}
+
+// ── Mode 2: Right panel — Before / After comparison ───────────────────────
+const PRE_BARS  = [0.28, 0.18, 0.32, 0.15, 0.24];
+const POST_BARS = [0.68, 0.88, 0.72, 0.82, 0.78];
+
+function NeuromodBeforeAfter() {
+  return (
+    <div className="ri-nm-ba-panel">
+      <div className="ri-nm-ba-section ri-nm-ba--pre">
+        <span className="ri-nm-ba-label">Pre-Stim</span>
+        <div className="ri-nm-ba-bars">
+          {PRE_BARS.map((h, i) => (
+            <div key={i} className="ri-nm-ba-bar ri-nm-ba-bar--pre" style={{height: `${h * 52}px`}} />
+          ))}
+        </div>
+      </div>
+      <div className="ri-nm-delta">↑ Excitability</div>
+      <div className="ri-nm-ba-section ri-nm-ba--post">
+        <span className="ri-nm-ba-label">Post-Stim</span>
+        <div className="ri-nm-ba-bars">
+          {POST_BARS.map((h, i) => (
+            <div key={i} className="ri-nm-ba-bar ri-nm-ba-bar--post" style={{height: `${h * 52}px`, animationDelay: `${i * 0.15}s`}} />
+          ))}
+        </div>
+      </div>
+    </div>
   );
 }
 
@@ -709,47 +764,32 @@ export function ResearchInterestsBrain() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [stimIdx, setStimIdx] = useState(0);
   const stimIdxRef = useRef(0);
-  const [encPhase, setEncPhase] = useState<'encode'|'decode'>('encode');
-  const encPhaseRef = useRef<'encode'|'decode'>('encode');
   const [decTaskIdx, setDecTaskIdx] = useState(0);
   const decTaskIdxRef = useRef(0);
 
   const activate = (i: number) => { activeRef.current = i; setActive(i); };
 
-  // Cycle stimulus idx while mode 0 (encode phase) or mode 1 is active
+  // Cycle stimulus idx while mode 0 or mode 1 is active (5 s per stimulus)
   useEffect(() => {
     if (active !== 0 && active !== 1) return;
     const timer = setInterval(() => {
       const next = (stimIdxRef.current + 1) % STIMULI.length;
       stimIdxRef.current = next;
       setStimIdx(next);
-    }, 3500);
+    }, 5000);
     return () => clearInterval(timer);
   }, [active]);
 
-  // Alternate encode → decode phases when mode 0 is active
+  // Cycle decoding task list while mode 0 is active
   useEffect(() => {
     if (active !== 0) return;
-    encPhaseRef.current = 'encode';
-    setEncPhase('encode');
-    const timer = setInterval(() => {
-      const next: 'encode'|'decode' = encPhaseRef.current === 'encode' ? 'decode' : 'encode';
-      encPhaseRef.current = next;
-      setEncPhase(next);
-    }, 4500);
-    return () => clearInterval(timer);
-  }, [active]);
-
-  // Cycle decoding task during decode phase
-  useEffect(() => {
-    if (active !== 0 || encPhase !== 'decode') return;
     const timer = setInterval(() => {
       const next = (decTaskIdxRef.current + 1) % DEC_TASKS.length;
       decTaskIdxRef.current = next;
       setDecTaskIdx(next);
-    }, 1200);
+    }, 1500);
     return () => clearInterval(timer);
-  }, [active, encPhase]);
+  }, [active]);
 
   useEffect(() => {
     let rafId = 0, disposed = false;
@@ -872,10 +912,11 @@ export function ResearchInterestsBrain() {
       {/* Visualization panel — brain canvas ALWAYS inside ri-viz-main to preserve WebGL context */}
       <div className={`ri-viz-panel ri-viz--mode${active}`}>
         <div className="ri-viz-main">
-          {active === 0 && encPhase === 'encode' && <EncodingStimPanel stimIdx={stimIdx} />}
-          {active === 0 && encPhase === 'decode' && <NeuralDecodePanel />}
+          {/* Mode 0: encoding panel sits above brain in column layout */}
+          {active === 0 && <EncodingStimPanel stimIdx={stimIdx} />}
 
           {active === 1 && <TribeV2Panel stimIdx={stimIdx} />}
+          {active === 2 && <NeuromodDevicePanel />}
 
           <div className="ri-brain-wrap">
             <canvas
@@ -884,7 +925,6 @@ export function ResearchInterestsBrain() {
               role="img"
               aria-label="Brain activity visualization"
             />
-            {/* DecodingOverlay removed — brain shows neural activity in both phases */}
             {active === 1 && <ConnectomeCanvas stimIdx={stimIdx} />}
             {active === 1 && (
               <svg className="ri-net-pulse-ring" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
@@ -892,15 +932,22 @@ export function ResearchInterestsBrain() {
               </svg>
             )}
             {active === 2 && <NeuromodOverlay />}
-          {active === 3 && <LanguageOverlay />}
+            {active === 3 && <LanguageOverlay />}
           </div>
 
-          {active === 0 && encPhase === 'decode' && <DecodingCol taskIdx={decTaskIdx} />}
+          {/* Mode 0: decode row sits below brain in column layout */}
+          {active === 0 && (
+            <div className="ri-mode0-dec-row">
+              <NeuralDecodePanel />
+              <DecodingCol taskIdx={decTaskIdx} />
+            </div>
+          )}
+          {active === 2 && <NeuromodBeforeAfter />}
           {active === 3 && <CompModelPanel />}
         </div>
 
         <span className={`ri-mode-tag ${cur.tagClass}`}>
-          {active === 0 ? (encPhase === 'encode' ? 'Stimulus → Response' : 'Signal → Decode')
+          {active === 0 ? 'Encode & Decode'
             : active === 1 ? `${STIMULI[stimIdx % STIMULI.length].label} Input`
             : active === 3 ? 'Neural Data → Model'
             : cur.tag}

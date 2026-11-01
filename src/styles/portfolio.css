@@ -286,10 +286,14 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
 /* ── Inner main area wrapper (always present, provides flex-row for mode 0) ── */
 .ri-viz-main { display: flex; align-items: center; gap: 8px; }
 
-/* ── Mode 0: EEG + brain + decode side by side, rep-learn panel below ── */
-.ri-viz--mode0 { align-items: center; gap: 10px; }
-.ri-viz--mode0 .ri-viz-main { flex-direction: row; }
-.ri-viz--mode0 .ri-brain-wrap { width: 180px; height: 180px; }
+/* ── Mode 0: encoding above brain, decoding below (column stack) ── */
+.ri-viz--mode0 { align-items: center; gap: 6px; }
+.ri-viz--mode0 .ri-viz-main { flex-direction: column; align-items: center; gap: 10px; }
+.ri-viz--mode0 .ri-brain-wrap { width: 160px; height: 160px; }
+/* Decode row: NeuralDecodePanel + DecodingCol side by side below brain */
+.ri-mode0-dec-row {
+  display: flex; flex-direction: row; align-items: flex-start; gap: 14px;
+}
 
 /* Paradigm hint below EEG canvas */
 .ri-paradigm-hint {
@@ -434,39 +438,71 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
   transition: color .5s ease;
 }
 
-/* ── Mode 2: Neuromodulation overlay ── */
+/* ── Mode 2: Neuromodulation overlay (TMS coil on brain) ── */
 .ri-neuromod-overlay { z-index: 3; }
-.ri-neuromod-electrode { animation: ri-elec-appear .5s ease forwards; }
-@keyframes ri-elec-appear {
-  from { opacity: 0; transform: translateY(-4px); }
-  to   { opacity: 1; transform: none; }
-}
-.ri-neuromod-current {
+.ri-nm-field {
   stroke-dashoffset: 0;
-  animation: ri-current-flow 1.6s linear infinite;
+  animation: ri-nm-field-flow 1.6s linear infinite;
 }
-@keyframes ri-current-flow {
-  from { stroke-dashoffset: 0; }
-  to   { stroke-dashoffset: -20; }
+@keyframes ri-nm-field-flow { to { stroke-dashoffset: -16; } }
+.ri-nm-target-pulse {
+  fill: rgba(251,191,36,.55);
+  animation: ri-nm-target 1.2s ease-in-out infinite;
 }
-.ri-neuromod-halo {
-  fill: none; stroke: rgba(251,191,36,.0);
-  animation: ri-halo-ramp 3s ease-in-out infinite alternate;
+@keyframes ri-nm-target {
+  0%,100% { opacity: .40; r: 3; }
+  50%     { opacity: 1;   r: 5; }
 }
-.ri-neuromod-halo--1 { stroke: rgba(239,68,68,.0);  animation-delay: 0s;    animation-name: ri-halo-ramp-r; }
-.ri-neuromod-halo--2 { stroke: rgba(251,191,36,.0); animation-delay: .6s;   animation-name: ri-halo-ramp-y; }
-.ri-neuromod-halo--3 { stroke: rgba(59,130,246,.0); animation-delay: 1.2s;  animation-name: ri-halo-ramp-b; }
-@keyframes ri-halo-ramp-r {
-  0%,20%  { stroke: rgba(239,68,68,.08);  stroke-width: 0.4; }
-  80%,100%{ stroke: rgba(239,68,68,.48);  stroke-width: 1.2; }
+
+/* ── Mode 2: Device panel (left) ── */
+.ri-nm-device-panel {
+  display: flex; flex-direction: column; align-items: center; gap: 5px; flex-shrink: 0; width: 80px;
 }
-@keyframes ri-halo-ramp-y {
-  0%,20%  { stroke: rgba(251,191,36,.06); stroke-width: 0.3; }
-  80%,100%{ stroke: rgba(251,191,36,.42); stroke-width: 1.0; }
+.ri-nm-device-title {
+  font-size: .56rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+  color: rgba(239,68,68,.88);
 }
-@keyframes ri-halo-ramp-b {
-  0%,20%  { stroke: rgba(59,130,246,.05); stroke-width: 0.3; }
-  80%,100%{ stroke: rgba(59,130,246,.35); stroke-width: 0.9; }
+.ri-nm-device-svg { width: 64px; height: 84px; overflow: visible; }
+.ri-nm-coil-pulse {
+  fill: rgba(251,191,36,.65);
+  animation: ri-nm-coil-blink .9s ease-in-out infinite;
+}
+@keyframes ri-nm-coil-blink {
+  0%,100% { opacity: .35; }
+  50%     { opacity: 1; }
+}
+.ri-nm-protocol {
+  display: flex; flex-direction: column; align-items: center; gap: 1px;
+}
+.ri-nm-protocol span {
+  font-size: .50rem; color: rgba(148,163,184,.75); letter-spacing: .02em;
+}
+
+/* ── Mode 2: Before/After panel (right) ── */
+.ri-nm-ba-panel {
+  display: flex; flex-direction: column; align-items: center; gap: 6px; flex-shrink: 0; width: 66px;
+}
+.ri-nm-ba-section { display: flex; flex-direction: column; align-items: center; gap: 4px; width: 100%; }
+.ri-nm-ba-label {
+  font-size: .48rem; font-weight: 700; letter-spacing: .05em; text-transform: uppercase;
+}
+.ri-nm-ba--pre .ri-nm-ba-label  { color: rgba(148,163,184,.65); }
+.ri-nm-ba--post .ri-nm-ba-label { color: rgba(251,191,36,.90); }
+.ri-nm-ba-bars { display: flex; align-items: flex-end; gap: 3px; height: 44px; }
+.ri-nm-ba-bar {
+  width: 8px; border-radius: 2px 2px 0 0; flex-shrink: 0;
+}
+.ri-nm-ba-bar--pre  { background: rgba(148,163,184,.25); }
+.ri-nm-ba-bar--post {
+  background: rgba(251,191,36,.80);
+  animation: ri-nm-post-pulse 2s ease-in-out infinite alternate;
+}
+@keyframes ri-nm-post-pulse {
+  from { opacity: .60; }
+  to   { opacity: 1; }
+}
+.ri-nm-delta {
+  font-size: .55rem; font-weight: 800; color: rgba(251,191,36,.85); letter-spacing: .02em;
 }
 
 /* ── Mode 3: Computational model panel ── */
@@ -529,9 +565,9 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
   overflow: hidden;
 }
 
-/* ── Mode 2: brain with neuromodulation overlay ── */
-.ri-viz--mode2 .ri-viz-main { flex-direction: row; align-items: center; justify-content: center; }
-.ri-viz--mode2 .ri-brain-wrap { width: 260px; height: 260px; }
+/* ── Mode 2: device panel + brain + before/after in a row ── */
+.ri-viz--mode2 .ri-viz-main { flex-direction: row; align-items: center; justify-content: center; gap: 10px; }
+.ri-viz--mode2 .ri-brain-wrap { width: 210px; height: 210px; }
 
 /* ── Mode 3: neural data panel + brain side by side ── */
 .ri-viz--mode3 .ri-viz-main { flex-direction: row; align-items: center; gap: 14px; }
