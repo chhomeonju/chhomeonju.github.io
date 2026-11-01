@@ -27,6 +27,7 @@
 /* Static detail pages also work after a direct load or refresh. */
 .project-page { width: min(100%, 1120px); padding: 0 clamp(20px, 4vw, 50px); }
 .project-page-nav { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 22px 0; border-bottom: 1px solid #dce2ea; }
+.project-page-nav-right { display: flex; align-items: center; gap: 16px; }
 .project-page-nav a { font-size: .9rem; }
 .detail-site-name { color: var(--ink); font-weight: 700; }
 .project-page-hero { padding: 46px 0 32px; }

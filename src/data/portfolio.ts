@@ -21,12 +21,12 @@ export const portfolio: PortfolioData = {
     },
   ],
   technicalSkills: [
-    { category: '프로그래밍 언어', skills: ['Python', 'MATLAB', 'C', 'SQL', 'Bash'] },
-    { category: '딥러닝 프레임워크 및 라이브러리', skills: ['PyTorch', 'TensorFlow', 'Scikit-learn', 'Hugging Face'] },
-    { category: '신경영상 및 신호처리', skills: ['MNE-Python', 'EEGLAB', 'SPM', 'fMRIPrep'] },
-    { category: 'GPU 컴퓨팅 및 분산 학습', skills: ['CUDA', 'Multi-GPU Training', 'Distributed Training'] },
-    { category: '데이터 관리 및 실험 추적', skills: ['MySQL', 'LMDB', 'Weights & Biases', 'TensorBoard'] },
-    { category: '개발 및 연구 도구', skills: ['Git', 'Linux', 'Docker', 'LaTeX'] },
+    { category: 'Programming Languages', skills: ['Python', 'MATLAB', 'C', 'SQL', 'Bash'] },
+    { category: 'Deep Learning Frameworks & Libraries', skills: ['PyTorch', 'TensorFlow', 'Scikit-learn', 'Hugging Face'] },
+    { category: 'Neuroimaging & Signal Processing', skills: ['MNE-Python', 'EEGLAB', 'SPM', 'fMRIPrep'] },
+    { category: 'GPU Computing & Distributed Training', skills: ['CUDA', 'Multi-GPU Training', 'Distributed Training'] },
+    { category: 'Data Management & Experiment Tracking', skills: ['MySQL', 'LMDB', 'Weights & Biases', 'TensorBoard'] },
+    { category: 'Development & Research Tools', skills: ['Git', 'Linux', 'Docker', 'LaTeX'] },
   ],
   researchInterests: [
     {
@@ -489,7 +489,7 @@ export const portfolio: PortfolioData = {
       "category": "Multimodal inner speech analysis",
       "subtitle": "Decoding & Functional Connectivity with EEG and fMRI",
       "date": "",
-      "teaser": "A multimodal analysis pipeline applied to the Nieto et al. 2022 'Thinking out loud' dataset (ds003626 v2.1.2), combining 136-channel EEG preprocessing, run-held-out CSP classification, and task-vs-rest functional connectivity analysis across EEG and fMRI recordings.",
+      "teaser": "Multimodal inner speech analysis combining EEG decoding (CSP/LDA/SVM) and fMRI functional connectivity, applied to the public Nieto et al. 2022 dataset.",
       "tags": [
         "EEG",
         "fMRI",

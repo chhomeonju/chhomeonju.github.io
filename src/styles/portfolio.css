@@ -868,7 +868,7 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
 .entries, .timeline { width: 100%; border-collapse: collapse; table-layout: fixed; }
 .entries td { padding: 24px 0; border-bottom: 1px solid var(--rule); transition: background .1s; }
 .timeline td { transition: background .1s; }
-.entries tr:first-child td, .timeline tr:first-child td { border-top: 1px solid var(--rule); }
+.entries tr:first-child td { border-top: 1px solid var(--rule); }
 .entries tr:hover td, .timeline tr:hover td { background: var(--wash); }
 .entries .papertitle { display: block; font-size: 1.02rem; font-weight: 700; line-height: 1.6; max-width: 80ch; }
 .entries p { margin-top: 6px; }
@@ -975,6 +975,8 @@ footer p { font-size: .76rem; color: var(--muted); letter-spacing: .01em; }
 [data-theme="dark"] .menu-toggle { background: #111827; border-color: var(--rule); color: var(--accent); }
 [data-theme="dark"] .patent-entry { background: #111827; }
 [data-theme="dark"] .presentation-entry { background: #111827; }
+[data-theme="dark"] .mj-figure { background: #111827; }
+[data-theme="dark"] .mj-figure img { mix-blend-mode: multiply; filter: brightness(0.92); }
 
 /* News section */
 #news { margin-top: 78px; }
@@ -1034,7 +1036,9 @@ footer p { font-size: .76rem; color: var(--muted); letter-spacing: .01em; }
   .site-name { display: none; }
   .mobile-menu { display: flex; justify-content: space-between; align-items: center; min-height: 64px; }
   .mobile-menu > span { font-size: .92rem; font-weight: 700; }
+  .mobile-menu-right { display: flex; align-items: center; gap: 8px; }
   .menu-toggle { min-height: 44px; background: white; border: 1px solid var(--rule); border-radius: 3px; color: var(--accent); padding: 5px 13px; font-size: .84rem; cursor: pointer; }
+  .theme-toggle--desktop { display: none; }
   .site-nav .section-nav { display: none; }
   .site-nav.is-open .section-nav { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0 24px; padding: 8px 0 16px; }
   .site-nav .section-nav a { min-height: 44px; font-size: .85rem; }
