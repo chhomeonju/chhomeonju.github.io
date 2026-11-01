@@ -690,14 +690,14 @@ function CompModelPanel() {
   );
 }
 
-// ── Mode 0: EEG panel for decoding phase ──────────────────────────────────
-function EEGDecodePanel() {
+// ── Mode 0: Neural signal panel for decoding phase ────────────────────────
+function NeuralDecodePanel() {
   return (
     <div className="ri-enc-col" aria-hidden="true">
       <div className="ri-enc-dir-label">← decoding</div>
-      <span className="ri-signal-label">EEG / fMRI</span>
+      <span className="ri-signal-label">Neural Signal</span>
       <EEGPanel />
-      <span className="ri-paradigm-hint">brain signal read</span>
+      <span className="ri-paradigm-hint">neural readout</span>
     </div>
   );
 }
@@ -808,7 +808,7 @@ export function ResearchInterestsBrain() {
         gl!.uniform1f(uAspect, w / h);
         gl!.uniform1f(uTime, elapsed);
         const effectiveMode = activeRef.current === 0
-          ? (encPhaseRef.current === 'encode' ? 4.0 : 0.0)
+          ? 4.0
           : activeRef.current;
         gl!.uniform1f(uMode, effectiveMode);
         gl!.uniform1f(uStimIdx, stimIdxRef.current);
@@ -873,7 +873,7 @@ export function ResearchInterestsBrain() {
       <div className={`ri-viz-panel ri-viz--mode${active}`}>
         <div className="ri-viz-main">
           {active === 0 && encPhase === 'encode' && <EncodingStimPanel stimIdx={stimIdx} />}
-          {active === 0 && encPhase === 'decode' && <EEGDecodePanel />}
+          {active === 0 && encPhase === 'decode' && <NeuralDecodePanel />}
 
           {active === 1 && <TribeV2Panel stimIdx={stimIdx} />}
 
@@ -884,7 +884,7 @@ export function ResearchInterestsBrain() {
               role="img"
               aria-label="Brain activity visualization"
             />
-            {active === 0 && encPhase === 'decode' && <DecodingOverlay />}
+            {/* DecodingOverlay removed — brain shows neural activity in both phases */}
             {active === 1 && <ConnectomeCanvas stimIdx={stimIdx} />}
             {active === 1 && (
               <svg className="ri-net-pulse-ring" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
@@ -900,7 +900,7 @@ export function ResearchInterestsBrain() {
         </div>
 
         <span className={`ri-mode-tag ${cur.tagClass}`}>
-          {active === 0 ? (encPhase === 'encode' ? 'Stimulus → Response' : 'EEG → Decode')
+          {active === 0 ? (encPhase === 'encode' ? 'Stimulus → Response' : 'Signal → Decode')
             : active === 1 ? `${STIMULI[stimIdx % STIMULI.length].label} Input`
             : active === 3 ? 'Neural Data → Model'
             : cur.tag}
