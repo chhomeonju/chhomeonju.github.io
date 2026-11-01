@@ -62,6 +62,7 @@ export const portfolio: PortfolioData = {
       "authors": "M.-J. Cho, S.-H. Lee, and S.-W. Lee†",
       "venue": "IEEE BCI 2027 · Planned submission",
       "image": null,
+      "imageAlt": null,
       "links": [
         {
           "label": "Code ↗",
