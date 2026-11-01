@@ -373,8 +373,8 @@ export const portfolio: PortfolioData = {
       "image": { "src": "/images/essenti/pipeline.png", "alt": "ESSENTI system pipeline: financial news sources → database → preprocessing → BERT sentiment model and KoBART summarisation → web platform", "caption": "End-to-end system pipeline — from news collection to sentiment-aware web delivery." },
       "cardImages": [
         { "src": "/images/essenti/pipeline.png", "alt": "ESSENTI system pipeline" },
-        { "src": "/images/essenti/web_chart.png", "alt": "Sentiment chart dashboard" },
-        { "src": "/images/essenti/web_articles.png", "alt": "Financial news articles list" }
+        { "src": "/images/essenti/model_bert.png", "alt": "Sentiment classifier: BERT fine-tuning" },
+        { "src": "/images/essenti/model_kobart.png", "alt": "Summarisation model: KoBART fine-tuning" }
       ]
     },
     {

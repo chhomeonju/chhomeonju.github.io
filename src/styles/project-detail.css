@@ -2,6 +2,7 @@
 .project-page { width: min(100%, 1120px); padding: 0 clamp(20px, 4vw, 50px); }
 .project-page-nav { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 22px 0; border-bottom: 1px solid #dce2ea; }
 .project-page-nav a { font-size: .9rem; }
+.project-page-nav-right { display: flex; align-items: center; gap: 20px; }
 .detail-site-name { color: var(--ink); font-weight: 700; }
 .project-page-hero { padding: 46px 0 32px; }
 .project-page-meta { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 10px 25px; font-size: .82rem; color: #647182; }
@@ -81,3 +82,28 @@
 .project-page-hero { border-top: 3px solid var(--accent); margin-top: 24px; }
 .project-page-layout { grid-template-columns: 180px minmax(0, 1fr); }
 @media (max-width: 760px) { .project-page-layout { grid-template-columns: minmax(0,1fr); } }
+
+/* Dark mode */
+[data-theme="dark"] .project-page-nav { border-bottom-color: var(--rule); }
+[data-theme="dark"] .project-page-meta { color: var(--muted); }
+[data-theme="dark"] .project-page-subtitle { color: #cbd5e1; }
+[data-theme="dark"] .project-page-lead { color: #cbd5e1; }
+[data-theme="dark"] .project-page-figure { background: #111827; border-color: var(--rule); }
+[data-theme="dark"] .project-page-figure img { mix-blend-mode: multiply; filter: brightness(0.92); }
+[data-theme="dark"] .project-page-figure figcaption { color: #64748b; }
+[data-theme="dark"] .project-page-layout { border-top-color: var(--rule); }
+[data-theme="dark"] .project-page-aside p { color: #64748b; }
+[data-theme="dark"] .project-page-aside a { color: #94a3b8; }
+[data-theme="dark"] .project-page-body section { border-bottom-color: var(--rule); }
+[data-theme="dark"] .project-page-body p, [data-theme="dark"] .project-page-body li { color: #cbd5e1; }
+[data-theme="dark"] .project-page-body .detail-technology li { border-color: var(--rule); color: #94a3b8; }
+[data-theme="dark"] .project-page-body .detail-paper-venue { color: #64748b; }
+[data-theme="dark"] .dataset-table { border-color: var(--rule); }
+[data-theme="dark"] .dataset-table th, [data-theme="dark"] .dataset-table td { border-bottom-color: var(--rule); color: #94a3b8; }
+[data-theme="dark"] .dataset-table thead { background: #111827; }
+[data-theme="dark"] .dataset-table thead th { color: #64748b; }
+[data-theme="dark"] .dataset-table tbody th { color: var(--accent); }
+[data-theme="dark"] .experiment-list > div { border-bottom-color: var(--rule); }
+[data-theme="dark"] .experiment-list dt { color: var(--ink); }
+[data-theme="dark"] .experiment-list dd { color: #94a3b8; }
+[data-theme="dark"] .study-scope { background: #111827; }

@@ -857,6 +857,9 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
 .project-visual { flex-shrink: 0; width: 200px; height: 160px; border-radius: 6px; background: transparent; display: flex; align-items: center; justify-content: center; }
 .project-visual img { display: block; max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; border-radius: 4px; }
 .project-visual figcaption { display: none; }
+.project-visual-gallery { flex-direction: column; justify-content: flex-start; align-items: stretch; gap: 4px; overflow: hidden; }
+.project-visual-gallery img { width: 100%; height: 48px; max-height: none; max-width: none; object-fit: contain; background: #f6f8fb; border-radius: 3px; }
+[data-theme="dark"] .project-visual-gallery img { background: #1e293b; }
 .project-card-footer { grid-column: 2; display: flex; justify-content: space-between; gap: 18px; align-items: center; border-top: 1px solid var(--rule); padding-top: 10px; }
 .project-read-more { color: var(--accent); font-size: .79rem; font-weight: 700; }
 .project-read-more > span { margin-left: 9px; }
