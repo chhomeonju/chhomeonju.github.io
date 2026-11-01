@@ -656,14 +656,25 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
 .award-title { font-size: 1.02rem; font-weight: 700; color: var(--ink); line-height: 1.6; margin: 0 0 4px; }
 .award-org { font-size: .86rem; color: var(--muted); margin: 0 0 3px; }
 .award-detail { font-size: .82rem; color: var(--muted); margin: 0; }
-/* Activities */
-.activity-list { margin-top: 24px; }
-.activity-entry { display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 36px; padding: 23px 0; border-bottom: 1px solid var(--rule); }
-.activity-entry:first-child { border-top: 1px solid var(--rule); }
-.activity-date { color: var(--muted); font-size: .8rem; padding-top: 4px; }
-.activity-entry h3 { font-size: 1.04rem; font-weight: 700; margin-bottom: 4px; }
-.activity-role { color: var(--accent); font-size: .77rem; margin-bottom: 6px; }
-.activity-description { color: var(--muted); font-size: .92rem; }
+/* Activities — vertical bar timeline */
+.act-tl-wrap { position: relative; padding: 4px 0; }
+.act-tl-line { position: absolute; left: 160px; top: 0; bottom: 0; width: 1px; background: var(--rule); }
+.act-tl-item { display: grid; grid-template-columns: 160px 32px 1fr; align-items: start; padding: 18px 0; border-top: 1px solid var(--rule); cursor: default; transition: background .15s; }
+.act-tl-item:last-child { border-bottom: 1px solid var(--rule); }
+.act-tl-left { text-align: right; padding-right: 16px; padding-top: 2px; }
+.act-tl-date { font-size: .7rem; color: var(--muted); line-height: 1.7; }
+.act-tl-date span { display: block; }
+.act-tl-dur { font-size: .63rem; color: var(--muted); opacity: .55; margin-top: 4px; }
+.act-tl-mid { display: flex; flex-direction: column; align-items: center; z-index: 1; padding-top: 4px; }
+.act-tl-bar { width: 8px; border-radius: 4px; background: var(--accent); opacity: .65; }
+.act-tl-dot { width: 8px; height: 8px; border-radius: 50%; border: 2px solid var(--accent); background: var(--accent-soft); flex-shrink: 0; }
+.act-tl-right { padding-left: 16px; padding-top: 2px; }
+.act-tl-title { font-size: .88rem; font-weight: 600; color: var(--ink); line-height: 1.4; transition: color .15s; }
+.act-tl-role { font-size: .72rem; color: var(--muted); margin-top: 3px; }
+.act-tl-org { display: inline-block; font-size: .65rem; font-weight: 600; color: var(--accent); background: var(--accent-soft); border: 1px solid var(--accent-border); padding: 1px 8px; border-radius: 3px; margin-top: 6px; }
+.act-tl-desc { font-size: .76rem; color: var(--muted); line-height: 1.75; margin: 0; max-height: 0; overflow: hidden; opacity: 0; transition: max-height .28s ease, opacity .2s ease, margin-top .2s ease; margin-top: 0; }
+.act-tl-item:hover .act-tl-desc { max-height: 120px; opacity: 1; margin-top: 8px; }
+.act-tl-item:hover .act-tl-title { color: var(--accent); }
 .patent-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 14px; }
 .patent-entry { background: var(--wash); padding: 24px 28px; border-left: 3px solid var(--accent); }
 .patent-meta { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px 20px; color: var(--muted); font-size: .78rem; margin-bottom: 10px; }

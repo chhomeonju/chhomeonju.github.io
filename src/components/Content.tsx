@@ -156,13 +156,57 @@ export function Patents() {
   )}</div></section>;
 }
 
+const ACT_MONTH: Record<string, number> = {Jan:0,Feb:1,Mar:2,Apr:3,May:4,Jun:5,Jul:6,Aug:7,Sep:8,Oct:9,Nov:10,Dec:11};
+
+function parseAbsMonth(s: string): number {
+  const m = s.match(/([A-Z][a-z]+)\.?\s*(\d{4})/);
+  return m ? parseInt(m[2]) * 12 + ACT_MONTH[m[1]] : 0;
+}
+
 export function Activities() {
-  return <section id="activities"><h2>Extracurricular Activities</h2><p className="activities-intro">Alongside research, I have founded peer study groups and participated in AI training and programming club activities.</p><div className="activity-list">{portfolio.activities.map(activity =>
-    <article className="activity-entry" key={activity.title}>
-      <div className="activity-date">{activity.date}</div>
-      <div><h3>{activity.title}</h3><p className="activity-role">{activity.role}</p><p className="activity-description">{activity.description}</p></div>
-    </article>
-  )}</div></section>;
+  const sorted = [...portfolio.activities].sort(
+    (a, b) => parseAbsMonth(b.date.split(' – ')[0]) - parseAbsMonth(a.date.split(' – ')[0])
+  );
+
+  return (
+    <section id="activities">
+      <h2>Extracurricular Activities</h2>
+      <div className="act-tl-wrap">
+        <div className="act-tl-line" />
+        {sorted.map((a, i) => {
+          const parts = a.title.split(' · ');
+          const mainTitle = parts[0];
+          const org = parts.length > 1 ? parts[parts.length - 1] : null;
+          const showOrg = org?.match(/Lab|Club|Office/) ? org : null;
+          const [start, end] = a.date.split(' – ');
+          const dur = end ? parseAbsMonth(end) - parseAbsMonth(start) : 1;
+          const barH = Math.min(Math.max(dur * 5, 10), 72);
+          return (
+            <div key={i} className="act-tl-item">
+              <div className="act-tl-left">
+                <div className="act-tl-date">
+                  <span>{start}</span>
+                  {end && <span>– {end}</span>}
+                </div>
+                {dur > 1 && <div className="act-tl-dur">{dur}mo</div>}
+              </div>
+              <div className="act-tl-mid">
+                {dur > 1
+                  ? <div className="act-tl-bar" style={{ height: `${barH}px` }} />
+                  : <div className="act-tl-dot" />}
+              </div>
+              <div className="act-tl-right">
+                <div className="act-tl-title">{mainTitle}</div>
+                <div className="act-tl-role">{a.role}</div>
+                {showOrg && <span className="act-tl-org">{showOrg}</span>}
+                {a.description && <p className="act-tl-desc">{a.description}</p>}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </section>
+  );
 }
 
 const projectEmphasis: Record<string, string> = {
