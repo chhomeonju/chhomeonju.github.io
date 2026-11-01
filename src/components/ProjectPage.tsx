@@ -19,7 +19,7 @@ export function ProjectPage({ project: p }: { project: Project }) {
   }, [dark]);
 
   return <><CustomCursor /><main className="project-page">
-    <nav className="project-page-nav" aria-label="Project navigation"><a className="detail-site-name" href="index.html#about">Myeongju Cho</a><div className="project-page-nav-right"><a href={`index.html#${p.id}`}>← All projects</a><button className="theme-toggle" onClick={() => setDark(d => !d)} aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'}>{dark ? <Sun size={15} /> : <Moon size={15} />}</button></div></nav>
+    <nav className="project-page-nav" aria-label="Project navigation"><a className="detail-site-name" href="index.html#about">Myeongju Cho</a><a href={`index.html#${p.id}`}>← All projects</a><button className="theme-toggle" onClick={() => setDark(d => !d)} aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'}>{dark ? <Sun size={15} /> : <Moon size={15} />}</button></nav>
     <header className="project-page-hero">
       <div className="project-page-meta"><span>{p.category}</span>{p.date && <span>{p.date}</span>}</div>
       <h1>{p.name}</h1><p className="project-page-subtitle">{p.subtitle}</p><p className="project-page-lead">{p.teaser}</p>

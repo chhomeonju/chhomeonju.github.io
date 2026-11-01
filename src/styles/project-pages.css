@@ -27,7 +27,6 @@
 /* Static detail pages also work after a direct load or refresh. */
 .project-page { width: min(100%, 1120px); padding: 0 clamp(20px, 4vw, 50px); }
 .project-page-nav { display: flex; justify-content: space-between; align-items: center; gap: 20px; padding: 22px 0; border-bottom: 1px solid #dce2ea; }
-.project-page-nav-right { display: flex; align-items: center; gap: 16px; }
 .project-page-nav a { font-size: .9rem; }
 .detail-site-name { color: var(--ink); font-weight: 700; }
 .project-page-hero { padding: 46px 0 32px; }
@@ -109,6 +108,7 @@
 @media (max-width: 580px) { .screenshot-gallery { grid-template-columns: 1fr; } }
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
 
+/* Dark mode: image blend */
 [data-theme="dark"] .project-page-figure { background: #111827; border-color: var(--rule); }
 [data-theme="dark"] .project-page-figure img { mix-blend-mode: multiply; filter: brightness(0.92); }
 [data-theme="dark"] .project-hero-img { background: #111827; border-color: var(--rule); }
@@ -117,6 +117,31 @@
 [data-theme="dark"] .project-visual-image img { mix-blend-mode: multiply; filter: brightness(0.92); }
 [data-theme="dark"] .experiment-image { background: #111827; border-radius: 6px; }
 [data-theme="dark"] .experiment-image img { mix-blend-mode: multiply; filter: brightness(0.92); }
+/* Dark mode: text colors & borders */
+[data-theme="dark"] .project-page-nav { border-bottom-color: var(--rule); }
+[data-theme="dark"] .project-page-meta { color: var(--muted); }
+[data-theme="dark"] .project-page-subtitle { color: #94a3b8; }
+[data-theme="dark"] .project-page-lead { color: #94a3b8; }
+[data-theme="dark"] .project-page-figure figcaption { color: #64748b; }
+[data-theme="dark"] .project-hero-img figcaption { color: #64748b; }
+[data-theme="dark"] .project-page-layout { border-top-color: var(--rule); }
+[data-theme="dark"] .project-page-aside p { color: #64748b; }
+[data-theme="dark"] .project-page-aside a { color: #94a3b8; }
+[data-theme="dark"] .project-page-body section { border-bottom-color: var(--rule); }
+[data-theme="dark"] .project-page-body p, [data-theme="dark"] .project-page-body li { color: #94a3b8; }
+[data-theme="dark"] .project-page-body .detail-technology li { border-color: var(--rule); color: #94a3b8; }
+[data-theme="dark"] .project-page-body .detail-paper-venue { color: #64748b; }
+[data-theme="dark"] .project-page-bottom { border-top-color: var(--rule); }
+[data-theme="dark"] .dataset-table { border-color: var(--rule); }
+[data-theme="dark"] .dataset-table th, [data-theme="dark"] .dataset-table td { border-bottom-color: var(--rule); color: #94a3b8; }
+[data-theme="dark"] .dataset-table thead { background: #111827; }
+[data-theme="dark"] .dataset-table thead th { color: #64748b; }
+[data-theme="dark"] .dataset-table tbody th { color: var(--accent); }
+[data-theme="dark"] .experiment-list > div { border-bottom-color: var(--rule); }
+[data-theme="dark"] .experiment-list dt { color: var(--ink); }
+[data-theme="dark"] .experiment-list dd { color: #94a3b8; }
+[data-theme="dark"] .study-scope { background: #111827; }
+[data-theme="dark"] .screenshot-item img { border-color: var(--rule); }
 @media (max-width: 680px) {
   .dataset-table th, .dataset-table td { padding: 9px 10px; font-size: .81rem; }
   .experiment-list > div { grid-template-columns: minmax(0, 1fr); gap: 5px; }
