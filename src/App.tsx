@@ -113,8 +113,8 @@ function HomePage() {
         </div>
         <Publications /><Presentations />
         <ProjectsSection navigate={navigation.navigate} />
-        <Activities /><Patents /><Awards />
-        <footer><p>Copyright ©Myeongju Cho</p></footer>
+        <Awards /><Patents /><Activities />
+        <footer><p>© 2026 Myeongju Cho</p></footer>
       </>
     )}
   </main></>;

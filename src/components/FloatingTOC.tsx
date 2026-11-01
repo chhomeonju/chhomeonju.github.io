@@ -38,11 +38,17 @@ export function FloatingTOC() {
       observers.push(obs);
     });
 
-    // Hide TOC once Publications section comes into view
+    // Hide TOC once Publications section comes into view; show again if scrolled back up above it
     const pubEl = document.getElementById('publications');
     if (pubEl) {
       const pubObs = new IntersectionObserver(
-        ([entry]) => setInAbout(!entry.isIntersecting),
+        ([entry]) => {
+          if (entry.isIntersecting) {
+            setInAbout(false);
+          } else if (entry.boundingClientRect.top > 0) {
+            setInAbout(true);
+          }
+        },
         { threshold: 0 }
       );
       pubObs.observe(pubEl);

@@ -3,11 +3,15 @@ import { blpmExperience, celpExperience } from './foundation-experience';
 
 export const portfolio: PortfolioData = {
   activities: [
-    { title: 'LG Aimers · 7th Cohort', role: 'Participant', date: 'Jul. – Aug. 2025', description: 'Worked on food and beverage demand prediction.' },
-    { title: 'AI Study Group', role: 'Peer Study', date: 'Mar. – Jun. 2025', description: 'Studied artificial intelligence through a peer study group.' },
-    { title: 'MATLAB for Neuroscience Study Group', role: 'Peer Study', date: 'Jan. – Feb. 2024', description: 'Studied MATLAB for Neuroscience through a peer reading group.' },
-    { title: 'Neuroscience Study Group', role: 'Peer Study', date: 'Jul. – Aug. 2023', description: 'Studied neuroscience through a peer study group.' },
-    { title: 'WAP Programming Club', role: 'Member', date: 'Sep. 2021 – Aug. 2022', description: 'Participated in web development activities.' },
+    { title: 'AI Model Study · PRML Lab', role: 'Peer Study', date: 'Jan. 2026 – Feb. 2026', description: 'Studied AI models through a peer study group at the Pattern Recognition and Machine Learning (PRML) Lab, Korea University.' },
+    { title: 'AI Model Study · PRML Lab', role: 'Peer Study', date: 'Aug. 2025', description: 'Studied AI models through a peer study group at the Pattern Recognition and Machine Learning (PRML) Lab, Korea University.' },
+    { title: 'LG Aimers · 7th Cohort', role: 'Participant', date: 'Jul. 2025 – Aug. 2025', description: 'Developed a demand forecasting model for food and beverage outlets using operational and sales data.', url: 'https://www.lgaimers.ai/' },
+    { title: 'AI Study Group', role: 'Peer Study', date: 'Mar. 2025 – Jun. 2025', description: 'Studied artificial intelligence through a peer study group.' },
+    { title: 'Administrative Assistant · Department Office', role: 'Administrative Assistant', date: 'Sep. 2024 – Feb. 2025', description: 'Assisted with departmental administrative tasks and office operations at the Department of Computer Engineering and Artificial Intelligence, Pukyong National University.' },
+    { title: 'MATLAB for Neuroscience Study Group', role: 'Peer Study', date: 'Jan. 2024 – Feb. 2024', description: 'Studied MATLAB for Neuroscience through a peer reading group.' },
+    { title: 'Neuroscience Study Group', role: 'Peer Study', date: 'Jul. 2023 – Aug. 2023', description: 'Studied neuroscience through a peer study group.' },
+    { title: 'Journal Club · BXAI Lab', role: 'Undergraduate Researcher', date: 'Apr. 2023 – Jan. 2025', description: 'Participated in a weekly journal club, reading and discussing research papers in neuroscience and AI at BXAI Lab, Pukyong National University.' },
+    { title: 'WAP (Why Are You Programming?) · Programming Club', role: 'Member', date: 'Sep. 2021 – Aug. 2022', description: 'Worked as a web developer on team projects, developing a library book lending platform and a community-based item-sharing web service.', url: 'https://github.com/pknu-wap' },
   ],
   patents: [
     {
@@ -17,12 +21,12 @@ export const portfolio: PortfolioData = {
     },
   ],
   technicalSkills: [
-    { category: 'Programming Languages', skills: ['Python', 'MATLAB', 'C', 'SQL'] },
-    { category: 'Deep Learning Frameworks and Libraries', skills: ['PyTorch', 'TensorFlow', 'Scikit-learn', 'Hugging Face Transformers', 'PEFT', 'Accelerate'] },
+    { category: 'Programming Languages', skills: ['Python', 'MATLAB', 'C', 'SQL', 'Bash'] },
+    { category: 'Deep Learning Frameworks and Libraries', skills: ['PyTorch', 'TensorFlow', 'Scikit-learn', 'Hugging Face'] },
     { category: 'Neuroimaging and Signal Processing', skills: ['MNE-Python', 'EEGLAB', 'SPM', 'fMRIPrep'] },
     { category: 'GPU Computing and Distributed Training', skills: ['CUDA', 'Multi-GPU Training', 'Distributed Training'] },
-    { category: 'Databases and Experiment Tracking', skills: ['MySQL', 'LMDB', 'Weights & Biases'] },
-    { category: 'Development and Research Tools', skills: ['Git', 'Linux', 'Docker', 'Conda', 'LaTeX'] },
+    { category: 'Data Management and Experiment Tracking', skills: ['MySQL', 'LMDB', 'Weights & Biases', 'TensorBoard'] },
+    { category: 'Development and Research Tools', skills: ['Git', 'Linux', 'Docker', 'LaTeX'] },
   ],
   researchInterests: [
     {
@@ -30,7 +34,7 @@ export const portfolio: PortfolioData = {
       description: 'Investigating how cognitive information is encoded in neural signals across EEG, ECoG, and fMRI — spanning classification, reconstruction, and learning representations that generalize across subjects, tasks, and recording modalities.',
     },
     {
-      title: 'Brain–Language Modeling',
+      title: 'Brain Foundation Model',
       description: 'Aligning neural representations with language semantics through self-supervised learning and cross-modal objectives, toward foundation models that bridge brain signals and natural language.',
     },
     {
@@ -47,7 +51,7 @@ export const portfolio: PortfolioData = {
     },
     {
       label: 'B',
-      title: 'Understanding Human Cognition',
+      title: 'Understanding Human Cognition & Behavior',
       description: 'Investigating how distributed neural dynamics, functional connectivity, and individual variability shape human perception and cognition — moving from decoding models toward mechanistic understanding of what the brain is actually computing.',
       tags: ['Neural Dynamics', 'Functional Connectivity', 'Individual Variability', 'Computational Neuroscience'],
     },
@@ -57,8 +61,8 @@ export const portfolio: PortfolioData = {
       "title": "Multi-Scale Temporal Fusion Network with Encoding-Guided Reciprocal Re-ranking for ECoG-to-Text Semantic Decoding",
       "authors": "M.-J. Cho, S.-H. Lee, and S.-W. Lee†",
       "venue": "IEEE BCI 2027 · Planned submission",
-      "image": null,
-      "imageAlt": null,
+      "image": "/assets/images/tada-framework.webp",
+      "imageAlt": "TADA framework: multi-scale temporal decoder and encoding-guided reciprocal re-ranking for ECoG-to-text decoding",
       "links": [
         {
           "label": "Code ↗",
@@ -70,15 +74,15 @@ export const portfolio: PortfolioData = {
       "title": "Continuous Latent Predictive Modeling with Predictive Semantic Alignment for EEG-Language Foundation Models",
       "authors": "M.-J. Cho, H.-B. Shin, S.-H. Lee, and S.-W. Lee†",
       "venue": "ARR 2027 · Preprint · Submitted",
-      "image": "assets/images/continuous-latent-framework.png",
+      "image": "/assets/images/continuous-latent-framework.png",
       "imageAlt": "Continuous Latent Predictive Modeling 논문의 EEG 사전학습 및 예측 의미 정렬 구조도",
       "links": []
     },
     {
       "title": "Classification of Non-Invasive EEG Signals During Motor Imagery Tasks Using a Large Language Model",
       "authors": "D.-H. Lim*, M.-J. Cho*, and H.-H. Kim†",
-      "venue": "IEEE CW 2024",
-      "image": "assets/images/ieee-cw-2024-framework.png",
+      "venue": "IEEE CW 2024 · Published",
+      "image": "/assets/images/ieee-cw-2024-framework.png",
       "imageAlt": "IEEE CW 2024 논문의 EEG 특징 추출 및 LLM 분류 구조도",
       "links": [
         {
@@ -105,7 +109,7 @@ export const portfolio: PortfolioData = {
     },
     {
       "status": "Poster · Sep. 2023",
-      "title": "Decoding electroencephalographic signals for inner speech words (functional, emotional) in brain-computer interface using Echo State Networks",
+      "title": "Decoding electroencephalographic signals for inner speech words (functional, emotional) in brain-computer interface using echo state networks",
       "authors": "M.-J. Cho, D.-H. Lim, H. Park, Y.-J. Cho, S.-H. Ko, and H.-H. Kim",
       "venue": "2023 KSEE Annual Conference",
       "location": "Jeju, South Korea"
@@ -209,7 +213,10 @@ export const portfolio: PortfolioData = {
         "Brainiak / SRM",
         "h5py"
       ],
-      "image": null
+      "image": {
+        "src": "/assets/images/tada-framework.webp",
+        "alt": "TADA framework: multi-scale temporal decoder and encoding-guided reciprocal re-ranking for ECoG-to-text decoding"
+      }
     },
     {
       "id": "project-neuralspeech",
@@ -331,7 +338,7 @@ export const portfolio: PortfolioData = {
         "NumPy"
       ],
       "image": {
-        "src": "assets/images/ieee-cw-2024-framework.png",
+        "src": "/assets/images/ieee-cw-2024-framework.png",
         "alt": "Fine-tuned LLM for EEG: feature extraction, JSON conversion, and LLM fine-tuning pipeline",
         "caption": "Fine-tuned LLM for EEG · IEEE CW 2024"
       }
@@ -437,7 +444,7 @@ export const portfolio: PortfolioData = {
     {
       "date": "Nov. 2024",
       "title": "Teamwork Award",
-      "organization": "2024 Capstone Design Competition, Department of Computer Engineering and Artificial Intelligence, Pukyong National University",
+      "organization": "2024 Capstone Design Competition · Department of Computer Engineering and Artificial Intelligence, Pukyong National University",
       "detail": null
     },
     {
@@ -457,22 +464,24 @@ export const portfolio: PortfolioData = {
     {
       "title": "Korea University",
       "description": "M.S. in Brain and Cognitive Engineering",
-      "date": "Sep. 2025 – Present"
+      "date": "Sep. 2025 – Aug. 2027 (Expected)",
+      "location": "Seoul, South Korea"
     },
     {
       "title": "Pukyong National University",
       "description": "B.S. in Computer Engineering",
-      "date": "Mar. 2020 – Feb. 2025"
+      "date": "Mar. 2020 – Feb. 2025",
+      "location": "Busan, South Korea"
     }
   ],
   "experience": [
     {
-      "title": "Graduate Researcher · PRML Lab",
+      "title": "Graduate Researcher · Pattern Recognition and Machine Learning (PRML) Lab",
       "description": "Korea University · Prof. Seong-Whan Lee",
       "date": "Aug. 2025 – Present"
     },
     {
-      "title": "Undergraduate Researcher · Brain-inspired eXpainable Artificial Intelligence Lab",
+      "title": "Undergraduate Researcher · Brain-inspired eXpainable Artificial Intelligence (BXAI) Lab",
       "description": "Pukyong National University · Prof. Hoon-Hee Kim",
       "date": "Mar. 2023 – Jan. 2025"
     }
@@ -487,7 +496,7 @@ export const portfolio: PortfolioData = {
     { "date": "Feb. 2024", "category": "Award", "title": "Proud Student Award", "detail": "College of Information Technology and Convergence, Pukyong National University." },
     { "date": "Nov. 2023", "category": "Paper", "title": "Poster at Society for Neuroscience (SfN 2023)", "detail": "Decoding electroencephalographic signals for inner speech words in brain-computer interface. Washington, DC, USA." },
     { "date": "Sep. 2023", "category": "Award", "title": "Best Presentation Award — KSEE Annual Conference", "detail": "Korean Society for Engineering Education · Jeju, South Korea." },
-    { "date": "Mar. 2023", "category": "Career", "title": "Joined BEX-AI Lab as Undergraduate Researcher", "detail": "Pukyong National University · Prof. Hoon-Hee Kim." }
+    { "date": "Mar. 2023", "category": "Career", "title": "Joined BXAI Lab as Undergraduate Researcher", "detail": "Pukyong National University · Prof. Hoon-Hee Kim." }
   ],
   competencies: [
     {

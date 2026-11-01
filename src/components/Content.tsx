@@ -49,7 +49,7 @@ export function About() {
           <h1 className="name">Myeongju Cho</h1>
           <p className="intro-role">
             <span className="researcher-position">M.S. Researcher @ Korea University</span>
-            <span className="research-vision">Understanding Human Cognition Through AI</span>
+            <span className="research-vision">Understanding Human Cognition &amp; Behavior Through Neuroimaging and AI</span>
           </p>
           <p>I am a master's student in Brain and Cognitive Engineering at Korea University, working in the <ExternalLink href="http://pr.korea.ac.kr/">Pattern Recognition and Machine Learning (PRML) Lab</ExternalLink>, supervised by Prof. Seong-Whan Lee.</p>
           <p>My primary research interest lies in <strong>elucidating and modeling the neural mechanisms underlying human cognition and behavior</strong> through neural data analysis and computational modeling. To this end, I have investigated how information is represented in neural activity using neuroimaging and neurophysiological modalities, including <strong>EEG, ECoG, and fMRI</strong>, with a particular focus on <strong>neural decoding, representation learning, and brain–language modeling</strong>.</p>
@@ -223,7 +223,7 @@ export function Awards() {
 }
 
 export function Timeline({ id, title, entries }: { id: string; title: string; entries: TimelineEntry[] }) {
-  return <section id={id}><h2>{title}</h2><table className="timeline"><tbody>{entries.map(entry => <tr key={entry.title}><td><h3>{entry.title}</h3><p>{entry.description}</p></td><td>{entry.date}</td></tr>)}</tbody></table></section>;
+  return <section id={id}><h2>{title}</h2><table className="timeline"><tbody>{entries.map(entry => <tr key={entry.title}><td><h3>{entry.title}</h3><p>{entry.description}</p></td><td><div className="timeline-meta">{entry.date}{entry.location && <span className="timeline-location">{entry.location}</span>}</div></td></tr>)}</tbody></table></section>;
 }
 
 export function FutureDirections() {

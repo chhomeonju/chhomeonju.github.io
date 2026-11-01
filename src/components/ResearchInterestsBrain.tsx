@@ -11,7 +11,7 @@ const INTERESTS = [
     tag: 'Decoding', tagClass: 'ri-tag--decode',
   },
   {
-    title: 'Brain–Language Modeling',
+    title: 'Brain Foundation Model',
     description: 'Aligning neural representations with language semantics through self-supervised learning and cross-modal objectives, toward foundation models that bridge brain signals and natural language.',
     tag: 'Language', tagClass: 'ri-tag--lang',
   },

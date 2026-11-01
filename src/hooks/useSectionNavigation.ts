@@ -3,8 +3,8 @@ import type { Navigate } from '../components/Content';
 
 export const sections = [
   ['about', 'About'], ['publications', 'Publications'],
-  ['presentations', 'Presentations'], ['projects', 'Projects'], ['activities', 'Activities'],
-  ['patents', 'Patent'], ['awards', 'Awards'],
+  ['presentations', 'Presentations'], ['projects', 'Projects'],
+  ['awards', 'Awards'], ['patents', 'Patent'], ['activities', 'Activities'],
 ] as const;
 
 export function useSectionNavigation() {
@@ -23,7 +23,7 @@ export function useSectionNavigation() {
     let alignmentFrame = 0;
     let offset = 80;
     function measure() {
-      const lastSection = main!.querySelector<HTMLElement>('#awards');
+      const lastSection = main!.querySelector<HTMLElement>('#activities');
       const footer = main!.querySelector('footer');
       if (!nav || !main || !lastSection || !footer) return;
       offset = Math.ceil(nav.getBoundingClientRect().height) + 20;

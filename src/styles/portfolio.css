@@ -115,16 +115,17 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
   letter-spacing: .005em;
 }
 .hero-vision {
-  font-size: clamp(1.15rem, 1.8vw, 1.44rem);
+  font-size: clamp(1.02rem, 1.55vw, 1.26rem);
   font-weight: 400;
   letter-spacing: -.025em;
   line-height: 1.5;
+  white-space: nowrap;
   max-width: 440px;
   margin: 0 0 13px;
   color: var(--ink);
 }
 .hero-subjects {
-  font-size: .75rem;
+  font-size: .84rem;
   color: var(--muted);
   line-height: 1.9;
   max-width: 520px;
@@ -181,7 +182,7 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
 @media (max-width: 680px) {
   .hero-brain { height: calc(100svh - 60px); }
   .brain-canvas { width: 240px; height: 160px; margin-bottom: 14px; }
-  .hero-vision { max-width: 300px; }
+  .hero-vision { max-width: 300px; white-space: normal; }
   .hero-subjects { max-width: 280px; }
   .hero-bottom { flex-direction: column; align-items: flex-start; gap: 12px; }
 }
@@ -568,7 +569,7 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
 .about-area > section { margin-top: 92px; padding: 0; }
 .homepage > section > h2,
 .about-area > section > h2,
-.projects-heading h2 { font-family: var(--font-display); font-size: clamp(1.6rem, 2.3vw, 1.9rem); font-weight: 800; letter-spacing: -.035em; margin-bottom: 28px; padding-bottom: 0; border-bottom: none; }
+.projects-heading h2 { font-family: var(--font-display); font-size: clamp(1.6rem, 2.3vw, 1.9rem); font-weight: 800; letter-spacing: -.035em; margin-bottom: 14px; padding-bottom: 0; border-bottom: none; }
 .projects-heading { margin-bottom: 0; }
 .projects-heading h2 { margin-bottom: 10px; }
 .projects-heading p, .activities-intro { font-size: .9rem; line-height: 1.8; color: var(--muted); max-width: 75ch; }
@@ -585,8 +586,9 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
 .mj-paper:hover { background: var(--wash); }
 .mj-without-image { grid-template-columns: minmax(0, 1fr); }
 .mj-paper-copy { min-width: 0; max-width: 78ch; }
-.mj-figure { min-width: 0; }
-.mj-figure img { display: block; width: 100%; }
+.mj-figure { min-width: 0; height: 200px; border-radius: 4px; background: var(--wash); display: flex; align-items: center; justify-content: center; }
+.mj-real-figure { height: 100%; width: 100%; display: flex; align-items: center; justify-content: center; }
+.mj-figure img { display: block; max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; border-radius: 4px; }
 .mj-paper h2 { font-size: 1.13rem; font-weight: 700; line-height: 1.5; margin-bottom: 12px; }
 .mj-authors { font-size: .9rem; line-height: 1.75; color: var(--muted); margin-bottom: 8px; }
 .mj-authors strong { color: var(--ink); }
@@ -613,6 +615,8 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
 .project-name { display: block; font-size: 1.65rem; font-weight: 700; letter-spacing: -.035em; line-height: 1.15; margin-bottom: 10px; }
 .project-subtitle { display: block; font-size: .9rem; font-weight: 400; color: var(--muted); line-height: 1.6; }
 .project-preview, .project-copy { min-width: 0; }
+.project-preview.has-image { display: flex; gap: 28px; align-items: flex-start; }
+.project-preview.has-image .project-copy { flex: 1; min-width: 0; }
 .project-teaser { color: var(--ink); font-size: .94rem; line-height: 1.8; margin-bottom: 14px; max-width: 72ch; }
 .project-highlights { padding-left: 18px; margin: 0 0 17px; }
 .project-highlights li { color: var(--muted); font-size: .88rem; line-height: 1.8; }
@@ -621,9 +625,9 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
 .project-highlights strong { color: var(--ink); }
 .project-stack { color: var(--muted); font-size: .74rem; line-height: 1.8; }
 .project-stack-label { font-weight: 700; margin-right: 12px; }
-.project-visual { margin-top: 20px; max-width: 520px; }
-.project-visual img { display: block; width: 100%; }
-.project-visual figcaption { font-size: .72rem; color: var(--muted); margin-top: 8px; }
+.project-visual { flex-shrink: 0; width: 200px; height: 160px; border-radius: 6px; background: var(--wash); display: flex; align-items: center; justify-content: center; }
+.project-visual img { display: block; max-width: 100%; max-height: 100%; width: auto; height: auto; object-fit: contain; border-radius: 4px; }
+.project-visual figcaption { display: none; }
 .project-card-footer { grid-column: 2; display: flex; justify-content: space-between; gap: 18px; align-items: center; border-top: 1px solid var(--rule); padding-top: 10px; }
 .project-read-more { color: var(--accent); font-size: .79rem; font-weight: 700; }
 .project-read-more > span { margin-left: 9px; }
@@ -644,14 +648,15 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
 .entries .mj-small { color: var(--muted); font-size: .76rem; }
 #awards .papertitle { color: var(--accent); }
 #awards .entries td > p:not(.mj-status) { color: var(--muted); font-size: .88rem; }
-.award-list { list-style: none; padding: 0; margin: 0; }
-.award-entry { display: grid; grid-template-columns: 110px minmax(0, 1fr); gap: 0 28px; padding: 22px 0; border-top: 1px solid var(--rule); align-items: baseline; }
-.award-entry:first-child { border-top: 1px solid var(--rule); }
-.award-entry:last-child { border-bottom: 1px solid var(--rule); }
-.award-date { font-size: .78rem; color: var(--muted); line-height: 1.5; padding-top: 2px; }
-.award-title { font-size: 1.04rem; font-weight: 700; color: var(--ink); line-height: 1.5; margin: 0 0 5px; }
-.award-org { font-size: .9rem; color: var(--muted); margin: 0 0 3px; }
-.award-detail { font-size: .84rem; color: var(--muted); margin: 0; }
+.award-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; }
+.award-entry { display: flex; align-items: flex-start; gap: 32px; padding: 22px 0; border-top: 1px solid var(--rule); }
+.award-entry:last-of-type { border-bottom: 1px solid var(--rule); }
+.award-date { flex-shrink: 0; width: 80px; font-size: .78rem; color: var(--accent); padding-top: 3px; }
+.award-body { flex: 1; min-width: 0; }
+.award-title { font-size: 1.02rem; font-weight: 700; color: var(--ink); line-height: 1.6; margin: 0 0 4px; }
+.award-org { font-size: .86rem; color: var(--muted); margin: 0 0 3px; }
+.award-detail { font-size: .82rem; color: var(--muted); margin: 0; }
+/* Activities */
 .activity-list { margin-top: 24px; }
 .activity-entry { display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 36px; padding: 23px 0; border-bottom: 1px solid var(--rule); }
 .activity-entry:first-child { border-top: 1px solid var(--rule); }
@@ -659,17 +664,20 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
 .activity-entry h3 { font-size: 1.04rem; font-weight: 700; margin-bottom: 4px; }
 .activity-role { color: var(--accent); font-size: .77rem; margin-bottom: 6px; }
 .activity-description { color: var(--muted); font-size: .92rem; }
-.patent-entry { background: var(--wash); padding: 28px 32px; border-left: 3px solid var(--accent); }
-.patent-meta { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px 20px; color: var(--muted); font-size: .78rem; margin-bottom: 14px; }
-.patent-meta > span:first-child { color: var(--accent); }
-.patent-entry h3 { font-size: 1.08rem; line-height: 1.6; max-width: 75ch; margin-bottom: 14px; }
-.patent-inventors { color: var(--muted); font-size: .84rem; margin-bottom: 8px; }
+.patent-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 14px; }
+.patent-entry { background: var(--wash); padding: 24px 28px; border-left: 3px solid var(--accent); }
+.patent-meta { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px 20px; color: var(--muted); font-size: .78rem; margin-bottom: 10px; }
+.patent-meta > span:first-child { color: var(--muted); }
+.patent-entry h3 { font-size: 1.04rem; font-weight: 700; line-height: 1.6; max-width: 75ch; margin-bottom: 8px; }
+.patent-inventors { color: var(--muted); font-size: .84rem; margin-bottom: 5px; }
 .patent-inventors strong { color: var(--ink); }
 .patent-number { color: var(--muted); font-size: .76rem; }
 .timeline td { border-bottom: 1px solid var(--rule); padding: 24px 0; vertical-align: top; }
 .timeline h3 { font-size: 1.05rem; font-weight: 700; line-height: 1.6; }
 .timeline p { font-size: .93rem; color: var(--muted); margin-top: 5px; }
 .timeline td:last-child { width: 205px; padding-left: 26px; text-align: right; color: var(--muted); font-size: .8rem; }
+.timeline-meta { display: flex; flex-direction: column; align-items: flex-end; gap: 3px; }
+.timeline-location { font-size: .74rem; color: var(--muted); opacity: .7; }
 /* Future Directions */
 .future-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
 .future-card { padding: 30px 32px; border: 1px solid var(--rule); border-radius: 8px; background: var(--wash); transition: border-color .15s, box-shadow .15s; }
@@ -824,9 +832,9 @@ footer p { font-size: .76rem; color: var(--muted); letter-spacing: .01em; }
   .project-card-footer { gap: 10px; }
   .project-resources { gap: 14px; }
   .entries .papertitle { font-size: .97rem; }
-  .activity-entry { grid-template-columns: minmax(0, 1fr); gap: 7px; padding: 21px 0; }
+  .activity-entry { padding: 20px 0; }
   .activity-entry h3 { font-size: 1rem; }
-  .patent-entry { padding: 22px 20px; }
+  .patent-entry { padding: 20px 18px; }
   .patent-entry h3 { font-size: 1rem; }
   .timeline, .timeline tbody, .timeline tr, .timeline td { display: block; width: auto; }
   .timeline td:first-child { padding: 21px 0 6px; border-bottom: 0; }

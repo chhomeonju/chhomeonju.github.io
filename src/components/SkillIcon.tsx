@@ -1,14 +1,16 @@
-import { ChartSpline, Cpu, Database, Layers, Network, Zap, type LucideIcon } from 'lucide-react';
+import { Cpu, Database, Layers, Network, BarChart2, type LucideIcon } from 'lucide-react';
 
 const brands: Record<string, string> = {
   Python: 'python', C: 'c', PyTorch: 'pytorch', TensorFlow: 'tensorflow',
-  'Scikit-learn': 'scikitlearn', 'Hugging Face Transformers': 'huggingface',
+  'Scikit-learn': 'scikitlearn', 'Hugging Face': 'huggingface',
   CUDA: 'nvidia', MySQL: 'mysql', 'Weights & Biases': 'weightsandbiases',
   Git: 'git', Linux: 'linux', Docker: 'docker', Conda: 'anaconda', LaTeX: 'latex',
+  MATLAB: 'matlab', Bash: 'gnubash',
 };
 const symbols: Record<string, LucideIcon> = {
-  MATLAB: ChartSpline, SQL: Database, PEFT: Layers, Accelerate: Zap,
+  SQL: Database, PEFT: Layers,
   'Multi-GPU Training': Cpu, 'Distributed Training': Network, LMDB: Database,
+  TensorBoard: BarChart2,
 };
 
 export function SkillIcon({ skill }: { skill: string }) {

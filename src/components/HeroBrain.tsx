@@ -209,16 +209,16 @@ export function HeroBrain({ onExplore }: { onExplore?: (e: MouseEvent<HTMLAnchor
         <h1 className="hero-name">Myeongju Cho</h1>
         <p className="hero-role">M.S. Researcher at Korea University · PRML Lab</p>
         <p className="hero-vision">Understanding Human Cognition &amp; Behavior<br />Through Neuroimaging and AI</p>
-        <p className="hero-subjects">Experienced in neural data processing &amp; analysis and designing computational models<br />for neural decoding to understand human cognition</p>
+        <p className="hero-subjects">Experienced in neural data processing and analysis, and developing models for neural decoding to understand human cognition.</p>
         <a className="hero-explore" href="#about" onClick={onExplore}>Explore my research</a>
         <a className="hero-scroll-hint" href="#about" onClick={onExplore} aria-label="Go to research">
+          <span className="hero-scroll-arrow">↑</span>
           <span className="hero-scroll-label">click</span>
-          <span className="hero-scroll-arrow">↓</span>
         </a>
       </div>
       <div className="hero-bottom">
         <span className="hero-place">
-          Copyright © Myeongju Cho
+          © 2026 Myeongju Cho
         </span>
         <div className="hero-contacts">
           <a href="mailto:mj_cho@korea.ac.kr">Email</a>

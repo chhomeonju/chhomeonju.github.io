@@ -34,7 +34,7 @@ export function ProjectPage({ project: p }: { project: Project }) {
       </div>
     </div>
     <div className="project-page-bottom"><a href={`index.html#${p.id}`}>← Back to projects</a><a href={projectHref(next)}>Next project: {next.name} →</a></div>
-    <footer><p>Copyright ©Myeongju Cho</p></footer>
+    <footer><p>© 2026 Myeongju Cho<br />All rights reserved.</p></footer>
   </main></>;
 
 }
