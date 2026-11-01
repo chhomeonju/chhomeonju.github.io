@@ -978,8 +978,8 @@ footer p { font-size: .76rem; color: var(--muted); letter-spacing: .01em; }
 [data-theme="dark"] .menu-toggle { background: #111827; border-color: var(--rule); color: var(--accent); }
 [data-theme="dark"] .patent-entry { background: #111827; }
 [data-theme="dark"] .presentation-entry { background: #111827; }
-[data-theme="dark"] .mj-figure { background: #111827; }
-[data-theme="dark"] .mj-figure img { mix-blend-mode: multiply; filter: brightness(0.92); }
+[data-theme="dark"] .mj-figure { background: #1e293b; }
+[data-theme="dark"] .mj-figure img { filter: brightness(0.95); }
 
 /* News section */
 #news { margin-top: 78px; }

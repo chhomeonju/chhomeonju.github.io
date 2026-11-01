@@ -88,8 +88,8 @@
 [data-theme="dark"] .project-page-meta { color: var(--muted); }
 [data-theme="dark"] .project-page-subtitle { color: #cbd5e1; }
 [data-theme="dark"] .project-page-lead { color: #cbd5e1; }
-[data-theme="dark"] .project-page-figure { background: #111827; border-color: var(--rule); }
-[data-theme="dark"] .project-page-figure img { mix-blend-mode: multiply; filter: brightness(0.92); }
+[data-theme="dark"] .project-page-figure { background: #1e293b; border-color: var(--rule); }
+[data-theme="dark"] .project-page-figure img { filter: brightness(0.95); }
 [data-theme="dark"] .project-page-figure figcaption { color: #64748b; }
 [data-theme="dark"] .project-page-layout { border-top-color: var(--rule); }
 [data-theme="dark"] .project-page-aside p { color: #64748b; }

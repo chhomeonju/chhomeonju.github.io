@@ -208,7 +208,7 @@ export function HeroBrain({ onExplore }: { onExplore?: (e: MouseEvent<HTMLAnchor
         </canvas>
         <h1 className="hero-name">Myeongju Cho</h1>
         <p className="hero-role">M.S. Researcher at Korea University · PRML Lab</p>
-        <p className="hero-vision">Understanding Human Cognition &amp; Behavior<br />Through Neuroimaging and AI</p>
+        <p className="hero-vision">Understanding Human Cognition &amp; Behavior<br />Through Neuroimaging and{' '}AI</p>
         <p className="hero-subjects">Experienced in neural data processing and analysis, and developing models for neural decoding to understand human cognition.</p>
         <a className="hero-explore" href="#about" onClick={onExplore}>Explore my research</a>
         <a className="hero-scroll-hint" href="#about" onClick={onExplore} aria-label="Go to research">
