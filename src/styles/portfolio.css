@@ -297,7 +297,7 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
   line-height: 1.4; max-width: 92px; margin-top: 2px;
 }
 
-/* ── Mode 0: Encoding column ── */
+/* ── Mode 0: Encoding column (EEGDecodePanel reuses these) ── */
 .ri-enc-col {
   display: flex; flex-direction: column; align-items: center; gap: 4px; flex-shrink: 0;
 }
@@ -305,18 +305,46 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
   font-size: .50rem; font-weight: 700; letter-spacing: .09em; text-transform: uppercase;
   color: rgba(59,130,246,.68); margin-bottom: 2px;
 }
-.ri-enc-stims {
-  display: flex; flex-direction: column; gap: 4px; align-items: flex-start; width: 100%;
+
+/* ── Mode 0: Encoding stimulus panel ── */
+.ri-encstim-panel {
+  display: flex; flex-direction: column; align-items: flex-start;
+  gap: 5px; width: 152px; flex-shrink: 0;
 }
-.ri-enc-stim-row {
-  display: flex; align-items: center; gap: 5px;
+.ri-encstim-hdr {
+  font-size: .46rem; font-weight: 700; letter-spacing: .10em; text-transform: uppercase;
+  color: rgba(100,116,139,.65); align-self: center;
 }
-.ri-enc-stim-name {
-  font-size: .60rem; font-weight: 700; letter-spacing: .03em;
+.ri-encstim-card {
+  width: 100%; border: 1px solid; border-radius: 8px;
+  display: flex; flex-direction: column; align-items: center;
+  gap: 3px; padding: 6px 4px 5px;
+  transition: border-color .45s, background .45s;
 }
-.ri-enc-down {
-  font-size: .80rem; color: rgba(59,130,246,.50); line-height: 1;
+.ri-encstim-icon { display: flex; align-items: center; justify-content: center; }
+.ri-encstim-label {
+  font-size: .72rem; font-weight: 700; letter-spacing: .02em;
+  transition: color .45s;
 }
+.ri-encstim-desc {
+  font-size: .48rem; color: rgba(100,116,139,.70); text-align: center; line-height: 1.3;
+}
+.ri-encstim-arrow {
+  font-size: .85rem; align-self: center; line-height: 1; transition: color .45s;
+}
+.ri-encstim-nets { display: flex; flex-direction: column; gap: 4px; width: 100%; }
+.ri-encstim-net-row { display: flex; align-items: center; gap: 4px; }
+.ri-encstim-dot {
+  width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
+}
+.ri-encstim-net-name {
+  font-size: .50rem; font-weight: 600; min-width: 34px;
+  color: rgba(100,116,139,.80);
+}
+.ri-encstim-bar-bg {
+  flex: 1; height: 4px; background: rgba(100,116,139,.12); border-radius: 2px; overflow: hidden;
+}
+.ri-encstim-bar { height: 100%; border-radius: 2px; transition: width .50s ease; }
 
 /* ── Mode 0: Decoding column ── */
 .ri-dec-col {
@@ -685,6 +713,8 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
   .ri-viz--mode2 .ri-brain-wrap { width: 210px; height: 210px; }
   .ri-viz--mode3 .ri-brain-wrap { width: 190px; height: 190px; }
   .ri-tribe-panel { width: 115px; }
+  .ri-encstim-panel { width: 124px; }
+  .ri-encstim-icon svg { width: 48px; height: 37px; }
   .ri-comp-panel { width: 90px; }
 }
 @media (max-width: 600px) {

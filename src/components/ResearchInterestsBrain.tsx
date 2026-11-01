@@ -444,64 +444,117 @@ function ConnectomeCanvas({ stimIdx }: { stimIdx: number }) {
   );
 }
 
-// ── Mode 0: Encoding column (multi-modal stimuli → neural response) ──────
-const ENC_STIMS = [
+// ── Mode 0: Encoding stimulus panel (card + network activation bars) ──────
+const ENC_STIM_DATA = [
   {
     label: 'Visual',
+    desc: 'object / scene perception',
     color: '#7c3aed',
-    icon: (
-      <svg viewBox="0 0 28 20" width="28" height="20" aria-hidden="true">
-        <rect x="1" y="1" width="26" height="18" rx="3" fill="rgba(124,58,237,.12)" stroke="rgba(124,58,237,.55)" strokeWidth="0.8"/>
-        <circle cx="10" cy="10" r="4.5" fill="rgba(124,58,237,.22)" stroke="rgba(124,58,237,.55)" strokeWidth="0.8"/>
-        <circle cx="10" cy="10" r="2" fill="rgba(124,58,237,.70)"/>
-        <rect x="17" y="5" width="7" height="4" rx="1" fill="rgba(124,58,237,.35)"/>
-        <rect x="17" y="11" width="5" height="4" rx="1" fill="rgba(124,58,237,.22)"/>
-      </svg>
-    ),
+    nets: [
+      { name: 'VIS',   w: 1.00, color: '#7c3aed' },
+      { name: 'FPN-R', w: 0.78, color: '#4a90d9' },
+      { name: 'SAN',   w: 0.72, color: '#f4a261' },
+    ],
   },
   {
-    label: 'Audio',
+    label: 'Speech',
+    desc: 'lexical-phonological processing',
     color: '#f77f00',
-    icon: (
-      <svg viewBox="0 0 28 20" width="28" height="20" aria-hidden="true">
-        <rect x="1" y="1" width="26" height="18" rx="3" fill="rgba(247,127,0,.10)" stroke="rgba(247,127,0,.50)" strokeWidth="0.8"/>
-        {[3,5,8,6,4,7,5,3].map((h, i) => (
-          <rect key={i} x={5 + i * 2.5} y={10 - h / 2} width="1.8" height={h}
-            fill="rgba(247,127,0,.75)" rx="0.9"/>
-        ))}
-      </svg>
-    ),
+    nets: [
+      { name: 'LAN',   w: 1.00, color: '#f77f00' },
+      { name: 'FPN-L', w: 0.88, color: '#4a90d9' },
+      { name: 'DMN',   w: 0.65, color: '#e63946' },
+    ],
+  },
+  {
+    label: 'Emotional',
+    desc: 'affective & social cognition',
+    color: '#e63946',
+    nets: [
+      { name: 'SAN',   w: 1.00, color: '#f4a261' },
+      { name: 'DMN',   w: 0.72, color: '#e63946' },
+      { name: 'FPN-L', w: 0.55, color: '#4a90d9' },
+    ],
   },
   {
     label: 'Language',
+    desc: 'semantic processing',
     color: '#10b981',
-    icon: (
-      <svg viewBox="0 0 28 20" width="28" height="20" aria-hidden="true">
-        <rect x="1" y="1" width="26" height="18" rx="3" fill="rgba(16,185,129,.10)" stroke="rgba(16,185,129,.50)" strokeWidth="0.8"/>
-        <rect x="5" y="6" width="18" height="2" rx="1" fill="rgba(16,185,129,.65)"/>
-        <rect x="5" y="10" width="14" height="2" rx="1" fill="rgba(16,185,129,.50)"/>
-        <rect x="5" y="14" width="10" height="2" rx="1" fill="rgba(16,185,129,.35)"/>
-      </svg>
-    ),
+    nets: [
+      { name: 'LAN',   w: 1.00, color: '#f77f00' },
+      { name: 'DMN',   w: 0.85, color: '#e63946' },
+      { name: 'FPN-L', w: 0.78, color: '#4a90d9' },
+    ],
   },
 ];
 
-function EncodingCol() {
+const ENC_STIM_ICONS = [
+  // Visual: landscape + sun
+  <svg key="vis" viewBox="0 0 58 44" width="58" height="44" aria-hidden="true">
+    <rect x="0.5" y="0.5" width="57" height="43" rx="5" fill="rgba(124,58,237,.10)" stroke="rgba(124,58,237,.40)" strokeWidth="0.8"/>
+    <circle cx="44" cy="12" r="6" fill="rgba(124,58,237,.55)"/>
+    <polygon points="6,40 20,16 34,40" fill="rgba(124,58,237,.30)"/>
+    <polygon points="22,40 38,20 54,40" fill="rgba(124,58,237,.50)"/>
+  </svg>,
+  // Speech: audio waveform bars
+  <svg key="spe" viewBox="0 0 58 44" width="58" height="44" aria-hidden="true">
+    <rect x="0.5" y="0.5" width="57" height="43" rx="5" fill="rgba(247,127,0,.10)" stroke="rgba(247,127,0,.40)" strokeWidth="0.8"/>
+    {[5,10,18,26,32,28,20,13,8,5].map((h,i)=>(
+      <rect key={i} x={7+i*4.6} y={36-h} width="3.5" height={h} rx="1.5" fill="rgba(247,127,0,.72)"/>
+    ))}
+  </svg>,
+  // Emotional: 2×2 face grid
+  <svg key="emo" viewBox="0 0 58 44" width="58" height="44" aria-hidden="true">
+    <rect x="0.5" y="0.5" width="57" height="43" rx="5" fill="rgba(233,62,70,.10)" stroke="rgba(233,62,70,.40)" strokeWidth="0.8"/>
+    {([
+      [16,14,'M11,18 Q16,22 21,18'],
+      [40,14,'M35,18 Q40,14 45,18'],
+      [16,32,'M11,36 Q16,40 21,36'],
+      [40,32,'M35,34 Q40,30 45,34'],
+    ] as [number,number,string][]).map(([cx,cy,mouth],i)=>(
+      <g key={i}>
+        <circle cx={cx} cy={cy} r="10" fill="rgba(233,62,70,.16)" stroke="rgba(233,62,70,.55)" strokeWidth="0.7"/>
+        <circle cx={cx-3} cy={cy-2} r="1.6" fill="rgba(233,62,70,.72)"/>
+        <circle cx={cx+3} cy={cy-2} r="1.6" fill="rgba(233,62,70,.72)"/>
+        <path d={mouth} fill="none" stroke="rgba(233,62,70,.72)" strokeWidth="1.2" strokeLinecap="round"/>
+      </g>
+    ))}
+  </svg>,
+  // Language: text lines
+  <svg key="lan" viewBox="0 0 58 44" width="58" height="44" aria-hidden="true">
+    <rect x="0.5" y="0.5" width="57" height="43" rx="5" fill="rgba(16,185,129,.10)" stroke="rgba(16,185,129,.40)" strokeWidth="0.8"/>
+    <rect x="7" y="9"  width="44" height="5" rx="2.5" fill="rgba(16,185,129,.65)"/>
+    <rect x="7" y="18" width="36" height="5" rx="2.5" fill="rgba(16,185,129,.50)"/>
+    <rect x="7" y="27" width="40" height="5" rx="2.5" fill="rgba(16,185,129,.40)"/>
+    <rect x="7" y="36" width="22" height="5" rx="2.5" fill="rgba(16,185,129,.30)"/>
+  </svg>,
+];
+
+function EncodingStimPanel({ stimIdx }: { stimIdx: number }) {
+  const idx = stimIdx % ENC_STIM_DATA.length;
+  const stim = ENC_STIM_DATA[idx];
   return (
-    <div className="ri-enc-col" aria-hidden="true">
-      <div className="ri-enc-dir-label">encoding →</div>
-      <div className="ri-enc-stims">
-        {ENC_STIMS.map(s => (
-          <div key={s.label} className="ri-enc-stim-row">
-            {s.icon}
-            <span className="ri-enc-stim-name" style={{ color: s.color }}>{s.label}</span>
+    <div className="ri-encstim-panel" aria-hidden="true">
+      <div className="ri-encstim-hdr">Input Stimulus</div>
+      <div className="ri-encstim-card"
+        style={{ borderColor: stim.color + '50', background: stim.color + '0d' } as CSSProperties}>
+        <div className="ri-encstim-icon">{ENC_STIM_ICONS[idx]}</div>
+        <div className="ri-encstim-label" style={{ color: stim.color }}>{stim.label}</div>
+        <div className="ri-encstim-desc">{stim.desc}</div>
+      </div>
+      <div className="ri-encstim-arrow" style={{ color: stim.color }}>↓</div>
+      <div className="ri-encstim-hdr">Active Networks</div>
+      <div className="ri-encstim-nets">
+        {stim.nets.map(net => (
+          <div key={net.name} className="ri-encstim-net-row">
+            <span className="ri-encstim-dot" style={{ background: net.color }}/>
+            <span className="ri-encstim-net-name">{net.name}</span>
+            <div className="ri-encstim-bar-bg">
+              <div className="ri-encstim-bar" style={{ width: `${net.w * 100}%`, background: net.color }}/>
+            </div>
           </div>
         ))}
       </div>
-      <div className="ri-enc-down">↓</div>
-      <span className="ri-signal-label">EEG response</span>
-      <EEGPanel />
-      <span className="ri-paradigm-hint">neural activity recorded</span>
     </div>
   );
 }
@@ -800,7 +853,7 @@ export function ResearchInterestsBrain() {
       {/* Visualization panel — brain canvas ALWAYS inside ri-viz-main to preserve WebGL context */}
       <div className={`ri-viz-panel ri-viz--mode${active}`}>
         <div className="ri-viz-main">
-          {active === 0 && encPhase === 'encode' && <TribeV2Panel stimIdx={stimIdx} />}
+          {active === 0 && encPhase === 'encode' && <EncodingStimPanel stimIdx={stimIdx} />}
           {active === 0 && encPhase === 'decode' && <EEGDecodePanel />}
 
           {active === 1 && <TribeV2Panel stimIdx={stimIdx} />}
