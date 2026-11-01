@@ -26,6 +26,7 @@ export interface Project {
   stack: string[];
   image: { src: string; alt: string; caption?: string } | null;
   cardImage?: { src: string; alt: string; caption?: string };
+  cardImages?: { src: string; alt: string }[];
 }
 export interface Award { date: string; title: string; organization: string; detail: string | null }
 export interface TimelineEntry { title: string; description: string; date: string; location?: string; expected?: string }
