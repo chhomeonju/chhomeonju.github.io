@@ -656,25 +656,24 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
 .award-title { font-size: 1.02rem; font-weight: 700; color: var(--ink); line-height: 1.6; margin: 0 0 4px; }
 .award-org { font-size: .86rem; color: var(--muted); margin: 0 0 3px; }
 .award-detail { font-size: .82rem; color: var(--muted); margin: 0; }
-/* Activities — vertical bar timeline */
-.act-tl-wrap { position: relative; padding: 4px 0; }
-.act-tl-line { position: absolute; left: 160px; top: 0; bottom: 0; width: 1px; background: var(--rule); }
-.act-tl-item { display: grid; grid-template-columns: 160px 32px 1fr; align-items: start; padding: 18px 0; border-top: 1px solid var(--rule); cursor: default; transition: background .15s; }
-.act-tl-item:last-child { border-bottom: 1px solid var(--rule); }
-.act-tl-left { text-align: right; padding-right: 16px; padding-top: 2px; }
-.act-tl-date { font-size: .7rem; color: var(--muted); line-height: 1.7; }
-.act-tl-date span { display: block; }
-.act-tl-dur { font-size: .63rem; color: var(--muted); opacity: .55; margin-top: 4px; }
-.act-tl-mid { display: flex; flex-direction: column; align-items: center; z-index: 1; padding-top: 4px; }
-.act-tl-bar { width: 8px; border-radius: 4px; background: var(--accent); opacity: .65; }
-.act-tl-dot { width: 8px; height: 8px; border-radius: 50%; border: 2px solid var(--accent); background: var(--accent-soft); flex-shrink: 0; }
-.act-tl-right { padding-left: 16px; padding-top: 2px; }
-.act-tl-title { font-size: .88rem; font-weight: 600; color: var(--ink); line-height: 1.4; transition: color .15s; }
-.act-tl-role { font-size: .72rem; color: var(--muted); margin-top: 3px; }
-.act-tl-org { display: inline-block; font-size: .65rem; font-weight: 600; color: var(--accent); background: var(--accent-soft); border: 1px solid var(--accent-border); padding: 1px 8px; border-radius: 3px; margin-top: 6px; }
-.act-tl-desc { font-size: .76rem; color: var(--muted); line-height: 1.75; margin: 0; max-height: 0; overflow: hidden; opacity: 0; transition: max-height .28s ease, opacity .2s ease, margin-top .2s ease; margin-top: 0; }
-.act-tl-item:hover .act-tl-desc { max-height: 120px; opacity: 1; margin-top: 8px; }
-.act-tl-item:hover .act-tl-title { color: var(--accent); }
+/* Activities — year-block cards */
+.act-yb-wrap { margin-top: 8px; display: flex; flex-direction: column; gap: 0; }
+.act-yb-block { display: grid; grid-template-columns: 48px 1fr; gap: 0 20px; padding: 18px 0; border-top: 1px solid var(--rule); }
+.act-yb-block:last-child { border-bottom: 1px solid var(--rule); }
+.act-yb-year { font-size: .78rem; font-weight: 700; color: var(--accent); padding-top: 3px; letter-spacing: .02em; }
+.act-yb-cards { display: flex; flex-wrap: wrap; gap: 10px; }
+.act-yb-card { flex: 1 1 200px; min-width: 0; background: var(--wash); border: 1px solid var(--rule); border-radius: 10px; padding: 14px 16px; display: flex; flex-direction: column; gap: 4px; transition: border-color .18s, background .18s; cursor: default; }
+.act-yb-card:hover { border-color: var(--accent-border); background: var(--accent-soft); }
+.act-yb-title { font-size: .9rem; font-weight: 700; color: var(--ink); line-height: 1.4; }
+.act-yb-role { font-size: .73rem; color: var(--muted); }
+.act-yb-meta { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; margin-top: 2px; }
+.act-yb-date { font-size: .68rem; color: var(--muted); opacity: .8; }
+.act-yb-org { font-size: .63rem; font-weight: 600; color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, transparent); border: 1px solid var(--accent-border); padding: 1px 7px; border-radius: 3px; }
+.act-yb-bar-track { height: 3px; background: var(--rule); border-radius: 2px; margin-top: 8px; }
+.act-yb-bar { height: 100%; background: var(--accent); border-radius: 2px; opacity: .5; }
+.act-yb-card:hover .act-yb-bar { opacity: .8; }
+.act-yb-desc { font-size: .74rem; color: var(--muted); line-height: 1.7; margin: 4px 0 0; max-height: 0; overflow: hidden; opacity: 0; transition: max-height .25s ease, opacity .2s ease, margin-top .2s; }
+.act-yb-card:hover .act-yb-desc { max-height: 100px; opacity: 1; margin-top: 6px; }
 .patent-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 14px; }
 .patent-entry { background: var(--wash); padding: 24px 28px; border-left: 3px solid var(--accent); }
 .patent-meta { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 8px 20px; color: var(--muted); font-size: .78rem; margin-bottom: 10px; }

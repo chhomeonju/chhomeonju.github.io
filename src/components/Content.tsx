@@ -164,46 +164,51 @@ function parseAbsMonth(s: string): number {
 }
 
 export function Activities() {
-  const sorted = [...portfolio.activities].sort(
-    (a, b) => parseAbsMonth(b.date.split(' – ')[0]) - parseAbsMonth(a.date.split(' – ')[0])
-  );
+  const byYear: Record<number, typeof portfolio.activities> = {};
+  for (const a of portfolio.activities) {
+    const m = a.date.match(/(\d{4})/);
+    const year = m ? parseInt(m[1]) : 0;
+    if (!byYear[year]) byYear[year] = [];
+    byYear[year].push(a);
+  }
+  const years = Object.keys(byYear).map(Number).sort((a, b) => b - a);
 
   return (
     <section id="activities">
       <h2>Extracurricular Activities</h2>
-      <div className="act-tl-wrap">
-        <div className="act-tl-line" />
-        {sorted.map((a, i) => {
-          const parts = a.title.split(' · ');
-          const mainTitle = parts[0];
-          const org = parts.length > 1 ? parts[parts.length - 1] : null;
-          const showOrg = org?.match(/Lab|Club|Office/) ? org : null;
-          const [start, end] = a.date.split(' – ');
-          const dur = end ? parseAbsMonth(end) - parseAbsMonth(start) : 1;
-          const barH = Math.min(Math.max(dur * 5, 10), 72);
-          return (
-            <div key={i} className="act-tl-item">
-              <div className="act-tl-left">
-                <div className="act-tl-date">
-                  <span>{start}</span>
-                  {end && <span>– {end}</span>}
-                </div>
-                {dur > 1 && <div className="act-tl-dur">{dur}mo</div>}
-              </div>
-              <div className="act-tl-mid">
-                {dur > 1
-                  ? <div className="act-tl-bar" style={{ height: `${barH}px` }} />
-                  : <div className="act-tl-dot" />}
-              </div>
-              <div className="act-tl-right">
-                <div className="act-tl-title">{mainTitle}</div>
-                <div className="act-tl-role">{a.role}</div>
-                {showOrg && <span className="act-tl-org">{showOrg}</span>}
-                {a.description && <p className="act-tl-desc">{a.description}</p>}
-              </div>
+      <div className="act-yb-wrap">
+        {years.map(year => (
+          <div key={year} className="act-yb-block">
+            <div className="act-yb-year">{year}</div>
+            <div className="act-yb-cards">
+              {byYear[year].map((a, i) => {
+                const parts = a.title.split(' · ');
+                const mainTitle = parts[0];
+                const org = parts.length > 1 ? parts[parts.length - 1] : null;
+                const showOrg = org?.match(/Lab|Club|Office/) ? org : null;
+                const dur = (() => {
+                  const [start, end] = a.date.split(' – ');
+                  return end ? parseAbsMonth(end) - parseAbsMonth(start) : 1;
+                })();
+                const barW = Math.min(Math.max((dur / 12) * 100, 10), 100);
+                return (
+                  <div key={i} className="act-yb-card">
+                    <div className="act-yb-title">{mainTitle}</div>
+                    <div className="act-yb-role">{a.role}</div>
+                    <div className="act-yb-meta">
+                      <span className="act-yb-date">{a.date}</span>
+                      {showOrg && <span className="act-yb-org">{showOrg}</span>}
+                    </div>
+                    <div className="act-yb-bar-track">
+                      <div className="act-yb-bar" style={{ width: `${barW}%` }} />
+                    </div>
+                    {a.description && <p className="act-yb-desc">{a.description}</p>}
+                  </div>
+                );
+              })}
             </div>
-          );
-        })}
+          </div>
+        ))}
       </div>
     </section>
   );
