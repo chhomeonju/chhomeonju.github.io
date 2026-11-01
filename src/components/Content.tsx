@@ -166,7 +166,7 @@ function parseAbsMonth(s: string): number {
 
 export function Activities() {
   const sorted = [...portfolio.activities].sort(
-    (a, b) => parseAbsMonth(b.date.split(' – ')[0]) - parseAbsMonth(a.date.split(' – ')[0])
+    (a, b) => parseAbsMonth((b.date ?? '').split(' – ')[0]) - parseAbsMonth((a.date ?? '').split(' – ')[0])
   );
 
   return (
