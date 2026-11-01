@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import type { MouseEvent, ReactNode } from 'react';
 import { portfolio } from '../data/portfolio';
 import type { Project, TimelineEntry } from '../types';
@@ -164,51 +165,74 @@ function parseAbsMonth(s: string): number {
 }
 
 export function Activities() {
-  const byYear: Record<number, typeof portfolio.activities> = {};
-  for (const a of portfolio.activities) {
-    const m = a.date.match(/(\d{4})/);
-    const year = m ? parseInt(m[1]) : 0;
-    if (!byYear[year]) byYear[year] = [];
-    byYear[year].push(a);
-  }
-  const years = Object.keys(byYear).map(Number).sort((a, b) => b - a);
+  const [selected, setSelected] = useState<number | null>(null);
+
+  const acts = portfolio.activities.map(a => {
+    const [startStr, endStr] = a.date.split(' – ');
+    const startM = parseAbsMonth(startStr);
+    const endM = endStr ? parseAbsMonth(endStr) : startM + 1;
+    return { ...a, startM, endM };
+  });
+
+  const minM = Math.min(...acts.map(a => a.startM));
+  const maxM = Math.max(...acts.map(a => a.endM));
+  const span = maxM - minM;
+
+  const startYear = Math.floor(minM / 12);
+  const endYear = Math.ceil(maxM / 12);
+  const years: number[] = [];
+  for (let y = startYear; y <= endYear; y++) years.push(y);
+
+  const sel = selected !== null ? acts[selected] : null;
 
   return (
     <section id="activities">
       <h2>Extracurricular Activities</h2>
-      <div className="act-yb-wrap">
-        {years.map(year => (
-          <div key={year} className="act-yb-block">
-            <div className="act-yb-year">{year}</div>
-            <div className="act-yb-cards">
-              {byYear[year].map((a, i) => {
-                const parts = a.title.split(' · ');
-                const mainTitle = parts[0];
-                const org = parts.length > 1 ? parts[parts.length - 1] : null;
-                const showOrg = org?.match(/Lab|Club|Office/) ? org : null;
-                const dur = (() => {
-                  const [start, end] = a.date.split(' – ');
-                  return end ? parseAbsMonth(end) - parseAbsMonth(start) : 1;
-                })();
-                const barW = Math.min(Math.max((dur / 12) * 100, 10), 100);
-                return (
-                  <div key={i} className="act-yb-card">
-                    <div className="act-yb-title">{mainTitle}</div>
-                    <div className="act-yb-role">{a.role}</div>
-                    <div className="act-yb-meta">
-                      <span className="act-yb-date">{a.date}</span>
-                      {showOrg && <span className="act-yb-org">{showOrg}</span>}
-                    </div>
-                    <div className="act-yb-bar-track">
-                      <div className="act-yb-bar" style={{ width: `${barW}%` }} />
-                    </div>
-                    {a.description && <p className="act-yb-desc">{a.description}</p>}
+      <div className="act-htl">
+        <div className="act-htl-header">
+          {years.map(y => {
+            const pct = ((y * 12 - minM) / span) * 100;
+            if (pct < 0 || pct > 100) return null;
+            return <span key={y} className="act-htl-year" style={{ left: `${pct}%` }}>{y}</span>;
+          })}
+        </div>
+        <div className="act-htl-grid">
+          {years.map(y => {
+            const pct = ((y * 12 - minM) / span) * 100;
+            if (pct <= 0 || pct >= 100) return null;
+            return <div key={y} className="act-htl-gridline" style={{ left: `${pct}%` }} />;
+          })}
+          <div className="act-htl-rows">
+            {acts.map((a, i) => {
+              const leftPct = ((a.startM - minM) / span) * 100;
+              const widthPct = Math.max(((a.endM - a.startM) / span) * 100, 2);
+              const mainTitle = a.title.split(' · ')[0];
+              return (
+                <div key={i} className="act-htl-row">
+                  <div
+                    className={`act-htl-pill${selected === i ? ' act-htl-pill--active' : ''}`}
+                    style={{ left: `${leftPct}%`, width: `${widthPct}%` }}
+                    onClick={() => setSelected(selected === i ? null : i)}
+                  >
+                    <span className="act-htl-pill-text">{mainTitle}</span>
                   </div>
-                );
-              })}
-            </div>
+                </div>
+              );
+            })}
           </div>
-        ))}
+        </div>
+        {sel && (
+          <div className="act-htl-detail">
+            <div className="act-htl-detail-top">
+              <span className="act-htl-detail-title">{sel.title.split(' · ')[0]}</span>
+            </div>
+            <div className="act-htl-detail-meta">
+              <span className="act-htl-detail-role">{sel.role}</span>
+              <span className="act-htl-detail-date">{sel.date}</span>
+            </div>
+            {sel.description && <p className="act-htl-detail-desc">{sel.description}</p>}
+          </div>
+        )}
       </div>
     </section>
   );
