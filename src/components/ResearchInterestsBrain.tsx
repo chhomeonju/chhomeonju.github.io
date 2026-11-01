@@ -111,17 +111,20 @@ void main(){
   float gVis=max(max(glow(vec3(-.44,.10,.08),.18),glow(vec3(.44,.10,.08),.18)),
                  max(glow(vec3(-.38,.08,-.06),.17),glow(vec3(.38,.08,-.06),.17)));
 
-  /* ── Stimulus-specific weights (match STIMULI[] array in JS: 0=Emotional, 1=Speech, 2=Visual) ── */
+  /* ── Stimulus-specific weights (match STIMULI[] array in JS: 0=Image, 1=Audio, 2=Video, 3=Text) ── */
   float wDmn,wFpnl,wFpnr,wLan,wSan,wSmn,wVis;
   if(stimIdx<0.5){
-   /* Emotional: SAN>DMN>FPNl>FPNr>LAN>SMN>VIS */
-   wSan=1.0;wDmn=0.92;wFpnl=0.65;wFpnr=0.28;wLan=0.18;wSmn=0.10;wVis=0.08;
-  }else if(stimIdx<1.5){
-   /* Speech: LAN>FPNl>DMN>SMN>FPNr>SAN>VIS */
-   wLan=1.0;wFpnl=0.88;wDmn=0.65;wSmn=0.42;wSan=0.20;wFpnr=0.22;wVis=0.06;
-  }else{
-   /* Visual: VIS>FPNr>SAN>FPNl>SMN>DMN>LAN */
+   /* Image: VIS>FPNr>SAN>FPNl>SMN>DMN>LAN */
    wVis=1.0;wSan=0.72;wFpnr=0.78;wFpnl=0.38;wSmn=0.18;wDmn=0.10;wLan=0.07;
+  }else if(stimIdx<1.5){
+   /* Audio: LAN>FPNl>DMN>SMN>FPNr>SAN>VIS */
+   wLan=1.0;wFpnl=0.88;wDmn=0.65;wSmn=0.42;wSan=0.20;wFpnr=0.22;wVis=0.06;
+  }else if(stimIdx<2.5){
+   /* Video: SAN>VIS>DMN>FPNl>FPNr>LAN>SMN */
+   wSan=1.0;wVis=0.88;wDmn=0.72;wFpnl=0.55;wFpnr=0.48;wLan=0.30;wSmn=0.22;
+  }else{
+   /* Text: LAN>DMN>FPNl>FPNr>SAN>VIS>SMN */
+   wLan=1.0;wDmn=0.85;wFpnl=0.78;wFpnr=0.35;wSan=0.18;wVis=0.12;wSmn=0.08;
   }
 
   /* ── Weighted sum → total regional activation ── */
@@ -281,25 +284,24 @@ const NETS = [
 // Weights based on meta-analytic activation likelihood estimates
 const STIMULI = [
   {
-    label: 'Emotional',
-    sublabel: 'affective & social cognition',
-    color: '#e63946',
-    // Primary: SAN (amygdala-insula); DMN (vmPFC/mPFC social); FPN-L (emotion regulation)
-    weights: { san:1.0, dmn:0.92, fpnl:0.65, fpnr:0.28, lan:0.18, smn:0.10, vis:0.08 } as Record<string,number>,
+    label: 'Image',
+    color: '#7c3aed',
+    weights: { vis:1.0, san:0.72, fpnr:0.78, fpnl:0.38, smn:0.18, dmn:0.10, lan:0.07 } as Record<string,number>,
   },
   {
-    label: 'Speech',
-    sublabel: 'lexical-phonological processing',
+    label: 'Audio',
     color: '#f77f00',
-    // Primary: LAN (Broca BA44/45, Wernicke BA22); FPN-L (phonological WM); DMN (semantic)
     weights: { lan:1.0, fpnl:0.88, dmn:0.65, smn:0.42, san:0.20, fpnr:0.22, vis:0.06 } as Record<string,number>,
   },
   {
-    label: 'Visual',
-    sublabel: 'object / scene perception',
-    color: '#7c3aed',
-    // Primary: VIS (occipital-temporal stream); SAN (salience); FPN-R (dorsal attention)
-    weights: { vis:1.0, san:0.72, fpnr:0.78, fpnl:0.38, smn:0.18, dmn:0.10, lan:0.07 } as Record<string,number>,
+    label: 'Video',
+    color: '#e63946',
+    weights: { san:1.0, vis:0.88, dmn:0.72, fpnl:0.55, fpnr:0.48, lan:0.30, smn:0.22 } as Record<string,number>,
+  },
+  {
+    label: 'Text',
+    color: '#10b981',
+    weights: { lan:1.0, dmn:0.85, fpnl:0.78, fpnr:0.35, san:0.18, vis:0.12, smn:0.08 } as Record<string,number>,
   },
 ];
 
@@ -442,155 +444,78 @@ function ConnectomeCanvas({ stimIdx }: { stimIdx: number }) {
   );
 }
 
-// ── Mode 2: Per-stimulus visual representation ────────────────────────────────
-function StimulusVisual({ label, color }: { label: string; color: string }) {
-  if (label === 'Emotional') {
-    // 4 schematic face photographs — static, all visible at full opacity
-    const Face = ({ tx, ty, mouth, bL, bR, eyeRx = 1.5, eyeRy = 1.5 }:
-      { tx:number; ty:number; mouth?:string; bL?:number[]; bR?:number[]; eyeRx?:number; eyeRy?:number }) => (
-      <g transform={`translate(${tx},${ty})`}>
-        <rect width="22" height="24" rx="3" fill={color} fillOpacity="0.10" stroke={color} strokeWidth="0.8" strokeOpacity="0.45"/>
-        <ellipse cx="11" cy="11" rx="7" ry="8.5" fill={color} fillOpacity="0.20"/>
-        {bL && <line x1={bL[0]} y1={bL[1]} x2={bL[2]} y2={bL[3]} stroke={color} strokeWidth="1.2" strokeLinecap="round" opacity="0.85"/>}
-        {bR && <line x1={bR[0]} y1={bR[1]} x2={bR[2]} y2={bR[3]} stroke={color} strokeWidth="1.2" strokeLinecap="round" opacity="0.85"/>}
-        <ellipse cx="7.5" cy="10" rx={eyeRx} ry={eyeRy} fill={color} opacity="0.90"/>
-        <ellipse cx="14.5" cy="10" rx={eyeRx} ry={eyeRy} fill={color} opacity="0.90"/>
-        {mouth && <path d={mouth} fill="none" stroke={color} strokeWidth="1.3" strokeLinecap="round" opacity="0.90"/>}
-      </g>
-    );
-    return (
-      <svg viewBox="0 0 50 54" width="68" height="74" className="ri-stim-visual" aria-hidden="true">
-        <Face tx={2}  ty={2}  mouth="M7 15 Q11 19 15 15" />
-        <Face tx={26} ty={2}  mouth="M7 17 Q11 13 15 17" />
-        <Face tx={2}  ty={28} mouth="M9 17 Q11 15 13 17" eyeRx={2.0} eyeRy={2.5} />
-        <Face tx={26} ty={28} mouth="M7.5 16 Q11 14 14.5 16"
-          bL={[5,7,9,9]} bR={[17,7,13,9]} />
-      </svg>
-    );
-  }
-  if (label === 'Speech') {
-    // Animated audio equalizer bars — lexical/phonological stimulus
-    const heights = [12, 22, 16, 28, 20, 26, 14, 24, 18, 10];
-    return (
-      <svg viewBox="0 0 56 34" width="78" height="50" className="ri-stim-visual" aria-hidden="true">
-        {heights.map((h, i) => (
-          <rect key={i} className="ri-speech-bar"
-            x={i * 5.4 + 1} y={34 - h} width="4" height={h}
-            fill={color} opacity="0.78" rx="2"
-            style={{ animationDelay: `${i * 0.06}s`, animationDuration: `${0.52 + (i % 3) * 0.12}s` }}
-          />
-        ))}
-      </svg>
-    );
-  }
-  // Visual — naturalistic scene (mountain landscape)
+// ── Mode 0: Encoding column (stimulus → neural response) ─────────────────
+function EncodingCol() {
   return (
-    <svg viewBox="0 0 70 52" width="82" height="60" className="ri-stim-visual" aria-hidden="true">
-      {/* frame */}
-      <rect x="1" y="1" width="68" height="50" rx="5" fill={color} fillOpacity="0.08" stroke={color} strokeWidth="0.8" strokeOpacity="0.45"/>
-      {/* sky */}
-      <rect x="2" y="2" width="66" height="27" rx="4" fill={color} fillOpacity="0.13"/>
-      {/* sun */}
-      <circle cx="57" cy="13" r="7" fill={color} fillOpacity="0.62"/>
-      {/* cloud */}
-      <ellipse cx="24" cy="13" rx="10" ry="5.5" fill={color} fillOpacity="0.22"/>
-      <ellipse cx="33" cy="11" rx="8" ry="4.5" fill={color} fillOpacity="0.22"/>
-      {/* mountain left (front) */}
-      <polygon points="2,51 24,20 44,51" fill={color} fillOpacity="0.42"/>
-      {/* mountain right (back, lighter) */}
-      <polygon points="34,51 56,17 70,51" fill={color} fillOpacity="0.28"/>
-      {/* ground / meadow */}
-      <rect x="2" y="42" width="66" height="9" rx="0 0 4 4" fill={color} fillOpacity="0.24"/>
-    </svg>
+    <div className="ri-enc-col" aria-hidden="true">
+      <div className="ri-enc-dir-label">encoding →</div>
+      <div className="ri-enc-stim-box">
+        <svg viewBox="0 0 76 32" width="76" height="32" aria-hidden="true">
+          <rect x="1" y="1" width="74" height="30" rx="5"
+            fill="rgba(59,130,246,.10)" stroke="rgba(59,130,246,.42)" strokeWidth="0.85"/>
+          <text x="38" y="12.5" textAnchor="middle" fontSize="5.5"
+            fill="rgba(147,197,253,.62)" fontFamily="system-ui,sans-serif" fontWeight="700" letterSpacing="0.08em">STIMULUS</text>
+          <text x="38" y="24" textAnchor="middle" fontSize="8.5"
+            fill="rgba(147,197,253,.92)" fontFamily="system-ui,sans-serif" fontWeight="700">covert speech</text>
+        </svg>
+      </div>
+      <div className="ri-enc-down">↓</div>
+      <span className="ri-signal-label">EEG response</span>
+      <EEGPanel />
+      <span className="ri-paradigm-hint">4s covert articulation · no vocalization</span>
+    </div>
   );
 }
 
-// ── Mode 2: Stimulus input panel ──────────────────────────────────────────────
-function StimulusPanel({ stim }: { stim: typeof STIMULI[0] }) {
-  // Networks with activation weight ≥ 0.4, sorted highest first
-  const activeNets = [...NETS]
-    .filter(n => (stim.weights[n.id] ?? 0) >= 0.4)
-    .sort((a, b) => (stim.weights[b.id] ?? 0) - (stim.weights[a.id] ?? 0));
+// ── Mode 0: Decoding column (neural signal → model → output) ─────────────
+function DecodingCol() {
   return (
-    <div className="ri-stim-panel" aria-hidden="true">
-      <div className="ri-stim-header">INPUT STIMULUS</div>
-      <div className="ri-stim-box" style={{ borderColor: stim.color + '80', background: stim.color + '14' }}>
-        <div className="ri-stim-visual-wrap">
-          <StimulusVisual label={stim.label} color={stim.color} />
-        </div>
-        <div className="ri-stim-name" style={{ color: stim.color }}>{stim.label}</div>
-        <div className="ri-stim-sub">{stim.sublabel}</div>
+    <div className="ri-dec-col" aria-hidden="true">
+      <div className="ri-dec-dir-label">← decoding</div>
+      <div className="ri-dec-model">
+        <span>Foundation</span>
+        <span>Model</span>
       </div>
-      <div className="ri-stim-arrow" style={{ color: stim.color }}>↓</div>
-      <div className="ri-stim-acts-label">Active Networks</div>
-      <div className="ri-stim-nets">
-        {activeNets.map(net => {
-          const w = stim.weights[net.id] ?? 0;
-          return (
-            <div key={net.id} className="ri-stim-net">
-              <span className="ri-stim-dot" style={{ background: net.color }} />
-              <span className="ri-stim-net-label" style={{ color: net.color }}>{net.id.toUpperCase()}</span>
-              <span className="ri-stim-bar-wrap">
-                <span className="ri-stim-bar" style={{ width: `${w * 100}%`, background: net.color + 'cc' }} />
-              </span>
-            </div>
-          );
-        })}
+      <div className="ri-dec-down">↓</div>
+      <div className="ri-dec-output">
+        <span className="ri-decoded-word">imagined</span>
+        <span className="ri-decoded-word">speech</span>
       </div>
     </div>
   );
 }
 
-// ── Representation Learning diagram (mode 0 only) ─────────────────────────
-const RL_INPUTS = [
-  { l: 'EEG',  x: 52,  c: '#3b82f6' },
-  { l: 'ECoG', x: 150, c: '#8b5cf6' },
-  { l: 'fMRI', x: 248, c: '#06b6d4' },
-];
-const RL_TASKS = [
-  { l: 'Decoding',   x: 52,  c: '#3b82f6' },
-  { l: 'Generation', x: 150, c: '#10b981' },
-  { l: 'Transfer',   x: 248, c: '#f59e0b' },
+// ── Mode 1: TRIBE v2-inspired multimodal input panel ──────────────────────
+// Inspired by Meta's TRIBE v2: predicts fMRI brain responses from multi-modal stimuli
+const MODALITIES = [
+  { label: 'Image', color: '#7c3aed' },
+  { label: 'Audio', color: '#f77f00' },
+  { label: 'Video', color: '#e63946' },
+  { label: 'Text',  color: '#10b981' },
 ];
 
-function RepLearningPanel() {
+function TribeV2Panel({ stimIdx }: { stimIdx: number }) {
+  const activeMod = stimIdx % MODALITIES.length;
   return (
-    <div className="ri-replearn" aria-hidden="true">
-      <div className="ri-rl-header">Foundation Model · Representation Learning</div>
-      <svg viewBox="0 0 300 88" className="ri-rl-svg" preserveAspectRatio="xMidYMid meet">
-        {RL_INPUTS.map(({ l, x, c }) => (
-          <g key={l}>
-            <rect x={x-20} y={1} width={40} height={14} rx={3.5}
-              fill="rgba(59,130,246,.10)" stroke={c} strokeWidth={0.85} strokeOpacity={0.5} />
-            <text x={x} y={11} textAnchor="middle" fontSize={7} fill={c}
-              fontFamily="system-ui,sans-serif" fontWeight={700}>{l}</text>
-            <line x1={x} y1={15} x2={x} y2={22} stroke={c}
-              strokeWidth={0.8} strokeOpacity={0.4} strokeDasharray="2 1.5" />
-          </g>
+    <div className="ri-tribe-panel" aria-hidden="true">
+      <div className="ri-tribe-header">Brain Encoding Model</div>
+      <div className="ri-tribe-sublabel">stimuli → predicted fMRI</div>
+      <div className="ri-tribe-mods">
+        {MODALITIES.map((m, i) => (
+          <div key={m.label}
+            className={`ri-tribe-mod${i === activeMod ? ' ri-tribe-mod--on' : ''}`}
+            style={i === activeMod
+              ? { background: m.color + '18', borderColor: m.color + '60' } as CSSProperties
+              : {}}>
+            <span className="ri-tribe-mod-label"
+              style={i === activeMod ? { color: m.color } : {}}>
+              {m.label}
+            </span>
+          </div>
         ))}
-        <path d="M52,22 Q52,26 150,28 M150,22 L150,28 M248,22 Q248,26 150,28"
-          stroke="rgba(99,102,241,.28)" strokeWidth={0.8} fill="none" strokeDasharray="2 1.5" />
-        <rect x={55} y={26} width={190} height={18} rx={5}
-          fill="rgba(79,70,229,.18)" stroke="rgba(99,102,241,.65)" strokeWidth={1} />
-        <text x={150} y={38} textAnchor="middle" fontSize={8} fill="rgba(199,210,254,.95)"
-          fontFamily="system-ui,sans-serif" fontWeight={700}>Foundation Encoder</text>
-        <line x1={150} y1={44} x2={150} y2={50} stroke="rgba(99,102,241,.45)" strokeWidth={0.9} />
-        <polygon points="146,50 154,50 150,54" fill="rgba(99,102,241,.45)" />
-        <rect x={65} y={53} width={170} height={14} rx={4}
-          fill="rgba(109,40,217,.14)" stroke="rgba(139,92,246,.52)" strokeWidth={0.85} />
-        <text x={150} y={63} textAnchor="middle" fontSize={7} fill="rgba(196,181,253,.9)"
-          fontFamily="system-ui,sans-serif" fontWeight={600}>Universal Representations z</text>
-        <path d="M120,67 Q52,70 52,75 M150,67 L150,75 M180,67 Q248,70 248,75"
-          stroke="rgba(139,92,246,.28)" strokeWidth={0.8} fill="none" strokeDasharray="2 1.5" />
-        {RL_TASKS.map(({ l, x, c }) => (
-          <g key={l}>
-            <rect x={x-28} y={74} width={56} height={13} rx={3}
-              fill={c + '18'} stroke={c} strokeWidth={0.8} strokeOpacity={0.45} />
-            <text x={x} y={83} textAnchor="middle" fontSize={6.5} fill={c}
-              fontFamily="system-ui,sans-serif" fontWeight={600} fillOpacity={0.88}>{l}</text>
-          </g>
-        ))}
-      </svg>
+      </div>
+      <div className="ri-tribe-arrow"
+        style={{ color: MODALITIES[activeMod].color }}>→</div>
     </div>
   );
 }
@@ -605,7 +530,7 @@ export function ResearchInterestsBrain() {
 
   const activate = (i: number) => { activeRef.current = i; setActive(i); };
 
-  // Cycle stimulus every 3.5s while mode 2 is active
+  // Cycle stimulus every 3.5s while mode 1 is active
   useEffect(() => {
     if (active !== 1) return;
     const timer = setInterval(() => {
@@ -734,15 +659,9 @@ export function ResearchInterestsBrain() {
       {/* Visualization panel — brain canvas ALWAYS inside ri-viz-main to preserve WebGL context */}
       <div className={`ri-viz-panel ri-viz--mode${active}`}>
         <div className="ri-viz-main">
-          {active === 0 && (
-            <div className="ri-eeg-col">
-              <span className="ri-signal-label">EEG channels</span>
-              <EEGPanel />
-              <span className="ri-paradigm-hint">4s covert articulation · no vocalization</span>
-            </div>
-          )}
+          {active === 0 && <EncodingCol />}
 
-          {active === 1 && <StimulusPanel stim={STIMULI[stimIdx]} />}
+          {active === 1 && <TribeV2Panel stimIdx={stimIdx} />}
 
           <div className="ri-brain-wrap">
             <canvas
@@ -761,21 +680,11 @@ export function ResearchInterestsBrain() {
             {active === 3 && <LanguageOverlay />}
           </div>
 
-          {active === 0 && (
-            <div className="ri-decode-out" aria-hidden="true">
-              <div className="ri-decode-arrow">→</div>
-              <div className="ri-decode-words">
-                <span className="ri-decoded-word">imagined</span>
-                <span className="ri-decoded-word">speech</span>
-              </div>
-            </div>
-          )}
+          {active === 0 && <DecodingCol />}
         </div>
 
-        {active === 0 && <RepLearningPanel />}
-
         <span className={`ri-mode-tag ${cur.tagClass}`}>
-          {active === 1 ? `${STIMULI[stimIdx].label} Stimulus` : cur.tag}
+          {active === 1 ? `${STIMULI[stimIdx % STIMULI.length].label} Input` : cur.tag}
         </span>
       </div>
 

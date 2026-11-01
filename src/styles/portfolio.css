@@ -297,34 +297,43 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
   line-height: 1.4; max-width: 92px; margin-top: 2px;
 }
 
-/* Representation learning panel */
-.ri-replearn { width: 100%; max-width: 320px; }
-.ri-rl-header {
-  font-size: .54rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
-  color: rgba(99,102,241,.58); text-align: center; margin-bottom: 4px;
-}
-.ri-rl-svg { width: 100%; height: auto; display: block; }
-
-.ri-eeg-col {
+/* ── Mode 0: Encoding column ── */
+.ri-enc-col {
   display: flex; flex-direction: column; align-items: center; gap: 4px; flex-shrink: 0;
 }
-.ri-signal-label {
-  font-size: .55rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase;
-  color: var(--muted); opacity: .65;
+.ri-enc-dir-label {
+  font-size: .50rem; font-weight: 700; letter-spacing: .09em; text-transform: uppercase;
+  color: rgba(59,130,246,.68); margin-bottom: 2px;
 }
-.ri-eeg-canvas { display: block; border-radius: 4px; }
+.ri-enc-stim-box { display: flex; flex-direction: column; align-items: center; gap: 2px; }
+.ri-enc-down {
+  font-size: .80rem; color: rgba(59,130,246,.50); line-height: 1;
+}
 
-.ri-decode-out {
-  display: flex; flex-direction: column; align-items: center; gap: 3px; flex-shrink: 0;
-  animation: ri-decode-out-fade 2s ease-in-out infinite alternate;
+/* ── Mode 0: Decoding column ── */
+.ri-dec-col {
+  display: flex; flex-direction: column; align-items: center; gap: 4px; flex-shrink: 0;
 }
-.ri-decode-arrow {
-  font-size: .9rem; color: rgba(30,80,200,.6); line-height: 1;
+.ri-dec-dir-label {
+  font-size: .50rem; font-weight: 700; letter-spacing: .09em; text-transform: uppercase;
+  color: rgba(30,80,200,.68); margin-bottom: 2px;
 }
-.ri-decode-words {
+.ri-dec-model {
+  display: flex; flex-direction: column; align-items: center;
+  background: rgba(20,54,101,.09); border: 1px solid rgba(30,80,200,.22);
+  border-radius: 6px; padding: 5px 12px; gap: 0;
+}
+.ri-dec-model span {
+  font-size: .58rem; font-weight: 700; color: #2563eb; letter-spacing: .03em; line-height: 1.5;
+}
+.ri-dec-down {
+  font-size: .80rem; color: rgba(30,80,200,.50); line-height: 1;
+}
+.ri-dec-output {
   display: flex; flex-direction: column; align-items: center;
   background: rgba(20,54,101,.09); border: 1px solid rgba(30,80,200,.18);
   border-radius: 5px; padding: 4px 8px; gap: 0;
+  animation: ri-decode-out-fade 2s ease-in-out infinite alternate;
 }
 .ri-decoded-word {
   font-size: .60rem; font-weight: 700; color: #2563eb; letter-spacing: .03em; line-height: 1.5;
@@ -332,6 +341,43 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
 @keyframes ri-decode-out-fade {
   0%,40% { opacity: .55; }
   60%,100% { opacity: 1; }
+}
+
+.ri-signal-label {
+  font-size: .55rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase;
+  color: var(--muted); opacity: .65;
+}
+.ri-eeg-canvas { display: block; border-radius: 4px; }
+
+/* ── Mode 1: TRIBE v2 panel ── */
+.ri-tribe-panel {
+  display: flex; flex-direction: column; align-items: center; gap: 7px;
+  width: 138px; flex-shrink: 0;
+}
+.ri-tribe-header {
+  font-size: .60rem; font-weight: 700; letter-spacing: .06em; text-transform: uppercase;
+  color: var(--muted); text-align: center;
+}
+.ri-tribe-sublabel {
+  font-size: .52rem; color: var(--muted); text-align: center; opacity: .72;
+  line-height: 1.4; margin-top: -3px;
+}
+.ri-tribe-mods {
+  display: flex; flex-direction: column; gap: 5px; width: 100%;
+}
+.ri-tribe-mod {
+  display: flex; align-items: center; padding: 5px 10px;
+  border-radius: 6px; border: 1px solid transparent;
+  background: rgba(148,163,184,.06);
+  transition: background .35s, border-color .35s;
+}
+.ri-tribe-mod-label {
+  font-size: .72rem; font-weight: 600; color: var(--muted);
+  transition: color .35s; letter-spacing: .01em;
+}
+.ri-tribe-arrow {
+  font-size: 1.3rem; font-weight: 700; line-height: 1;
+  transition: color .5s ease;
 }
 
 /* ── Mode 1: stimulus panel + brain side by side (Network Neuroscience) ── */
