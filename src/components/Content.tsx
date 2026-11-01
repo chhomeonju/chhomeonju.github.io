@@ -266,8 +266,15 @@ export function Awards() {
   );
 }
 
-export function Timeline({ id, title, entries }: { id: string; title: string; entries: TimelineEntry[] }) {
-  return <section id={id}><h2>{title}</h2><table className="timeline"><tbody>{entries.map(entry => <tr key={entry.title}><td><h3>{entry.title}</h3><p>{entry.description}</p></td><td><div className="timeline-meta">{entry.date}{entry.location && <span className="timeline-location">{entry.location}</span>}</div></td></tr>)}</tbody></table></section>;
+export function Timeline({ id, title, entries, supervisor }: { id: string; title: string; entries: TimelineEntry[]; supervisor?: boolean }) {
+  return <section id={id}><h2>{title}</h2><table className="timeline"><tbody>{entries.map(entry => {
+    const parts = supervisor ? entry.description.split(' · ') : null;
+    return <tr key={entry.title}><td><h3>{entry.title}</h3>
+      {parts && parts.length > 1
+        ? <><p>{parts[0]}</p><p className="timeline-supervisor"><span>Supervisor:</span> {parts.slice(1).join(' · ')}</p></>
+        : <p>{entry.description}</p>}
+    </td><td><div className="timeline-meta">{entry.date}{entry.location && <span className="timeline-location">{entry.location}</span>}</div></td></tr>;
+  })}</tbody></table></section>;
 }
 
 export function FutureDirections() {

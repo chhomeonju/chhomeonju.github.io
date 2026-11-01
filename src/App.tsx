@@ -107,7 +107,7 @@ function HomePage() {
           <ResearchTimeline />
           <Competencies />
           <News />
-          <Timeline id="experience" title="Research Experience" entries={portfolio.experience} />
+          <Timeline id="experience" title="Research Experience" entries={portfolio.experience} supervisor />
           <Timeline id="education" title="Education" entries={portfolio.education} />
           <TechnicalSkills />
         </div>
