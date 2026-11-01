@@ -81,70 +81,65 @@ void main(){
   activity=clamp(a*.88+b*.80+c*.55+d*.65,0.,1.);
   highlight=vec3(.46,.16,.82)*(.72+.28*light);
  }else{
-  /* Network: stimulus-driven, network-weight-based regional glow.
-     Each RSN painted at its canonical anatomical location.
-     Activation = network weight × spatial glow → same as StimulusPanel bars.
-     Sources: Menon 2011 (Nat Rev Neurosci), Power et al. 2011 (Neuron),
-     Yeo et al. 2011 (J Neurophysiol), Vigneau 2006 (NeuroImage). */
-  float pulse=0.82+0.18*sin(time*0.90);
+  /* Network RSN: stimulus-driven regional activation.
+     mode<3.5 → static weighted glow (Brain Dynamics / Neuromod / Comp panels).
+     mode≥3.5 → per-network HRF blink (Encoding phase: stimulus→predicted response). */
 
-  /* ── Compute each network's spatial glow at canonical anatomical loci ──
-     sigma=0.16-0.18 gives a clearly visible blob spanning ~1/3 of brain width.
-     foci in brain-mesh coords (empirically calibrated from Broca/Wernicke/SMA). */
-  /* DMN: medial PFC + PCC + bilateral inferior parietal lobule */
+  /* Spatial glows at canonical anatomical loci */
   float gDmn=max(max(glow(vec3(.00,.30,.16),.18),glow(vec3(.00,-.18,.42),.17)),
                  max(glow(vec3(-.36,.06,.36),.14),glow(vec3(.36,.06,.36),.14)));
-  /* FPN-L: L dlPFC (lateral prefrontal) + L IPS/IPL */
   float gFpnl=max(glow(vec3(-.40,.28,.20),.16),glow(vec3(-.42,.14,.36),.14));
-  /* FPN-R: R dlPFC + R IPS/IPL */
   float gFpnr=max(glow(vec3(.40,.28,.20),.16),glow(vec3(.42,.14,.36),.14));
-  /* LAN: L IFG Broca BA44/45 + L posterior STG Wernicke BA22 */
   float gLan=max(glow(vec3(-.44,.16,.30),.16),glow(vec3(-.48,-.18,.42),.16));
-  /* SAN: bilateral anterior insula + bilateral amygdala + dACC */
   float gSan=max(max(glow(vec3(-.36,.12,.22),.15),glow(vec3(.36,.12,.22),.15)),
                  max(glow(vec3(-.26,-.04,.26),.13),glow(vec3(.00,.22,.20),.14)));
-  /* SMN: bilateral S1/M1 strip + pre-SMA (superior convexity) */
   float gSmn=max(max(glow(vec3(-.30,.30,.18),.15),glow(vec3(.30,.30,.18),.15)),
                  glow(vec3(.00,.40,.14),.15));
-  /* VIS: lateral occipital-temporal cortex (MT/hMT+, LO) on surface (y>0) +
-     inferior temporal (z low) — positive y puts these on the visible lateral surface */
   float gVis=max(max(glow(vec3(-.44,.10,.08),.18),glow(vec3(.44,.10,.08),.18)),
                  max(glow(vec3(-.38,.08,-.06),.17),glow(vec3(.38,.08,-.06),.17)));
 
-  /* ── Stimulus-specific weights (match STIMULI[] array in JS: 0=Image, 1=Audio, 2=Video, 3=Text) ── */
   float wDmn,wFpnl,wFpnr,wLan,wSan,wSmn,wVis;
   if(stimIdx<0.5){
-   /* Image: VIS>FPNr>SAN>FPNl>SMN>DMN>LAN */
    wVis=1.0;wSan=0.72;wFpnr=0.78;wFpnl=0.38;wSmn=0.18;wDmn=0.10;wLan=0.07;
   }else if(stimIdx<1.5){
-   /* Audio: LAN>FPNl>DMN>SMN>FPNr>SAN>VIS */
    wLan=1.0;wFpnl=0.88;wDmn=0.65;wSmn=0.42;wSan=0.20;wFpnr=0.22;wVis=0.06;
   }else if(stimIdx<2.5){
-   /* Video: SAN>VIS>DMN>FPNl>FPNr>LAN>SMN */
    wSan=1.0;wVis=0.88;wDmn=0.72;wFpnl=0.55;wFpnr=0.48;wLan=0.30;wSmn=0.22;
   }else{
-   /* Text: LAN>DMN>FPNl>FPNr>SAN>VIS>SMN */
    wLan=1.0;wDmn=0.85;wFpnl=0.78;wFpnr=0.35;wSan=0.18;wVis=0.12;wSmn=0.08;
   }
 
-  /* ── Weighted sum → total regional activation ── */
-  float aNet=gDmn*wDmn+gFpnl*wFpnl+gFpnr*wFpnr+gLan*wLan+gSan*wSan+gSmn*wSmn+gVis*wVis;
-  /* Amplify: 2.5× boost + power curve → even moderate glow produces vivid color
-     pow(x,0.60): 0.1→0.22, 0.2→0.38, 0.4→0.60, 0.6→0.74, 1.0→1.0 */
-  float aBoosted=clamp(aNet*2.5,0.,1.);
-  activity=pow(aBoosted,.60)*pulse;
+  vec3 cDmn=vec3(1.00,.18,.22);vec3 cFpn=vec3(.22,.60,.98);
+  vec3 cLan=vec3(1.00,.52,.00);vec3 cSan=vec3(1.00,.65,.12);
+  vec3 cSmn=vec3(.12,.82,.38); vec3 cVis=vec3(.68,.18,1.00);
 
-  /* ── Blend network colors proportionally (spatially coherent hue map) ── */
-  vec3 cDmn=vec3(1.00,.18,.22);  /* DMN: vivid red */
-  vec3 cFpn=vec3(.22,.60,.98);   /* FPN: vivid blue */
-  vec3 cLan=vec3(1.00,.52,.00);  /* LAN: vivid orange */
-  vec3 cSan=vec3(1.00,.65,.12);  /* SAN: vivid amber */
-  vec3 cSmn=vec3(.12,.82,.38);   /* SMN: vivid green */
-  vec3 cVis=vec3(.68,.18,1.00);  /* VIS: vivid purple */
+  /* Effective per-network weight: slow pulse (static) or per-network HRF blink */
+  float bDmn=0.,bFpnl=0.,bFpnr=0.,bLan=0.,bSan=0.,bSmn=0.,bVis=0.;
+  if(mode<3.5){
+   float pulse=0.82+0.18*sin(time*0.90);
+   bDmn=wDmn*pulse;bFpnl=wFpnl*pulse;bFpnr=wFpnr*pulse;bLan=wLan*pulse;
+   bSan=wSan*pulse;bSmn=wSmn*pulse;bVis=wVis*pulse;
+  }else{
+   /* pow(max(0,sin()),5) → narrow ~18% duty-cycle peak per network,
+      staggered phases so each RSN blinks at a different moment */
+   bDmn =pow(max(0.,sin(time*1.80+0.00)),5.)*wDmn;
+   bFpnl=pow(max(0.,sin(time*2.10+1.05)),5.)*wFpnl;
+   bFpnr=pow(max(0.,sin(time*1.95+2.10)),5.)*wFpnr;
+   bLan =pow(max(0.,sin(time*2.25+0.70)),5.)*wLan;
+   bSan =pow(max(0.,sin(time*1.65+1.75)),5.)*wSan;
+   bSmn =pow(max(0.,sin(time*2.40+3.14)),5.)*wSmn;
+   bVis =pow(max(0.,sin(time*2.00+2.45)),5.)*wVis;
+  }
+
+  float boost=mode<3.5?2.5:4.0;
+  float gam=mode<3.5?0.60:0.52;
+  float aNet=gDmn*bDmn+gFpnl*bFpnl+gFpnr*bFpnr+gLan*bLan+gSan*bSan+gSmn*bSmn+gVis*bVis;
+  float aBoosted=clamp(aNet*boost,0.,1.);
+  activity=pow(aBoosted,gam);
   float tw=max(aNet,.001);
-  highlight=( cDmn*(gDmn*wDmn)+cFpn*(gFpnl*wFpnl+gFpnr*wFpnr)+
-              cLan*(gLan*wLan)+cSan*(gSan*wSan)+
-              cSmn*(gSmn*wSmn)+cVis*(gVis*wVis) )/tw;
+  highlight=(cDmn*(gDmn*bDmn)+cFpn*(gFpnl*bFpnl+gFpnr*bFpnr)+
+            cLan*(gLan*bLan)+cSan*(gSan*bSan)+
+            cSmn*(gSmn*bSmn)+cVis*(gVis*bVis))/tw;
   highlight*=(.80+.20*light);
  }
  gl_FragColor=vec4(mix(base,highlight,activity),1.);
@@ -559,8 +554,15 @@ function EncodingStimPanel({ stimIdx }: { stimIdx: number }) {
   );
 }
 
-// ── Mode 0: Decoding column (neural signal → model → output) ─────────────
-function DecodingCol() {
+// ── Mode 0: Decoding column (neural signal → model → task output) ────────
+const DEC_TASKS = [
+  { label: 'Emotion Recognition',    icon: '🧠' },
+  { label: 'Motor Imagery',          icon: '🤸' },
+  { label: 'Imagined Speech',        icon: '💬' },
+  { label: 'Mental Disorder Dx',     icon: '🔬' },
+];
+
+function DecodingCol({ taskIdx }: { taskIdx: number }) {
   return (
     <div className="ri-dec-col" aria-hidden="true">
       <div className="ri-dec-dir-label">← decoding</div>
@@ -569,10 +571,14 @@ function DecodingCol() {
         <span>Model</span>
       </div>
       <div className="ri-dec-down">↓</div>
-      <div className="ri-dec-output">
-        <span className="ri-decoded-word">imagined</span>
-        <span className="ri-decoded-word">speech</span>
-      </div>
+      <ul className="ri-dec-tasks">
+        {DEC_TASKS.map((t, i) => (
+          <li key={t.label} className={`ri-dec-task${i === taskIdx ? ' ri-dec-task--on' : ''}`}>
+            <span className="ri-dec-task-icon">{t.icon}</span>
+            <span className="ri-dec-task-label">{t.label}</span>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
@@ -705,6 +711,8 @@ export function ResearchInterestsBrain() {
   const stimIdxRef = useRef(0);
   const [encPhase, setEncPhase] = useState<'encode'|'decode'>('encode');
   const encPhaseRef = useRef<'encode'|'decode'>('encode');
+  const [decTaskIdx, setDecTaskIdx] = useState(0);
+  const decTaskIdxRef = useRef(0);
 
   const activate = (i: number) => { activeRef.current = i; setActive(i); };
 
@@ -731,6 +739,17 @@ export function ResearchInterestsBrain() {
     }, 4500);
     return () => clearInterval(timer);
   }, [active]);
+
+  // Cycle decoding task during decode phase
+  useEffect(() => {
+    if (active !== 0 || encPhase !== 'decode') return;
+    const timer = setInterval(() => {
+      const next = (decTaskIdxRef.current + 1) % DEC_TASKS.length;
+      decTaskIdxRef.current = next;
+      setDecTaskIdx(next);
+    }, 1200);
+    return () => clearInterval(timer);
+  }, [active, encPhase]);
 
   useEffect(() => {
     let rafId = 0, disposed = false;
@@ -789,7 +808,7 @@ export function ResearchInterestsBrain() {
         gl!.uniform1f(uAspect, w / h);
         gl!.uniform1f(uTime, elapsed);
         const effectiveMode = activeRef.current === 0
-          ? (encPhaseRef.current === 'encode' ? 2.0 : 0.0)
+          ? (encPhaseRef.current === 'encode' ? 4.0 : 0.0)
           : activeRef.current;
         gl!.uniform1f(uMode, effectiveMode);
         gl!.uniform1f(uStimIdx, stimIdxRef.current);
@@ -876,12 +895,12 @@ export function ResearchInterestsBrain() {
           {active === 3 && <LanguageOverlay />}
           </div>
 
-          {active === 0 && encPhase === 'decode' && <DecodingCol />}
+          {active === 0 && encPhase === 'decode' && <DecodingCol taskIdx={decTaskIdx} />}
           {active === 3 && <CompModelPanel />}
         </div>
 
         <span className={`ri-mode-tag ${cur.tagClass}`}>
-          {active === 0 ? (encPhase === 'encode' ? 'Stimulus → fMRI' : 'EEG → Decode')
+          {active === 0 ? (encPhase === 'encode' ? 'Stimulus → Response' : 'EEG → Decode')
             : active === 1 ? `${STIMULI[stimIdx % STIMULI.length].label} Input`
             : active === 3 ? 'Neural Data → Model'
             : cur.tag}

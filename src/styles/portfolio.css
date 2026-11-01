@@ -378,6 +378,24 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
   0%,40% { opacity: .55; }
   60%,100% { opacity: 1; }
 }
+.ri-dec-tasks {
+  list-style: none; margin: 0; padding: 0;
+  display: flex; flex-direction: column; gap: 3px; width: 100%;
+}
+.ri-dec-task {
+  display: flex; align-items: center; gap: 5px;
+  padding: 3px 7px; border-radius: 5px;
+  border: 1px solid transparent;
+  opacity: 0.32; transition: opacity .35s ease, border-color .35s ease, background .35s ease;
+  font-size: .55rem; font-weight: 600; color: #2563eb; letter-spacing: .02em; white-space: nowrap;
+}
+.ri-dec-task--on {
+  opacity: 1;
+  background: rgba(20,54,101,.10);
+  border-color: rgba(30,80,200,.30);
+}
+.ri-dec-task-icon { font-size: .65rem; line-height: 1; }
+.ri-dec-task-label { flex: 1; }
 
 .ri-signal-label {
   font-size: .55rem; font-weight: 700; letter-spacing: .07em; text-transform: uppercase;
