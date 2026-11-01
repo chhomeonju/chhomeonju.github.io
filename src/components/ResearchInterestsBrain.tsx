@@ -444,25 +444,64 @@ function ConnectomeCanvas({ stimIdx }: { stimIdx: number }) {
   );
 }
 
-// ── Mode 0: Encoding column (stimulus → neural response) ─────────────────
+// ── Mode 0: Encoding column (multi-modal stimuli → neural response) ──────
+const ENC_STIMS = [
+  {
+    label: 'Visual',
+    color: '#7c3aed',
+    icon: (
+      <svg viewBox="0 0 28 20" width="28" height="20" aria-hidden="true">
+        <rect x="1" y="1" width="26" height="18" rx="3" fill="rgba(124,58,237,.12)" stroke="rgba(124,58,237,.55)" strokeWidth="0.8"/>
+        <circle cx="10" cy="10" r="4.5" fill="rgba(124,58,237,.22)" stroke="rgba(124,58,237,.55)" strokeWidth="0.8"/>
+        <circle cx="10" cy="10" r="2" fill="rgba(124,58,237,.70)"/>
+        <rect x="17" y="5" width="7" height="4" rx="1" fill="rgba(124,58,237,.35)"/>
+        <rect x="17" y="11" width="5" height="4" rx="1" fill="rgba(124,58,237,.22)"/>
+      </svg>
+    ),
+  },
+  {
+    label: 'Audio',
+    color: '#f77f00',
+    icon: (
+      <svg viewBox="0 0 28 20" width="28" height="20" aria-hidden="true">
+        <rect x="1" y="1" width="26" height="18" rx="3" fill="rgba(247,127,0,.10)" stroke="rgba(247,127,0,.50)" strokeWidth="0.8"/>
+        {[3,5,8,6,4,7,5,3].map((h, i) => (
+          <rect key={i} x={5 + i * 2.5} y={10 - h / 2} width="1.8" height={h}
+            fill="rgba(247,127,0,.75)" rx="0.9"/>
+        ))}
+      </svg>
+    ),
+  },
+  {
+    label: 'Language',
+    color: '#10b981',
+    icon: (
+      <svg viewBox="0 0 28 20" width="28" height="20" aria-hidden="true">
+        <rect x="1" y="1" width="26" height="18" rx="3" fill="rgba(16,185,129,.10)" stroke="rgba(16,185,129,.50)" strokeWidth="0.8"/>
+        <rect x="5" y="6" width="18" height="2" rx="1" fill="rgba(16,185,129,.65)"/>
+        <rect x="5" y="10" width="14" height="2" rx="1" fill="rgba(16,185,129,.50)"/>
+        <rect x="5" y="14" width="10" height="2" rx="1" fill="rgba(16,185,129,.35)"/>
+      </svg>
+    ),
+  },
+];
+
 function EncodingCol() {
   return (
     <div className="ri-enc-col" aria-hidden="true">
       <div className="ri-enc-dir-label">encoding →</div>
-      <div className="ri-enc-stim-box">
-        <svg viewBox="0 0 76 32" width="76" height="32" aria-hidden="true">
-          <rect x="1" y="1" width="74" height="30" rx="5"
-            fill="rgba(59,130,246,.10)" stroke="rgba(59,130,246,.42)" strokeWidth="0.85"/>
-          <text x="38" y="12.5" textAnchor="middle" fontSize="5.5"
-            fill="rgba(147,197,253,.62)" fontFamily="system-ui,sans-serif" fontWeight="700" letterSpacing="0.08em">STIMULUS</text>
-          <text x="38" y="24" textAnchor="middle" fontSize="8.5"
-            fill="rgba(147,197,253,.92)" fontFamily="system-ui,sans-serif" fontWeight="700">covert speech</text>
-        </svg>
+      <div className="ri-enc-stims">
+        {ENC_STIMS.map(s => (
+          <div key={s.label} className="ri-enc-stim-row">
+            {s.icon}
+            <span className="ri-enc-stim-name" style={{ color: s.color }}>{s.label}</span>
+          </div>
+        ))}
       </div>
       <div className="ri-enc-down">↓</div>
       <span className="ri-signal-label">EEG response</span>
       <EEGPanel />
-      <span className="ri-paradigm-hint">4s covert articulation · no vocalization</span>
+      <span className="ri-paradigm-hint">neural activity recorded</span>
     </div>
   );
 }
@@ -482,6 +521,44 @@ function DecodingCol() {
         <span className="ri-decoded-word">speech</span>
       </div>
     </div>
+  );
+}
+
+// ── Mode 2: Neuromodulation overlay (tDCS/tACS electrodes + activation ramp) ──
+function NeuromodOverlay() {
+  return (
+    <svg className="ri-net-overlay ri-neuromod-overlay" viewBox="0 0 100 100"
+      preserveAspectRatio="none" aria-hidden="true">
+      {/* tDCS anode pad — forehead / prefrontal */}
+      <g className="ri-neuromod-electrode ri-neuromod-anode">
+        <rect x="34" y="5" width="18" height="10" rx="2.5"
+          fill="rgba(239,68,68,.18)" stroke="rgba(239,68,68,.75)" strokeWidth="0.8"/>
+        <text x="43" y="12.2" textAnchor="middle" fontSize="4.5"
+          fill="rgba(239,68,68,.90)" fontFamily="system-ui,sans-serif" fontWeight="700">+</text>
+        {/* wire down */}
+        <line x1="43" y1="15" x2="43" y2="22" stroke="rgba(239,68,68,.55)" strokeWidth="0.6" strokeDasharray="1.5 1"/>
+      </g>
+      {/* tDCS cathode pad — vertex/parietal */}
+      <g className="ri-neuromod-electrode ri-neuromod-cathode">
+        <rect x="60" y="8" width="18" height="10" rx="2.5"
+          fill="rgba(59,130,246,.18)" stroke="rgba(59,130,246,.75)" strokeWidth="0.8"/>
+        <text x="69" y="12.2" textAnchor="middle" fontSize="4.5"
+          fill="rgba(59,130,246,.90)" fontFamily="system-ui,sans-serif" fontWeight="700">−</text>
+        <line x1="69" y1="18" x2="69" y2="25" stroke="rgba(59,130,246,.55)" strokeWidth="0.6" strokeDasharray="1.5 1"/>
+      </g>
+      {/* Current flow arc between electrodes */}
+      <path d="M43,22 Q56,18 69,25" fill="none"
+        stroke="rgba(251,191,36,.50)" strokeWidth="0.7" strokeDasharray="2 1.5"
+        className="ri-neuromod-current"/>
+      {/* Activation halos — ramp up over time */}
+      <circle cx="50" cy="52" r="12" className="ri-neuromod-halo ri-neuromod-halo--1"/>
+      <circle cx="50" cy="52" r="20" className="ri-neuromod-halo ri-neuromod-halo--2"/>
+      <circle cx="50" cy="52" r="28" className="ri-neuromod-halo ri-neuromod-halo--3"/>
+      {/* Label */}
+      <text x="50" y="92" textAnchor="middle" fontSize="4.2"
+        fill="rgba(251,191,36,.78)" fontFamily="system-ui,sans-serif" fontWeight="700"
+        letterSpacing="0.06em">tDCS / tACS</text>
+    </svg>
   );
 }
 
@@ -516,6 +593,40 @@ function TribeV2Panel({ stimIdx }: { stimIdx: number }) {
       </div>
       <div className="ri-tribe-arrow"
         style={{ color: MODALITIES[activeMod].color }}>→</div>
+    </div>
+  );
+}
+
+// ── Mode 3: Computational pipeline (neural data → model → brain repr) ─────
+const NEURAL_INPUTS = [
+  { label: 'EEG', color: '#3b82f6' },
+  { label: 'fMRI', color: '#06b6d4' },
+];
+
+function CompModelPanel() {
+  return (
+    <div className="ri-comp-panel" aria-hidden="true">
+      <div className="ri-comp-header">Neural Data</div>
+      <div className="ri-comp-inputs">
+        {NEURAL_INPUTS.map(inp => (
+          <div key={inp.label} className="ri-comp-input"
+            style={{ borderColor: inp.color + '60', background: inp.color + '12' }}>
+            <span className="ri-comp-input-label" style={{ color: inp.color }}>{inp.label}</span>
+          </div>
+        ))}
+      </div>
+      <div className="ri-comp-down" style={{ color: 'rgba(99,102,241,.60)' }}>↓</div>
+      <div className="ri-comp-model">
+        <span className="ri-comp-model-title">Foundation</span>
+        <span className="ri-comp-model-title">Model</span>
+        <div className="ri-comp-model-layers">
+          {[1,2,3].map(i => (
+            <div key={i} className="ri-comp-layer" style={{ opacity: 0.35 + i * 0.22 }}/>
+          ))}
+        </div>
+      </div>
+      <div className="ri-comp-down" style={{ color: 'rgba(99,102,241,.60)' }}>↓</div>
+      <div className="ri-comp-arrow-label">→</div>
     </div>
   );
 }
@@ -677,14 +788,18 @@ export function ResearchInterestsBrain() {
                 <circle cx="50" cy="50" r="46" className="ri-net-ring-static" style={{ stroke: STIMULI[stimIdx].color + '70' }} />
               </svg>
             )}
-            {active === 3 && <LanguageOverlay />}
+            {active === 2 && <NeuromodOverlay />}
+          {active === 3 && <LanguageOverlay />}
           </div>
 
           {active === 0 && <DecodingCol />}
+          {active === 3 && <CompModelPanel />}
         </div>
 
         <span className={`ri-mode-tag ${cur.tagClass}`}>
-          {active === 1 ? `${STIMULI[stimIdx % STIMULI.length].label} Input` : cur.tag}
+          {active === 1 ? `${STIMULI[stimIdx % STIMULI.length].label} Input`
+            : active === 3 ? 'Neural Data → Model'
+            : cur.tag}
         </span>
       </div>
 
