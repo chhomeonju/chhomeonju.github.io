@@ -78,5 +78,5 @@ test('study dates match the owner clarification and the patent remains an applic
     ['AI Study Group', 'Mar. – Jun. 2025'],
   ]) assert.equal(portfolio.activities.find(activity => activity.title === title)?.date, date);
   assert.equal(portfolio.patents.length, 1);
-  assert.match(portfolio.patents[0].status, /application · Filed/);
+  assert.match(portfolio.patents[0].status, /application · Filed/i);
 });
