@@ -631,6 +631,18 @@ function CompModelPanel() {
   );
 }
 
+// ── Mode 0: EEG panel for decoding phase ──────────────────────────────────
+function EEGDecodePanel() {
+  return (
+    <div className="ri-enc-col" aria-hidden="true">
+      <div className="ri-enc-dir-label">← decoding</div>
+      <span className="ri-signal-label">EEG / fMRI</span>
+      <EEGPanel />
+      <span className="ri-paradigm-hint">brain signal read</span>
+    </div>
+  );
+}
+
 // ── Main component ─────────────────────────────────────────────────────────
 export function ResearchInterestsBrain() {
   const [active, setActive] = useState(0);
@@ -638,17 +650,32 @@ export function ResearchInterestsBrain() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [stimIdx, setStimIdx] = useState(0);
   const stimIdxRef = useRef(0);
+  const [encPhase, setEncPhase] = useState<'encode'|'decode'>('encode');
+  const encPhaseRef = useRef<'encode'|'decode'>('encode');
 
   const activate = (i: number) => { activeRef.current = i; setActive(i); };
 
-  // Cycle stimulus every 3.5s while mode 1 is active
+  // Cycle stimulus idx while mode 0 (encode phase) or mode 1 is active
   useEffect(() => {
-    if (active !== 1) return;
+    if (active !== 0 && active !== 1) return;
     const timer = setInterval(() => {
       const next = (stimIdxRef.current + 1) % STIMULI.length;
       stimIdxRef.current = next;
       setStimIdx(next);
     }, 3500);
+    return () => clearInterval(timer);
+  }, [active]);
+
+  // Alternate encode → decode phases when mode 0 is active
+  useEffect(() => {
+    if (active !== 0) return;
+    encPhaseRef.current = 'encode';
+    setEncPhase('encode');
+    const timer = setInterval(() => {
+      const next: 'encode'|'decode' = encPhaseRef.current === 'encode' ? 'decode' : 'encode';
+      encPhaseRef.current = next;
+      setEncPhase(next);
+    }, 4500);
     return () => clearInterval(timer);
   }, [active]);
 
@@ -708,7 +735,10 @@ export function ResearchInterestsBrain() {
         gl!.uniform1f(uTilt, -0.18);
         gl!.uniform1f(uAspect, w / h);
         gl!.uniform1f(uTime, elapsed);
-        gl!.uniform1f(uMode, activeRef.current);
+        const effectiveMode = activeRef.current === 0
+          ? (encPhaseRef.current === 'encode' ? 2.0 : 0.0)
+          : activeRef.current;
+        gl!.uniform1f(uMode, effectiveMode);
         gl!.uniform1f(uStimIdx, stimIdxRef.current);
         for (const m of geo) {
           gl!.bindBuffer(gl!.ARRAY_BUFFER, m.pb); gl!.enableVertexAttribArray(aPos); gl!.vertexAttribPointer(aPos, 3, gl!.FLOAT, false, 0, 0);
@@ -770,7 +800,8 @@ export function ResearchInterestsBrain() {
       {/* Visualization panel — brain canvas ALWAYS inside ri-viz-main to preserve WebGL context */}
       <div className={`ri-viz-panel ri-viz--mode${active}`}>
         <div className="ri-viz-main">
-          {active === 0 && <EncodingCol />}
+          {active === 0 && encPhase === 'encode' && <TribeV2Panel stimIdx={stimIdx} />}
+          {active === 0 && encPhase === 'decode' && <EEGDecodePanel />}
 
           {active === 1 && <TribeV2Panel stimIdx={stimIdx} />}
 
@@ -781,7 +812,7 @@ export function ResearchInterestsBrain() {
               role="img"
               aria-label="Brain activity visualization"
             />
-            {active === 0 && <DecodingOverlay />}
+            {active === 0 && encPhase === 'decode' && <DecodingOverlay />}
             {active === 1 && <ConnectomeCanvas stimIdx={stimIdx} />}
             {active === 1 && (
               <svg className="ri-net-pulse-ring" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
@@ -792,12 +823,13 @@ export function ResearchInterestsBrain() {
           {active === 3 && <LanguageOverlay />}
           </div>
 
-          {active === 0 && <DecodingCol />}
+          {active === 0 && encPhase === 'decode' && <DecodingCol />}
           {active === 3 && <CompModelPanel />}
         </div>
 
         <span className={`ri-mode-tag ${cur.tagClass}`}>
-          {active === 1 ? `${STIMULI[stimIdx % STIMULI.length].label} Input`
+          {active === 0 ? (encPhase === 'encode' ? 'Stimulus → fMRI' : 'EEG → Decode')
+            : active === 1 ? `${STIMULI[stimIdx % STIMULI.length].label} Input`
             : active === 3 ? 'Neural Data → Model'
             : cur.tag}
         </span>
