@@ -6,10 +6,10 @@ export const portfolio: PortfolioData = {
     { title: 'AI Model Study · PRML Lab', role: 'Peer Study', date: 'Jan. 2026 – Feb. 2026', description: 'Studied AI models through a peer study group at the Pattern Recognition and Machine Learning (PRML) Lab, Korea University.' },
     { title: 'AI Model Study · PRML Lab', role: 'Peer Study', date: 'Aug. 2025', description: 'Studied AI models through a peer study group at the Pattern Recognition and Machine Learning (PRML) Lab, Korea University.' },
     { title: 'LG Aimers · 7th Cohort', role: 'Participant', date: 'Jul. 2025 – Aug. 2025', description: 'Developed a demand forecasting model for food and beverage outlets using operational and sales data.', url: 'https://www.lgaimers.ai/' },
-    { title: 'AI Study Group', role: 'Peer Study', date: 'Mar. 2025 – Jun. 2025', description: 'Studied artificial intelligence through a peer study group.' },
+    { title: 'AI Study Group', role: 'Peer Study', date: 'Mar. – Jun. 2025', description: 'Studied artificial intelligence through a peer study group.' },
     { title: 'Administrative Assistant · Department Office', role: 'Administrative Assistant', date: 'Sep. 2024 – Feb. 2025', description: 'Assisted with departmental administrative tasks and office operations at the Department of Computer Engineering and Artificial Intelligence, Pukyong National University.' },
-    { title: 'MATLAB for Neuroscience Study Group', role: 'Peer Study', date: 'Jan. 2024 – Feb. 2024', description: 'Studied MATLAB for Neuroscience through a peer reading group.' },
-    { title: 'Neuroscience Study Group', role: 'Peer Study', date: 'Jul. 2023 – Aug. 2023', description: 'Studied neuroscience through a peer study group.' },
+    { title: 'MATLAB for Neuroscience Study Group', role: 'Peer Study', date: 'Jan. – Feb. 2024', description: 'Studied MATLAB for Neuroscience through a peer reading group.' },
+    { title: 'Neuroscience Study Group', role: 'Peer Study', date: 'Jul. – Aug. 2023', description: 'Studied neuroscience through a peer study group.' },
     { title: 'Journal Club · BXAI Lab', role: 'Undergraduate Researcher', date: 'Apr. 2023 – Jan. 2025', description: 'Participated in a weekly journal club, reading and discussing research papers in neuroscience and AI at BXAI Lab, Pukyong National University.' },
     { title: 'WAP (Why Are You Programming?) · Programming Club', role: 'Member', date: 'Sep. 2021 – Aug. 2022', description: 'Worked as a web developer on team projects, developing a library book lending platform and a community-based item-sharing web service.', url: 'https://github.com/pknu-wap' },
   ],
@@ -61,8 +61,7 @@ export const portfolio: PortfolioData = {
       "title": "Multi-Scale Temporal Fusion Network with Encoding-Guided Reciprocal Re-ranking for ECoG-to-Text Semantic Decoding",
       "authors": "M.-J. Cho, S.-H. Lee, and S.-W. Lee†",
       "venue": "IEEE BCI 2027 · Planned submission",
-      "image": "/assets/images/tada-framework.webp",
-      "imageAlt": "TADA framework: multi-scale temporal decoder and encoding-guided reciprocal re-ranking for ECoG-to-text decoding",
+      "image": null,
       "links": [
         {
           "label": "Code ↗",
@@ -144,7 +143,11 @@ export const portfolio: PortfolioData = {
       "code": null,
 
       "stack": ["Python", "PyTorch", "NeuralSet", "NeuralBench", "LoRA"],
-      "image": null,
+      "image": {
+        "src": "/assets/images/blpm-framework.png",
+        "alt": "BLPM framework: CoLP Encoder, language-guided semantic decomposition, predictive semantic alignment, and multi-task instruction tuning pipeline",
+        "caption": "BLPM · Brain Latent Predictive Model"
+      },
       ...blpmExperience
     },
     {

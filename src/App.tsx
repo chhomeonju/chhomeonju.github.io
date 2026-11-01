@@ -114,7 +114,7 @@ function HomePage() {
         <Publications /><Presentations />
         <ProjectsSection navigate={navigation.navigate} />
         <Awards /><Patents /><Activities />
-        <footer><p>© 2026 Myeongju Cho</p></footer>
+        <footer><p>Copyright ©Myeongju Cho · 2026</p></footer>
       </>
     )}
   </main></>;
