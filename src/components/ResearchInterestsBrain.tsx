@@ -6,19 +6,24 @@ declare global {
 
 const INTERESTS = [
   {
-    title: 'Neural Decoding & Representation Learning',
-    description: 'Investigating how cognitive information is encoded in neural signals across EEG, ECoG, and fMRI — spanning classification, reconstruction, and learning representations that generalize across subjects, tasks, and recording modalities.',
+    title: 'Neural Encoding & Decoding',
+    description: 'Exploring how cognitive information is represented in neural activity and decoded using deep learning across neural measurement modalities, including EEG, ECoG, and fMRI.',
     tag: 'Decoding', tagClass: 'ri-tag--decode',
   },
   {
-    title: 'Brain Foundation Model',
-    description: 'Aligning neural representations with language semantics through self-supervised learning and cross-modal objectives, toward foundation models that bridge brain signals and natural language.',
-    tag: 'Language', tagClass: 'ri-tag--lang',
+    title: 'Brain Dynamics & Network Neuroscience',
+    description: 'Characterizing dynamic functional connectivity, latent brain states, and network reconfiguration to understand the temporal organization and interactions of distributed brain networks.',
+    tag: 'Network', tagClass: 'ri-tag--net',
   },
   {
-    title: 'Brain Encoding & Network Dynamics',
-    description: 'To understand how neural responses and dynamic interactions across brain networks give rise to human cognition, emotion, and behavior through advanced computational modeling approaches, such as multimodal and multi-scale foundation models.',
-    tag: 'Network', tagClass: 'ri-tag--net',
+    title: 'Neural Mechanisms & Neuromodulation',
+    description: 'Investigating how neural activity and brain network interactions support cognition, emotion, and behavior, and how neuromodulation influences brain dynamics and mental health.',
+    tag: 'Mechanisms', tagClass: 'ri-tag--mech',
+  },
+  {
+    title: 'Computational Modeling of Brain Function',
+    description: 'Leveraging computational approaches, including deep learning, large language models, and multimodal foundation models, to model neural representations, predict brain responses, and uncover the mechanisms underlying human brain function.',
+    tag: 'Modeling', tagClass: 'ri-tag--comp',
   },
 ];
 
@@ -602,7 +607,7 @@ export function ResearchInterestsBrain() {
 
   // Cycle stimulus every 3.5s while mode 2 is active
   useEffect(() => {
-    if (active !== 2) return;
+    if (active !== 1) return;
     const timer = setInterval(() => {
       const next = (stimIdxRef.current + 1) % STIMULI.length;
       stimIdxRef.current = next;
@@ -737,7 +742,7 @@ export function ResearchInterestsBrain() {
             </div>
           )}
 
-          {active === 2 && <StimulusPanel stim={STIMULI[stimIdx]} />}
+          {active === 1 && <StimulusPanel stim={STIMULI[stimIdx]} />}
 
           <div className="ri-brain-wrap">
             <canvas
@@ -747,13 +752,13 @@ export function ResearchInterestsBrain() {
               aria-label="Brain activity visualization"
             />
             {active === 0 && <DecodingOverlay />}
-            {active === 1 && <LanguageOverlay />}
-            {active === 2 && <ConnectomeCanvas stimIdx={stimIdx} />}
-            {active === 2 && (
+            {active === 1 && <ConnectomeCanvas stimIdx={stimIdx} />}
+            {active === 1 && (
               <svg className="ri-net-pulse-ring" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
                 <circle cx="50" cy="50" r="46" className="ri-net-ring-static" style={{ stroke: STIMULI[stimIdx].color + '70' }} />
               </svg>
             )}
+            {active === 3 && <LanguageOverlay />}
           </div>
 
           {active === 0 && (
@@ -770,7 +775,7 @@ export function ResearchInterestsBrain() {
         {active === 0 && <RepLearningPanel />}
 
         <span className={`ri-mode-tag ${cur.tagClass}`}>
-          {active === 2 ? `${STIMULI[stimIdx].label} Stimulus` : cur.tag}
+          {active === 1 ? `${STIMULI[stimIdx].label} Stimulus` : cur.tag}
         </span>
       </div>
 

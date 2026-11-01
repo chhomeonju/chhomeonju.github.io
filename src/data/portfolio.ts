@@ -30,16 +30,20 @@ export const portfolio: PortfolioData = {
   ],
   researchInterests: [
     {
-      title: 'Neural Decoding & Representation Learning',
-      description: 'Investigating how cognitive information is encoded in neural signals across EEG, ECoG, and fMRI — spanning classification, reconstruction, and learning representations that generalize across subjects, tasks, and recording modalities.',
+      title: 'Neural Encoding & Decoding',
+      description: 'Exploring how cognitive information is represented in neural activity and decoded using deep learning across neural measurement modalities, including EEG, ECoG, and fMRI.',
     },
     {
-      title: 'Brain Foundation Model',
-      description: 'Aligning neural representations with language semantics through self-supervised learning and cross-modal objectives, toward foundation models that bridge brain signals and natural language.',
+      title: 'Brain Dynamics & Network Neuroscience',
+      description: 'Characterizing dynamic functional connectivity, latent brain states, and network reconfiguration to understand the temporal organization and interactions of distributed brain networks.',
     },
     {
-      title: 'Brain Encoding & Network Dynamics',
-      description: 'Leveraging multimodal foundation models and generative approaches to understand how distributed neural activity and functional connectivity give rise to human cognition and behavior.',
+      title: 'Neural Mechanisms & Neuromodulation',
+      description: 'Investigating how neural activity and brain network interactions support cognition, emotion, and behavior, and how neuromodulation influences brain dynamics and mental health.',
+    },
+    {
+      title: 'Computational Modeling of Brain Function',
+      description: 'Leveraging computational approaches, including deep learning, large language models, and multimodal foundation models, to model neural representations, predict brain responses, and uncover the mechanisms underlying human brain function.',
     },
   ],
   futureDirections: [

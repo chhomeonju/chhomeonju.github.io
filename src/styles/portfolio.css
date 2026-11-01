@@ -334,13 +334,10 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
   60%,100% { opacity: 1; }
 }
 
-/* ── Mode 1: centered brain ── */
-.ri-viz--mode1 .ri-brain-wrap { width: 250px; height: 250px; }
-
-/* ── Mode 2: stimulus panel + brain side by side ── */
-.ri-viz--mode2 .ri-viz-main { flex-direction: row; align-items: center; gap: 18px; }
-.ri-viz--mode2 .ri-brain-wrap { width: 300px; height: 300px; }
-.ri-viz--mode2 .ri-canvas {
+/* ── Mode 1: stimulus panel + brain side by side (Network Neuroscience) ── */
+.ri-viz--mode1 .ri-viz-main { flex-direction: row; align-items: center; gap: 18px; }
+.ri-viz--mode1 .ri-brain-wrap { width: 300px; height: 300px; }
+.ri-viz--mode1 .ri-canvas {
   position: absolute;
   width: 225px; height: 225px;
   left: 50%; top: 50%;
@@ -349,6 +346,12 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
   border-radius: 50%;
   overflow: hidden;
 }
+
+/* ── Mode 2: centered brain (Neural Mechanisms) ── */
+.ri-viz--mode2 .ri-brain-wrap { width: 250px; height: 250px; }
+
+/* ── Mode 3: centered brain (Computational Modeling) ── */
+.ri-viz--mode3 .ri-brain-wrap { width: 250px; height: 250px; }
 
 /* ── Mode 2: Stimulus input panel ── */
 .ri-stim-panel {
@@ -417,8 +420,8 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
   border-radius: 50%; overflow: hidden;
   box-shadow: 0 2px 20px rgba(0,0,0,.10);
 }
-/* Mode 2 wrap is not a circle — it's rectangular to hold the connectome */
-.ri-viz--mode2 .ri-brain-wrap {
+/* Mode 1 wrap is not a circle — it's rectangular to hold the connectome */
+.ri-viz--mode1 .ri-brain-wrap {
   border-radius: 12px; overflow: visible; box-shadow: none;
 }
 
@@ -498,8 +501,9 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
   padding: 3px 12px; border-radius: 20px; transition: background .2s, color .2s;
 }
 .ri-tag--decode { background: rgba(20,54,101,.10); color: #1d64c8; }
-.ri-tag--lang   { background: rgba(72,24,128,.10); color: #7c3aed; }
 .ri-tag--net    { background: rgba(194,87,10,.10);  color: #c2570a; }
+.ri-tag--mech   { background: rgba(6,95,70,.10);   color: #047857; }
+.ri-tag--comp   { background: rgba(72,24,128,.10); color: #7c3aed; }
 
 /* Cards column */
 .ri-cards-col {
@@ -536,18 +540,20 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
 @media (max-width: 900px) {
   .ri-layout { flex-direction: column; align-items: center; }
   .ri-viz-panel { position: static; flex: none; }
-  .ri-viz--mode0, .ri-viz--mode1, .ri-viz--mode2 { width: 100%; max-width: 420px; }
+  .ri-viz--mode0, .ri-viz--mode1, .ri-viz--mode2, .ri-viz--mode3 { width: 100%; max-width: 420px; }
   .ri-viz--mode0 .ri-brain-wrap { width: 180px; height: 180px; }
-  .ri-viz--mode1 .ri-brain-wrap { width: 220px; height: 220px; }
-  .ri-viz--mode2 .ri-brain-wrap { width: 240px; height: 230px; }
-  .ri-viz--mode2 .ri-canvas { width: 150px; height: 150px; }
+  .ri-viz--mode1 .ri-brain-wrap { width: 240px; height: 230px; }
+  .ri-viz--mode1 .ri-canvas { width: 150px; height: 150px; }
+  .ri-viz--mode2 .ri-brain-wrap { width: 220px; height: 220px; }
+  .ri-viz--mode3 .ri-brain-wrap { width: 220px; height: 220px; }
   .ri-stim-panel { width: 120px; }
 }
 @media (max-width: 600px) {
   .ri-viz--mode0 .ri-brain-wrap { width: 150px; height: 150px; }
-  .ri-viz--mode1 .ri-brain-wrap { width: 180px; height: 180px; }
-  .ri-viz--mode2 .ri-brain-wrap { width: 300px; height: 260px; }
-  .ri-viz--mode2 .ri-canvas { width: 140px; height: 140px; }
+  .ri-viz--mode1 .ri-brain-wrap { width: 300px; height: 260px; }
+  .ri-viz--mode1 .ri-canvas { width: 140px; height: 140px; }
+  .ri-viz--mode2 .ri-brain-wrap { width: 180px; height: 180px; }
+  .ri-viz--mode3 .ri-brain-wrap { width: 180px; height: 180px; }
 }
 .skills-list { margin: 0; }
 .skills-group { display: grid; grid-template-columns: minmax(220px, 1fr) minmax(0, 2.1fr); gap: 26px; align-items: center; padding: 18px 0; border-bottom: 1px solid var(--rule); min-width: 0; }
