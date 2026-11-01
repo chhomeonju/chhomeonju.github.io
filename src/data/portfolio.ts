@@ -42,7 +42,7 @@ export const portfolio: PortfolioData = {
       description: 'Investigating how neural activity and brain network interactions support cognition, emotion, and behavior, and how neuromodulation influences brain dynamics and mental health.',
     },
     {
-      title: 'Computational Modeling of Brain Function',
+      title: 'Computational Modeling & Foundation Models',
       description: 'Leveraging computational approaches, including deep learning, large language models, and multimodal foundation models, to model neural representations, predict brain responses, and uncover the mechanisms underlying human brain function.',
     },
   ],
