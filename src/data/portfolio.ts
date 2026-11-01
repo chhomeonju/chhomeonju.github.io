@@ -17,7 +17,7 @@ export const portfolio: PortfolioData = {
     {
       title: 'Apparatus and Method for Learning Universal Electroencephalogram Representations Based on Functional Connectivity Reconstruction',
       inventors: ['Seong-Whan Lee', 'Myeong-Ju Cho', 'Hana Jo', 'and Seo-Hyun Lee'],
-      date: 'Jan. 2026', number: '10-2026-0018395', status: 'Korean patent application · Filed',
+      date: 'Jan. 2026', number: '10-2026-0018395', status: 'Korean Patent Application · Filed',
     },
   ],
   technicalSkills: [
