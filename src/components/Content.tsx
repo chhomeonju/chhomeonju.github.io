@@ -38,12 +38,12 @@ export function About() {
     <section id="about">
       <div className="intro">
         <aside className="profile-sidebar" aria-label="Profile and contact">
-          <img className="portrait" src="assets/images/profile.webp" alt="Myeongju Cho" />
+          <img className="portrait" src="/assets/images/profile.webp" alt="Myeongju Cho" />
           <ul className="profile-links">
             <li className="profile-location"><MapPin size={17} aria-hidden="true" /><span>Seoul, Republic of Korea</span></li>
             <li><a href="mailto:mj_cho@korea.ac.kr"><Mail size={17} aria-hidden="true" /><span>Email</span></a></li>
-            <li><ExternalLink href="https://github.com/Myeongjuuu"><img src="assets/icons/contact-github.svg" alt="" aria-hidden="true" /><span>GitHub</span></ExternalLink></li>
-            <li><ExternalLink href="https://www.linkedin.com/in/myeongju-cho-a690a0387/"><img src="assets/icons/contact-linkedin.svg" alt="" aria-hidden="true" /><span>LinkedIn</span></ExternalLink></li>
+            <li><ExternalLink href="https://github.com/Myeongjuuu"><img src="/assets/icons/contact-github.svg" alt="" aria-hidden="true" /><span>GitHub</span></ExternalLink></li>
+            <li><ExternalLink href="https://www.linkedin.com/in/myeongju-cho-a690a0387/"><img src="/assets/icons/contact-linkedin.svg" alt="" aria-hidden="true" /><span>LinkedIn</span></ExternalLink></li>
           </ul>
         </aside>
         <div className="bio">
@@ -210,7 +210,7 @@ export function Activities() {
 }
 
 const projectEmphasis: Record<string, string> = {
-  'project-blpm': 'Latent predictive modeling',
+  'project-blpm': 'semantic embedding prediction',
   'project-celp': 'Self-supervised prediction',
   'project-tada': 'adaptive multi-window fusion',
   'project-neuralspeech': 'GAN-based speech synthesis pipeline',

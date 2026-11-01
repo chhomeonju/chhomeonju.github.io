@@ -1,5 +1,6 @@
 import type { PortfolioData } from '../types';
 import { blpmExperience, celpExperience } from './foundation-experience';
+import { tadaResults } from './tada-results';
 
 export const portfolio: PortfolioData = {
   activities: [
@@ -126,28 +127,29 @@ export const portfolio: PortfolioData = {
       "name": "BLPM",
       "subtitle": "Brain Latent Predictive Model",
       "date": "Apr. 2026 – Present",
-      "teaser": "A unified EEG–language model that predicts answer embeddings across heterogeneous decoding tasks.",
+      "teaser": "One EEG–language model for seven decoding tasks, using language-guided semantic alignment and instruction-conditioned answer embedding prediction.",
       "tags": [
         "EEG",
         "Foundation Model",
         "Decoding",
         "Representation learning"
       ],
-      "goal": "Can continuous EEG representations support diverse decoding tasks through a shared language-semantic prediction space?",
-      "contributionLabel": "Research focus",
+      "goal": "BLPM formulates heterogeneous EEG decoding tasks as continuous semantic embedding prediction. Instead of generating answer tokens, one model predicts an answer embedding in a single forward pass and selects the closest candidate description.\n\nThe core contribution is Predictive Semantic Alignment (PSA): language-guided queries summarize complementary EEG characteristics, while projected EEG tokens preserve fine-grained information. Multi-task instruction tuning then reuses the same predictor and output head across seven tasks.",
+      "contributionLabel": "Research contributions",
       "contributions": [
-        "Latent predictive modeling with the CELP encoder.",
-        "Language-guided multi-query semantic decomposition (MQSD).",
-        "Instruction-conditioned answer embedding prediction and semantic matching."
+        "Unified seven EEG tasks as instruction-conditioned semantic embedding prediction, without task-specific classification heads or autoregressive answer generation.",
+        "Designed PSA with language-guided Multi-Query Semantic Decomposition (MQSD), combining semantic summaries with token-level EEG information.",
+        "Developed multi-task instruction tuning with LoRA: task instructions condition one shared semantic predictor and answer head across all seven datasets, without separate per-dataset fine-tuning.",
+        "Evaluated a single jointly tuned model against eight individually trained or fine-tuned baselines; BLPM leads balanced accuracy on six of seven datasets."
       ],
       "steps": [
-        "CELP pretraining: predict masked latent targets with an EMA teacher, using temporal and spectral EEG features.",
-        "Semantic alignment: language-derived queries attend to EEG tokens; contrastive learning aligns predictions with label-text embeddings.",
-        "Multi-task decoding: LoRA-adapted Llama predicts an answer embedding; similarity to candidate answers determines the class."
+        "Stage 1 — Reuse the pretrained CELP backbone (called CoLP in the paper); encoder pretraining is covered on the CELP project page.",
+        "Stage 2 · PSA — Freeze the EEG encoder. Queries describing temporal, spectral, spatial, and morphological characteristics attend to EEG tokens. A bidirectional LLM-based predictor aligns the resulting representation with natural-language label embeddings.",
+        "Stage 3 · Multi-task instruction tuning — Jointly train on all seven tasks with task-specific instructions, adapting Llama 3.2-1B-Instruct through LoRA. The shared predictor learns answer embeddings using bidirectional multi-positive contrastive learning; inference selects the nearest candidate answer in a single forward pass."
       ],
       "code": null,
 
-      "stack": ["Python", "PyTorch", "NeuralSet", "NeuralBench", "LoRA"],
+      "stack": ["Python", "PyTorch", "Hugging Face", "NeuralSet", "NeuralBench", "LoRA"],
       "image": {
         "src": "/assets/images/blpm-framework.png",
         "alt": "BLPM framework: CoLP Encoder, language-guided semantic decomposition, predictive semantic alignment, and multi-task instruction tuning pipeline",
@@ -199,24 +201,36 @@ export const portfolio: PortfolioData = {
       "category": "ECoG-to-text semantic decoding",
       "subtitle": "Multi-Scale Temporal Fusion & Encoding-Guided Re-ranking",
       "date": "Sep. 2026 – Present",
-      "teaser": "A multi-scale ECoG-to-text decoding implementation combining temporal encoding, shared response alignment, and encoding-guided reciprocal re-ranking.",
+      "teaser": "Retrieving contextual word representations from ECoG by combining multiple temporal scales with encoding-guided candidate re-ranking.",
       "tags": [
         "ECoG",
         "Decoding",
         "BCI"
       ],
-      "goal": "Decode semantic information from ECoG using multiple temporal scales and encoding-guided re-ranking.",
-      "contributionLabel": "Implementation",
+      "goal": "Language-related neural responses unfold over different time scales. A single fixed window can miss useful context, while brain-to-text similarity alone does not check whether a candidate explains the observed neural activity.\n\nTADA combines short-, medium-, and long-window ECoG representations to predict contextual text embeddings. Encoding-Guided Reciprocal Re-ranking (EGR) then refines candidate rankings using both semantic similarity and text-to-neural consistency.",
+      "contributionLabel": "Research contributions",
       "contributions": [
-        "Implemented residual temporal encoders and adaptive multi-window fusion.",
-        "Integrated SRM alignment, ranking losses, and encoding-guided re-ranking.",
-        "Provided source and held-out participant evaluation pipelines."
+        "Analyzed how contextual linguistic information is distributed across neural response lags.",
+        "Designed adaptive temporal fusion over SRM-aligned ECoG responses at three time scales.",
+        "Introduced EGR to improve retrieval by checking candidate text against observed neural responses."
       ],
       "steps": [
-        "ECoG preparation & SRM alignment",
-        "Multi-scale temporal decoding",
-        "Encoding-guided re-ranking"
+        "Align — Use a Shared Response Model (SRM) to map participants’ ECoG into a common space at short (+25 to +275 ms), medium (−162.5 to +462.5 ms), and long (−600 to +900 ms) windows around word onset.",
+        "Decode — Apply a shared residual temporal CNN to each window and learn sample-specific fusion weights to predict contextual GPT-2 XL embeddings.",
+        "Re-rank — Combine brain-to-text similarity with the match between candidate-predicted and observed neural responses, keeping the decoder frozen."
       ],
+      "experimentalExperienceLabel": "Evaluation",
+      "experimentalExperience": [
+        {
+          "title": "Dataset & protocol",
+          "description": "Podcast ECoG: eight participants listening to the same 30-minute podcast. Five chronological folds train the decoder on seven participants and evaluate the held-out participant. Held-out training ECoG is used only for unsupervised SRM alignment; no held-out text labels enter decoder training. Results below report source-participant and held-out cross-subject retrieval as means ± standard deviations."
+        },
+        {
+          "title": "Key finding",
+          "description": "EGR improved AUC-ROC over the same multi-scale decoder in all eight held-out participants (paired sign-flip test, p = 0.0078)."
+        }
+      ],
+      "resultTables": tadaResults,
       "code": "https://github.com/Myeongjuuu/TADA",
       "relatedPublication": {
         "title": "Multi-Scale Temporal Fusion Network with Encoding-Guided Reciprocal Re-ranking for ECoG-to-Text Semantic Decoding",
@@ -241,7 +255,7 @@ export const portfolio: PortfolioData = {
       "name": "NeuralSpeech",
       "subtitle": "Voice Reconstruction from EEG",
       "date": "Feb. 2024 – Jan. 2025",
-      "teaser": "Voice reconstruction using imagined and spoken speech EEG, extending the NeuroTalk speech synthesis pipeline.",
+      "teaser": "GAN-based voice reconstruction from imagined and spoken speech EEG, converting neural signals to Mel-spectrograms via a generator–discriminator architecture with domain adaptation and DTW-based evaluation.",
       "tags": [
         "EEG",
         "Imagined Speech",
@@ -249,40 +263,67 @@ export const portfolio: PortfolioData = {
         "GAN",
         "BCI"
       ],
-      "goal": "Investigate voice reconstruction from imagined and spoken speech EEG.",
+      "goal": "Word recognition using EEG signals opens new communication opportunities for individuals with speech impairments. This project proposes a novel approach that addresses the nonlinear nature of EEG signals and their sensitivity to noise — by converting EEG data into Mel-spectrograms and employing a GAN-based pipeline to reconstruct voice from brain signals.\n\nThe core challenge is the modality gap between neural recordings and acoustic representations. We designed a full pipeline: 130-channel EEG recorded during imagined and spoken speech tasks, Fisher ratio and CSP feature selection, Multi-CSP domain adaptation from spoken to imagined EEG, and a GAN (generator + discriminator + pre-trained classifier) that reconstructs Mel-spectrograms from EEG features. Evaluation uses Dynamic Time Warping (DTW) to compare reconstructed and original Mel-spectrograms.\n\nThe approach builds on NeuroTalk (Lee et al., AAAI 2023) and extends it to the imagined speech domain by incorporating transfer learning from the more robust spoken speech EEG.",
       "contributionLabel": "My contribution",
       "contributions": [
-        "Conducted EEG experiments and signal preprocessing.",
-        "Reproduced and extended NeuroTalk.",
-        "Modified the GAN-based speech synthesis pipeline for reconstruction from mel-spectrograms."
+        "Designed and conducted EEG experiments with 4 participants across 13 word classes, collecting both imagined and spoken speech conditions.",
+        "Built the full preprocessing pipeline: 30–120 Hz bandpass, 60 Hz notch filter, ICLabel-based artifact rejection, and Mel-spectrogram conversion.",
+        "Implemented Fisher ratio feature selection and Multi-CSP domain adaptation (spoken → imagined EEG transfer learning).",
+        "Reproduced and extended NeuroTalk’s GAN-based Mel-spectrogram reconstruction pipeline with a pre-trained classifier trained on augmented voice data."
       ],
       "steps": [
-        "EEG experiments",
-        "Signal preprocessing",
-        "Speech reconstruction"
+        "Data collection — 4 participants, 13 word classes, 36 trials each → 468 trials/participant; two conditions: imagined speech and spoken speech",
+        "Preprocessing — band-pass 30–120 Hz, 60 Hz notch filter (ICLabel EOG/EMG removal), voice resampled to 22,050 Hz, Mel-spectrogram extraction",
+        "Feature selection — Fisher ratio and CSP to identify discriminative frequency–channel pairs; one class vs. remaining 12 for pairwise discrimination",
+        "Domain adaptation — Multi-CSP transfers features from spoken EEG to compensate for sparse imagined EEG via transfer learning",
+        "GAN training — generator produces Mel-spectrograms from EEG; discriminator evaluates real vs. generated; pre-trained classifier (voice + augmented data) guides word-class prediction",
+        "Evaluation — DTW between reconstructed and original Mel-spectrograms; Spoken F1 = 0.98 (±0.02), Imagined F1 = 0.98 (±0.02)"
       ],
       "code": null,
       "relatedPublication": null,
-      "stack": [],
-      "image": null,
+      "stack": ["Python", "PyTorch", "MNE-Python", "ICLabel"],
+      "image": {
+        "src": "/images/neuralspeech/overall_framework.png",
+        "alt": "NeuralSpeech overall framework: EEG-based voice reconstruction pipeline using GAN-based speech synthesis",
+        "caption": "Figure 4. Overall framework — EEG-to-speech reconstruction pipeline."
+      },
       experimentalExperience: [
         {
-                "title": "Equipment",
-                "description": "BEL EEG recording system."
+          "title": "Equipment",
+          "description": "EEG was recorded using the 130-channel BEL EEG system (BEL AMP One amplifier) in a shielded soundproof booth, minimizing environmental and electrical interference.",
+          "image": { "src": "/images/neuralspeech/eeg_device.png", "alt": "BEL AMP One: 130-channel EEG amplifier used for data collection" }
         },
         {
-                "title": "Experimental design & recording",
-                "description": "Designed and conducted imagined- and spoken-speech EEG data-collection experiments."
+          "title": "Experimental environment",
+          "description": "Participants wore the 130-channel EEG cap in a shielded soundproof booth and faced a monitor that presented audio cues and visual fixation dots guiding each imagined-speech trial.",
+          "image": { "src": "/images/neuralspeech/experimental_environment.png", "alt": "Participant wearing EEG cap in shielded soundproof booth facing a monitor" }
         },
         {
-                "title": "Signal processing",
-                "description": "Preprocessed the recorded EEG for speech reconstruction experiments."
+          "title": "Experimental protocol",
+          "description": "Each trial followed a fixed sequence: 0–3 s rest → 3–5 s audio cue (word presentation) → 5–6 s relax (black dot) → 6–8 s imagined or spoken speech (blue dot). Each of the 13 word classes was repeated 36 times, yielding 468 trials per participant. Both imagined and spoken speech conditions were recorded to enable domain adaptation.",
+          "image": { "src": "/images/neuralspeech/trial_protocol.png", "alt": "Single trial timeline: rest interval (0–3s), cue interval (3–5s), relax interval (5–6s), action interval (6–8s)" }
         },
         {
-                "title": "Model experiments",
-                "description": "Reproduced and extended NeuroTalk’s GAN-based mel-spectrogram reconstruction pipeline."
+          "title": "Target stimuli",
+          "description": "13 words covering device control and everyday commands served as target stimuli, forming a practical vocabulary for BCI communication applications.",
+          "image": { "src": "/images/neuralspeech/target_words.png", "alt": "13 target words: Call, Camera, Music, On, Up, Left, Receive, Message, Turn, Volume, Off, Down, Right" }
+        },
+        {
+          "title": "Pre-trained classifier",
+          "description": "Due to limited voice samples, a classifier was pre-trained on augmented voice data (time stretching, pitch shifting, noise addition, emphasis). This classifier evaluates Mel-spectrograms generated by the GAN and guides the generator toward correct word-class predictions.",
+          "image": { "src": "/images/neuralspeech/pretrained_classifier.png", "alt": "Pre-trained classifier pipeline: voice → augmentation → Mel-spectrogram → classifier → word class" }
+        },
+        {
+          "title": "Reference — Original Mel-spectrogram",
+          "description": "The original spoken-voice Mel-spectrogram serves as the acoustic reference for the EEG-to-speech pipeline. Reconstruction quality was evaluated using Dynamic Time Warping (DTW) between EEG-derived and original Mel-spectrograms.",
+          "image": { "src": "/images/neuralspeech/mel_original.png", "alt": "Figure 8: Original Mel-frequency spectrogram of spoken voice" }
+        },
+        {
+          "title": "Results — Test performance",
+          "description": "Table 1 reports RMSE and F1-score on the held-out test set. The model achieves F1 = 0.98 (±0.02) for both spoken and imagined EEG conditions, with RMSE ≈ 0.20–0.21 (±0.01), demonstrating that the GAN pipeline successfully classifies word intent from EEG-derived Mel-spectrograms across both conditions.",
+          "image": { "src": "/images/neuralspeech/results_table.png", "alt": "Table 1: Spoken EEG RMSE=0.21±0.01, F1=0.98±0.02; Imagined EEG RMSE=0.20±0.01, F1=0.98±0.02" }
         }
-]
+      ]
     },
     {
       "id": "project-essenti",

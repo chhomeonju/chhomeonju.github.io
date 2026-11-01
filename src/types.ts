@@ -12,7 +12,7 @@ export interface Project {
   contributions?: string[]; steps: string[]; code: string | null;
   relatedPublication: { title: string; venue: string; url?: string } | null;
   datasetExperience?: {
-    title: string; description: string; source: ResourceLink;
+    title: string; description: string; source?: ResourceLink;
     datasets: { name: string; task: string }[];
   }[];
   experimentalExperience?: { title: string; description: string; image?: { src: string; alt: string } }[];
@@ -21,6 +21,8 @@ export interface Project {
   screenshots?: { src: string; alt: string; caption?: string; description?: string }[];
   screenshotsLabel?: string;
   modelComparison?: { columns: string[]; rows: { cells: string[]; highlight?: boolean }[] };
+  resultsNote?: string;
+  resultTables?: { title: string; description: string; collapsed?: boolean; columns: string[]; groups: { label: string; rows: { cells: string[]; highlight?: boolean }[] }[] }[];
   relatedExperience?: ResourceLink;
   studyFindings?: { highlights: string[]; scope: string; source: ResourceLink };
   stack: string[];

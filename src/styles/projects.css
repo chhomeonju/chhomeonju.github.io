@@ -12,7 +12,7 @@
 .project-category { font-size: .8rem; color: var(--project-accent); font-weight: 600; letter-spacing: 0; text-transform: none; }
 .project-date { color: #6c7278; font-size: .8rem; white-space: nowrap; margin: 0; }
 .project-preview { display: block; }
-.project-preview.has-image { display: grid; grid-template-columns: minmax(0, 1.65fr) minmax(250px, 1fr); gap: 36px; align-items: center; }
+.project-preview.has-image { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(300px, 1fr); gap: 40px; align-items: start; }
 .project-copy { min-width: 0; }
 .project-title { font-family: inherit; margin: 0 0 12px; line-height: 1.4; }
 .project-name { display: block; font-size: 1.35rem; color: #18232b; font-weight: 700; }
@@ -29,8 +29,8 @@
 .project-resources:empty { display: none; }
 .project-resources a { font-size: .83rem; font-weight: 600; color: var(--project-accent); text-decoration: none; padding: 5px 0; }
 .project-resources a:hover { text-decoration: underline; text-underline-offset: 3px; }
-.project-visual-image { padding: 0; margin: 0; min-width: 0; border: 0; border-radius: 0; background: none; box-shadow: none; }
-.project-visual-image img { display: block; width: 100%; height: auto; object-fit: contain; }
+.project-visual-image { padding: 0; margin: 0; min-width: 0; border: 0; border-radius: 0; background: none; box-shadow: none; display: flex; align-items: flex-start; justify-content: center; }
+.project-visual-image img { display: block; height: 460px; width: auto; max-width: 100%; object-fit: contain; object-position: top center; }
 .project-visual-image figcaption { text-align: center; font-size: .72rem; color: #737a80; margin-top: 9px; }
 .project-card .project-notes { margin-top: 8px; }
 .project-card .project-notes > summary { display: list-item; list-style: disclosure-closed inside; width: fit-content; height: auto; padding: 7px 0; background: none; color: #626a71; font-size: .78rem; cursor: pointer; }

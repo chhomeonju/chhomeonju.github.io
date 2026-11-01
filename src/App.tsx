@@ -85,7 +85,7 @@ function HomePage() {
       }
     }}>
       <a className="site-name" href="/" onClick={goHome}>Myeongju Cho</a>
-      <div className="mobile-menu"><span>Myeongju Cho</span><button className="menu-toggle" type="button" aria-expanded={navigation.menuOpen} aria-controls="section-navigation" onClick={() => navigation.setMenuOpen(open => !open)}>{navigation.menuOpen ? 'Close menu' : 'Menu'}</button></div>
+      <div className="mobile-menu"><span>Myeongju Cho</span><div className="mobile-menu-right"><button className="theme-toggle" onClick={() => setDark(d => !d)} aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'}>{dark ? <Sun size={15} /> : <Moon size={15} />}</button><button className="menu-toggle" type="button" aria-expanded={navigation.menuOpen} aria-controls="section-navigation" onClick={() => navigation.setMenuOpen(open => !open)}>{navigation.menuOpen ? 'Close menu' : 'Menu'}</button></div></div>
       <nav id="section-navigation" className="section-nav" aria-label="Page sections">
         <a href="/" aria-current={view === 'home' ? 'location' : undefined} onClick={goHome}>Home</a>
         {sections.map(([id, label]) => (
@@ -94,7 +94,7 @@ function HomePage() {
             onClick={event => goSection(event, id)}>{label}</a>
         ))}
       </nav>
-      <button className="theme-toggle" onClick={() => setDark(d => !d)} aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'}>{dark ? <Sun size={15} /> : <Moon size={15} />}</button>
+      <button className="theme-toggle theme-toggle--desktop" onClick={() => setDark(d => !d)} aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'}>{dark ? <Sun size={15} /> : <Moon size={15} />}</button>
     </div>
 
     {view === 'home' ? (

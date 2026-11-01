@@ -37,7 +37,7 @@ test('project cards link to separate detail pages and expose their key contribut
     assert.ok(!html.includes('<details'));
   }
   const html = renderToStaticMarkup(<ProjectCard project={portfolio.projects[0]} navigate={() => {}} />);
-  assert.ok(html.includes('<strong>Latent predictive modeling</strong>'));
+  assert.ok(html.includes('<strong>semantic embedding prediction</strong>'));
   assert.ok(!html.includes('project-workflow'));
 });
 
