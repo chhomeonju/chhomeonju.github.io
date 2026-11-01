@@ -15,11 +15,17 @@ export interface Project {
     title: string; description: string; source: ResourceLink;
     datasets: { name: string; task: string }[];
   }[];
-  experimentalExperience?: { title: string; description: string }[];
+  experimentalExperience?: { title: string; description: string; image?: { src: string; alt: string } }[];
+  experimentalExperienceLabel?: string;
+  heroImages?: { src: string; alt: string; caption?: string }[];
+  screenshots?: { src: string; alt: string; caption?: string; description?: string }[];
+  screenshotsLabel?: string;
+  modelComparison?: { columns: string[]; rows: { cells: string[]; highlight?: boolean }[] };
   relatedExperience?: ResourceLink;
   studyFindings?: { highlights: string[]; scope: string; source: ResourceLink };
   stack: string[];
   image: { src: string; alt: string; caption?: string } | null;
+  cardImage?: { src: string; alt: string; caption?: string };
 }
 export interface Award { date: string; title: string; organization: string; detail: string | null }
 export interface TimelineEntry { title: string; description: string; date: string; location?: string; expected?: string }

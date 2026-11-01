@@ -234,13 +234,13 @@ export function ProjectCard({ project: p, navigate }: { project: Project; naviga
   return <article className="project-card" id={p.id} aria-labelledby={`${p.id}-title`}>
     <div className="project-topline"><span className="project-category">{p.category}</span>{p.date && <span className="project-date">{p.date}</span>}</div>
 <h3 id={`${p.id}-title`} className="project-title"><a className="project-title-link" href={projectHref(p)}><span className="project-name">{p.name}</span><span className="project-subtitle">{p.subtitle}</span></a></h3>
-    <div className={`project-preview${p.image ? ' has-image' : ''}`}>
+    <div className={`project-preview${(p.cardImage ?? p.image) ? ' has-image' : ''}`}>
       <div className="project-copy">
         <p className="project-teaser">{p.teaser}</p>
         {p.contributions && <ul className="project-highlights" aria-label={p.contributionLabel}>{p.contributions.slice(0, 2).map(text => <li key={text}><ProjectContribution text={text} emphasis={projectEmphasis[p.id]} /></li>)}</ul>}
         {p.stack.length > 0 && <p className="project-stack"><span className="project-stack-label">Stack</span>{p.stack.join(' · ')}</p>}
       </div>
-      {p.image && <figure className="project-visual project-visual-image"><img src={p.image.src} alt={p.image.alt} loading="lazy" />{p.image.caption && <figcaption>{p.image.caption}</figcaption>}</figure>}
+      {(p.cardImage ?? p.image) && (() => { const img = p.cardImage ?? p.image!; return <figure className="project-visual project-visual-image"><img src={img.src} alt={img.alt} loading="lazy" />{img.caption && <figcaption>{img.caption}</figcaption>}</figure>; })()}
     </div>
     <div className="project-card-footer"><span className="project-read-more" aria-hidden="true">View project <span>→</span></span><div className="project-resources">{p.code && <ExternalLink href={p.code}>GitHub ↗</ExternalLink>}{p.relatedPublication && (p.relatedPublication.url ? <ExternalLink href={p.relatedPublication.url}>Paper ↗</ExternalLink> : <a href="#publications" onClick={e => navigate(e, 'publications')}>Paper ↑</a>)}</div></div>
   </article>;
