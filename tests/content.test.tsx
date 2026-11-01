@@ -73,9 +73,9 @@ test('all conference entries are posters and repository-specific stacks stay dis
 
 test('study dates match the owner clarification and the patent remains an application', () => {
   for (const [title, date] of [
-    ['Neuroscience Study Group', 'Jul. – Aug. 2023'],
-    ['MATLAB for Neuroscience Study Group', 'Jan. – Feb. 2024'],
-    ['AI Study Group', 'Mar. – Jun. 2025'],
+    ['Neuroscience Study Group', 'Jul. 2023 – Aug. 2023'],
+    ['MATLAB for Neuroscience Study Group', 'Jan. 2024 – Feb. 2024'],
+    ['AI Study Group', 'Mar. 2025 – Jun. 2025'],
   ]) assert.equal(portfolio.activities.find(activity => activity.title === title)?.date, date);
   assert.equal(portfolio.patents.length, 1);
   assert.match(portfolio.patents[0].status, /application · Filed/i);
