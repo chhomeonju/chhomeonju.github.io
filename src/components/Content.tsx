@@ -165,74 +165,41 @@ function parseAbsMonth(s: string): number {
 }
 
 export function Activities() {
-  const [selected, setSelected] = useState<number | null>(null);
-
-  const acts = portfolio.activities.map(a => {
-    const [startStr, endStr] = a.date.split(' – ');
-    const startM = parseAbsMonth(startStr);
-    const endM = endStr ? parseAbsMonth(endStr) : startM + 1;
-    return { ...a, startM, endM };
-  });
-
-  const minM = Math.min(...acts.map(a => a.startM));
-  const maxM = Math.max(...acts.map(a => a.endM));
-  const span = maxM - minM;
-
-  const startYear = Math.floor(minM / 12);
-  const endYear = Math.ceil(maxM / 12);
-  const years: number[] = [];
-  for (let y = startYear; y <= endYear; y++) years.push(y);
-
-  const sel = selected !== null ? acts[selected] : null;
+  const sorted = [...portfolio.activities].sort(
+    (a, b) => parseAbsMonth(b.date.split(' – ')[0]) - parseAbsMonth(a.date.split(' – ')[0])
+  );
 
   return (
     <section id="activities">
       <h2>Extracurricular Activities</h2>
-      <div className="act-htl">
-        <div className="act-htl-header">
-          {years.map(y => {
-            const pct = ((y * 12 - minM) / span) * 100;
-            if (pct < 0 || pct > 100) return null;
-            return <span key={y} className="act-htl-year" style={{ left: `${pct}%` }}>{y}</span>;
-          })}
-        </div>
-        <div className="act-htl-grid">
-          {years.map(y => {
-            const pct = ((y * 12 - minM) / span) * 100;
-            if (pct <= 0 || pct >= 100) return null;
-            return <div key={y} className="act-htl-gridline" style={{ left: `${pct}%` }} />;
-          })}
-          <div className="act-htl-rows">
-            {acts.map((a, i) => {
-              const leftPct = ((a.startM - minM) / span) * 100;
-              const widthPct = Math.max(((a.endM - a.startM) / span) * 100, 2);
-              const mainTitle = a.title.split(' · ')[0];
-              return (
-                <div key={i} className="act-htl-row">
-                  <div
-                    className={`act-htl-pill${selected === i ? ' act-htl-pill--active' : ''}`}
-                    style={{ left: `${leftPct}%`, width: `${widthPct}%` }}
-                    onClick={() => setSelected(selected === i ? null : i)}
-                  >
-                    <span className="act-htl-pill-text">{mainTitle}</span>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-        </div>
-        {sel && (
-          <div className="act-htl-detail">
-            <div className="act-htl-detail-top">
-              <span className="act-htl-detail-title">{sel.title.split(' · ')[0]}</span>
+      <div className="act-alt-wrap">
+        <div className="act-alt-spine" />
+        {sorted.map((a, i) => {
+          const isRight = i % 2 === 0;
+          const parts = a.title.split(' · ');
+          const mainTitle = parts[0];
+          const org = parts.length > 1 ? parts[parts.length - 1] : null;
+          const badge = mainTitle;
+          const subtitle = org?.match(/Lab|Club|Office/) ? org : null;
+          const content = (
+            <div className="act-alt-content">
+              <div className="act-alt-head">
+                <span className="act-alt-badge">{badge}</span>
+                <span className="act-alt-date">{a.date}</span>
+              </div>
+              {subtitle && <div className="act-alt-sub">{subtitle}</div>}
+              <div className="act-alt-role">{a.role}</div>
+              {a.description && <p className="act-alt-desc">{a.description}</p>}
             </div>
-            <div className="act-htl-detail-meta">
-              <span className="act-htl-detail-role">{sel.role}</span>
-              <span className="act-htl-detail-date">{sel.date}</span>
+          );
+          return (
+            <div key={i} className={`act-alt-item${isRight ? ' act-alt-r' : ' act-alt-l'}`}>
+              <div className="act-alt-left">{!isRight && content}</div>
+              <div className="act-alt-dot-col"><div className="act-alt-dot" /></div>
+              <div className="act-alt-right">{isRight && content}</div>
             </div>
-            {sel.description && <p className="act-htl-detail-desc">{sel.description}</p>}
-          </div>
-        )}
+          );
+        })}
       </div>
     </section>
   );
