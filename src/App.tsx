@@ -43,6 +43,8 @@ function HomePage() {
   }, [view]);
 
   useEffect(() => {
+    // Home view (hero) is always above the fold — no scroll-reveal needed there.
+    if (view !== 'portfolio') return;
     const targets = document.querySelectorAll<HTMLElement>('section, .mj-paper, .project-card, .research-interest');
     const obs = new IntersectionObserver(
       entries => entries.forEach(entry => {
