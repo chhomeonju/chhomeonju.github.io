@@ -7,7 +7,7 @@ declare global {
 const INTERESTS = [
   {
     title: 'Neural Encoding & Decoding',
-    description: 'Exploring how cognitive information is represented in neural activity and decoded using deep learning across neural measurement modalities, including EEG, ECoG, and fMRI.',
+    description: 'Exploring how cognitive information is represented in neural activity and decoded using deep learning across neuroimaging modalities, such as EEG, MEG, ECoG, and fMRI.',
     tag: 'Decoding', tagClass: 'ri-tag--decode',
   },
   {
@@ -46,7 +46,7 @@ void main(){
 
 const FRAGMENT = `
 precision mediump float;
-uniform float time; uniform float mode; uniform float stimIdx;
+uniform float time; uniform float mode; uniform float stimIdx; uniform float networkFocus;
 varying vec3 point; varying vec3 shadingNormal;
 float wave(vec3 focus,float offset){
  float d=distance(point,focus);
@@ -58,6 +58,12 @@ float glow(vec3 focus,float sigma){
  vec3 dv=point-focus;
  return exp(-dot(dv,dv)/(2.*sigma*sigma));
 }
+float surfaceLink(vec3 a,vec3 b){
+ vec3 p=normalize(point); a=normalize(a); b=normalize(b);
+ float plane=abs(dot(p,normalize(cross(a,b))));
+ float gate=smoothstep(dot(a,b),dot(a,b)+.15,min(dot(p,a),dot(p,b)));
+ return exp(-pow(plane/.022,2.))*gate;
+}
 void main(){
  vec3 n=normalize(shadingNormal);
  float light=max(dot(n,normalize(vec3(-.6,.9,1.4))),0.);
@@ -65,7 +71,52 @@ void main(){
  /* Darker base gives activations more visual contrast */
  vec3 base=vec3(.72,.76,.82)*(.60+.28*light+.12*side);
  float activity; vec3 highlight;
- if(mode<0.5){
+ if(mode>5.5){
+  /* Coordinated regional activity and surface coupling, schematic, not an atlas. */
+  vec3 p1=vec3(-.40,.20,.26),p2=vec3(.40,.20,.26);
+  vec3 p3=vec3(-.32,-.22,.30),p4=vec3(.32,-.22,.30);
+  vec3 p5=vec3(-.34,.16,-.27),p6=vec3(.34,.16,-.27);
+  float g1=(glow(p1,.15)+glow(p2,.15))*(.55+.45*sin(time*1.4));
+  float g2=(glow(p3,.15)+glow(p4,.15))*(.55+.45*sin(time*1.1+2.));
+  float g3=(glow(p5,.17)+glow(p6,.17))*(.55+.45*sin(time*1.2+4.));
+  float links1=surfaceLink(p1,p2)+surfaceLink(p1,p3)+surfaceLink(p2,p4);
+  float links2=surfaceLink(p3,p5)+surfaceLink(p4,p6)+surfaceLink(p5,p6);
+  float l1=links1*(.42+.24*sin(time*1.4)),l2=links2*(.42+.24*sin(time*1.1+2.));
+  vec3 c1=vec3(.16,.64,1.),c2=vec3(1.,.30,.43),c3=vec3(.56,.30,1.);
+  float g4=glow(vec3(0.,-.12,.36),.18)*(.7+.3*sin(time*1.3));
+  float g5=(glow(vec3(-.43,-.15,.04),.16)+glow(vec3(.43,-.15,.04),.16))*(.7+.3*sin(time*1.2+2.));
+  if(networkFocus>=0.){
+    g1*=abs(networkFocus-1.)<.1?1.3:.10;
+    g2*=networkFocus<.1?1.3:.10;
+    g3*=abs(networkFocus-4.)<.1?1.3:.10;
+    g4*=abs(networkFocus-3.)<.1?1.3:.10;
+    g5*=abs(networkFocus-2.)<.1?1.3:.10;
+    l1*=.35;l2*=.35;
+  }
+  float sum=g1+g2+g3+g4+g5+l1+l2;
+  activity=clamp(sum*1.95,0.,.98);
+  highlight=(c1*(g1+l1)+c2*g2+c3*(g3+l2)+vec3(.24,.78,.58)*g4+vec3(.98,.65,.20)*g5)/max(sum,.001);
+  highlight*=(.85+.15*light);
+ }else if(mode>4.5){
+  /* Bilateral distributed responses stay visible from either hemisphere. */
+  vec3 color=vec3(.65,.20,1.0),accent=vec3(1.,.38,.64);
+  if(stimIdx>.5 && stimIdx<1.5){color=vec3(1.,.46,.02);accent=vec3(1.,.75,.16);}
+  else if(stimIdx>1.5 && stimIdx<2.5){color=vec3(1.,.20,.40);accent=vec3(.94,.44,.85);}
+  else if(stimIdx>2.5){color=vec3(.02,.78,.50);accent=vec3(.17,.82,.88);}
+  float response=.75+.25*sin(time*2.4);
+  float front=glow(vec3(-.40,.18,.28),.18)+glow(vec3(.40,.18,.28),.18);
+  float temporal=glow(vec3(-.43,-.18,.27),.18)+glow(vec3(.43,-.18,.27),.18);
+  float back=glow(vec3(-.38,.12,-.28),.20)+glow(vec3(.38,.12,-.28),.20);
+  float crown=glow(vec3(0.,.40,.08),.21)+glow(vec3(0.,-.32,.12),.18);
+  float local=(front*.9+temporal*.8+back+crown*.65)*response;
+  activity=clamp(local*2.0,0.,1.)*.729;
+  highlight=mix(color,accent,clamp((temporal+crown)*.9,0.,.65))*(.88+.12*light);
+ }else if(mode>1.5 && mode<2.5){
+  vec3 target=vec3(-.38,.28,.20);
+  float pulse=pow(max(0.,sin(time*3.2)),3.);
+  activity=clamp(glow(target,.19)*(.9+pulse)+wave(target,.0)*.24,0.,1.);
+  highlight=mix(vec3(.96,.26,.35),vec3(1.,.67,.19),pulse)*(.8+.2*light);
+ }else if(mode<0.5){
   /* Decoding: Broca, Wernicke, SMA — left hemisphere speech areas */
   float a=wave(vec3(-.38,.15,.30),0.0);
   float b=wave(vec3(-.40,-.20,.42),.45);
@@ -234,209 +285,74 @@ function DecodingOverlay() {
   );
 }
 
-// ── Mode 1: Language token overlay ────────────────────────────────────────
-const LANG_TOKENS = [
-  { word: 'speech',   x: 74, y: 16, delay: '0s' },
-  { word: 'imagined', x: 79, y: 33, delay: '.35s' },
-  { word: 'semantic', x: 76, y: 52, delay: '.7s' },
-  { word: 'neural',   x: 78, y: 68, delay: '1.1s' },
-  { word: 'language', x: 72, y: 83, delay: '.2s' },
+// Shared visual vocabulary for cortical hubs and the abstract modular graph.
+// These illustrations do not encode an empirical atlas or estimated edge weights.
+const DYNAMICS_COMMUNITIES = [
+  {id:'DMN',name:'Default mode',color:'#ed6b83'},
+  {id:'FPN',name:'Frontoparietal',color:'#4a9cdb'},
+  {id:'SAL',name:'Salience',color:'#e9a346'},
+  {id:'SMN',name:'Sensorimotor',color:'#49ad8f'},
+  {id:'VIS',name:'Visual',color:'#9871d3'},
 ];
+const CORTICAL_HUBS = [
+  {x:50,y:22,g:0,label:'DMN'},
+  {x:29,y:37,g:1,label:'FPN-L'},{x:71,y:37,g:1,label:'FPN-R'},
+  {x:25,y:57,g:2,label:''},{x:75,y:57,g:2,label:'SAL'},
+  {x:50,y:43,g:3,label:'SMN'},{x:50,y:77,g:4,label:'VIS'},
+];
+const CORTICAL_LINKS=[[0,1],[0,2],[0,5],[1,2],[1,3],[2,4],[3,5],[4,5],[3,6],[4,6],[5,6]];
 
-function LanguageOverlay() {
-  return (
-    <svg className="ri-net-overlay ri-lang-overlay" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-      {LANG_TOKENS.map(({ word, x, y, delay }) => (
-        <g key={word} style={{ '--ld': delay } as CSSProperties} className="ri-lang-token">
-          <line x1={54} y1={50} x2={x + word.length * 1.2} y2={y}
-            stroke="rgba(140,70,210,.22)" strokeWidth="0.35" strokeDasharray="2 2" />
-          <rect x={x - 1} y={y - 3.5} width={word.length * 2.55 + 2} height={7} rx={1.5}
-            fill="rgba(109,40,217,.13)" stroke="rgba(109,40,217,.40)" strokeWidth="0.35" />
-          <text x={x + (word.length*2.55/2)} y={y+1.5} textAnchor="middle"
-            fontSize="4.2" fill="rgba(167,139,250,1)" fontFamily="system-ui,sans-serif" fontWeight="600">
-            {word}
-          </text>
-        </g>
-      ))}
-    </svg>
-  );
+type NetworkInteraction = {
+  focused:number|null;
+  selected:number|null;
+  onHover:(group:number|null)=>void;
+  onSelect:(group:number|null)=>void;
+};
+
+function BrainNetworkOverlay() {
+  return <svg className="ri-cortical-overlay" viewBox="0 0 100 100" aria-hidden="true">
+    {CORTICAL_LINKS.map(([i,j])=>{
+      const a=CORTICAL_HUBS[i],b=CORTICAL_HUBS[j];
+      return <path key={`${i}-${j}`} d={`M${a.x} ${a.y} Q50 ${(a.y+b.y)/2-9} ${b.x} ${b.y}`} fill="none" stroke={DYNAMICS_COMMUNITIES[a.g].color} className="ri-cortical-link" data-linked={`${a.g} ${b.g}`} style={{'--community-delay':`${-a.g*.65}s`} as CSSProperties}/>;
+    })}
+    {CORTICAL_HUBS.map((n,i)=><g key={i} className="ri-cortical-hub" data-community={n.g} style={{'--community-delay':`${-n.g*.65}s`} as CSSProperties}>
+      <circle cx={n.x} cy={n.y} r="5.5" fill={DYNAMICS_COMMUNITIES[n.g].color} opacity=".18"/>
+      <circle cx={n.x} cy={n.y} r="2.4" fill={DYNAMICS_COMMUNITIES[n.g].color} stroke="var(--paper)" strokeWidth=".45"/>
+      {n.label&&<g><rect x={n.x-n.label.length*1.22-1.2} y={n.y+3.7} width={n.label.length*2.44+2.4} height="6.2" rx="1.3" className="ri-cortical-label-bg"/><text x={n.x} y={n.y+8.1} textAnchor="middle" className="ri-cortical-label">{n.label}</text></g>}
+    </g>)}
+  </svg>;
 }
 
-// ── Mode 2: Connectome with real resting-state networks ────────────────────
-// Positions in 360×310 space; brain center (180,155), visible radius ~70px
-// All nodes ON the brain surface — connections traverse through the brain
-const NETS = [
-  { id:'dmn',  label:'DMN',   color:'#e63946', x:180, y: 70 }, // medial PFC / PCC — moved up
-  { id:'fpnl', label:'FPN-L', color:'#4a90d9', x:110, y:108 }, // L lateral prefrontal (dlPFC)
-  { id:'fpnr', label:'FPN-R', color:'#4a90d9', x:250, y:105 }, // R lateral prefrontal
-  { id:'lan',  label:'LAN',   color:'#f77f00', x:96,  y:158 }, // L temporal: Broca/Wernicke
-  { id:'san',  label:'SAN',   color:'#f4a261', x:262, y:152 }, // R fronto-insular (amygdala)
-  { id:'smn',  label:'SMN',   color:'#2d9a4f', x:180, y:110 }, // sensorimotor / premotor — centered, below DMN
-  { id:'vis',  label:'VIS',   color:'#7c3aed', x:210, y:218 }, // occipital (V1-V5)
-];
+function NetworkGraph({selected,onHover,onSelect}: NetworkInteraction) {
+  const polar=(angle:number,r:number)=>({x:80+r*Math.cos(angle),y:88+r*Math.sin(angle)});
+  const start=-Math.PI/2-Math.PI/7;
+  const nodes=DYNAMICS_COMMUNITIES.flatMap((group,g)=>Array.from({length:4},(_,j)=>({...polar(start+g*Math.PI*2/5+(j-1.5)*.16,48),g,color:group.color})));
+  const internal=nodes.flatMap((a,i)=>nodes.flatMap((b,j)=>j>i&&a.g===b.g?[[i,j]]:[]));
+  const bridges=[[1,5],[3,8],[6,13],[9,15],[11,18],[14,17],[2,19],[7,10]];
+  return <div className="ri-network-only ri-network-connectogram">
+    <span>Functional organization</span>
+    <svg viewBox="0 0 160 178" role="group" aria-label="Explore functional network communities">
+      <circle cx="80" cy="88" r="48" className="ri-connectogram-guide"/>
+      {[...internal,...bridges].map(([i,j],k)=>{
+        const a=nodes[i],b=nodes[j],within=a.g===b.g;
+        return <path key={`${i}-${j}`} d={`M${a.x} ${a.y} Q${within?(a.x+b.x)/2:80} ${within?(a.y+b.y)/2:88} ${b.x} ${b.y}`} fill="none" stroke={within?a.color:'var(--muted)'} className={`ri-connectogram-edge${within?' ri-connectogram-edge--within':''}`} data-linked={`${a.g} ${b.g}`} style={{'--community-delay':`${-a.g*.65}s`,'--edge-weight':.55+(k%4)*.22} as CSSProperties}/>;
+      })}
+      {DYNAMICS_COMMUNITIES.map((group,g)=>{
+        const center=start+g*Math.PI*2/5;
+        const a=polar(center-.32,56),b=polar(center+.32,56),label=polar(center,70);
+        return <g key={group.id} role="button" tabIndex={0} aria-label={`Explore ${group.name} network`} aria-pressed={selected===g} data-community={g} className="ri-community-control" onPointerEnter={()=>onHover(g)} onPointerLeave={()=>onHover(null)} onFocus={()=>onHover(g)} onBlur={()=>onHover(null)} onClick={()=>onSelect(g)} onKeyDown={e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();onSelect(g);}}}>
+          <title>{group.name}</title><path d={`M${a.x} ${a.y} A56 56 0 0 1 ${b.x} ${b.y}`} fill="none" stroke="transparent" strokeWidth="18"/>
+          <path d={`M${a.x} ${a.y} A56 56 0 0 1 ${b.x} ${b.y}`} fill="none" stroke={group.color} strokeWidth="2.8" strokeLinecap="round"/><text x={label.x} y={label.y+2.6} textAnchor="middle" className="ri-community-label" fill={group.color}>{group.id}</text></g>;
+      })}
+      {nodes.map((n,i)=><g key={i} className="ri-graph-hub" data-community={n.g} style={{'--community-delay':`${-n.g*.65}s`} as CSSProperties}><circle cx={n.x} cy={n.y} r="4.5" fill={n.color} opacity=".1"/><circle cx={n.x} cy={n.y} r="2.25" fill={n.color} stroke="var(--paper)" strokeWidth=".7"/></g>)}
+    </svg>
+  </div>;
+}
 
-// Stimulus types with scientifically grounded network activation weights
-// Weights based on meta-analytic activation likelihood estimates
-const STIMULI = [
-  {
-    label: 'Image',
-    color: '#7c3aed',
-    weights: { vis:1.0, san:0.72, fpnr:0.78, fpnl:0.38, smn:0.18, dmn:0.10, lan:0.07 } as Record<string,number>,
-  },
-  {
-    label: 'Audio',
-    color: '#f77f00',
-    weights: { lan:1.0, fpnl:0.88, dmn:0.65, smn:0.42, san:0.20, fpnr:0.22, vis:0.06 } as Record<string,number>,
-  },
-  {
-    label: 'Video',
-    color: '#e63946',
-    weights: { san:1.0, vis:0.88, dmn:0.72, fpnl:0.55, fpnr:0.48, lan:0.30, smn:0.22 } as Record<string,number>,
-  },
-  {
-    label: 'Text',
-    color: '#10b981',
-    weights: { lan:1.0, dmn:0.85, fpnl:0.78, fpnr:0.35, san:0.18, vis:0.12, smn:0.08 } as Record<string,number>,
-  },
-];
-
-// [fromIdx, toIdx, baseWeight, freqHz, phaseRad]
-const FC: [number,number,number,number,number][] = [
-  [0,1, .55,.7, 0.0], [0,2, .55,.7, 0.5],
-  [0,3, .63,.6, 0.2], [0,4, .35,.8, 1.1],
-  [1,2, .72,.5, 0.0], [1,3, .60,.8, 0.6],
-  [1,4, .42,1.1,1.0], [1,5, .32,.7, 0.4],
-  [2,4, .52,.9, 1.5], [2,6, .30,.7, 0.9],
-  [3,5, .44,.9, 0.8], [4,6, .45,.7, 0.9],
-  [5,6, .50,1.0,0.6], [3,4, .28,.6, 1.4],
-];
-
-interface Pulse { ei: number; prog: number; spd: number; }
-
-function ConnectomeCanvas({ stimIdx }: { stimIdx: number }) {
-  const ref = useRef<HTMLCanvasElement>(null);
-  const stimIdxRef = useRef(stimIdx);
-  useEffect(() => { stimIdxRef.current = stimIdx; }, [stimIdx]);
-
-  useEffect(() => {
-    let raf = 0, t = 0;
-    const pulses: Pulse[] = FC.map((_, ei) => ({
-      ei, prog: Math.random(), spd: 0.003 + Math.random() * 0.004,
-    }));
-
-    function fcVal(ei: number, t: number): number {
-      const [,,base,freq,phase] = FC[ei];
-      return Math.max(0, Math.min(1, base + 0.28*Math.sin(2*Math.PI*freq*t + phase)));
-    }
-
-    function draw() {
-      const cv = ref.current; if (!cv) return;
-      const ctx = cv.getContext('2d'); if (!ctx) return;
-      const W = cv.width, H = cv.height;
-      ctx.clearRect(0,0,W,H);
-      const scx = W/360, scy = H/310;
-      const nx = (x:number) => x*scx;
-      const ny = (y:number) => y*scy;
-
-      const wt = STIMULI[stimIdxRef.current].weights;
-
-      // Edges modulated by stimulus-specific network activation
-      FC.forEach(([fi,ti], ei) => {
-        const from = NETS[fi], to = NETS[ti];
-        const edgeW = ((wt[from.id] ?? 0.05) + (wt[to.id] ?? 0.05)) / 2;
-        const fc = fcVal(ei, t) * edgeW;
-        if (fc < 0.06) return;
-        ctx.globalAlpha = Math.min(0.92, fc * 0.88);
-        ctx.strokeStyle = from.color;
-        ctx.lineWidth = 0.5 + fc * 4.5;
-        ctx.shadowColor = from.color;
-        ctx.shadowBlur = fc * 12;
-        ctx.beginPath();
-        ctx.moveTo(nx(from.x), ny(from.y));
-        ctx.lineTo(nx(to.x), ny(to.y));
-        ctx.stroke();
-        ctx.shadowBlur = 0;
-        ctx.globalAlpha = 1;
-      });
-
-      // Traveling pulses — rate proportional to edge activation weight
-      for (const p of pulses) {
-        const [fi,ti] = FC[p.ei];
-        const edgeW = ((wt[NETS[fi].id] ?? 0.1) + (wt[NETS[ti].id] ?? 0.1)) / 2;
-        p.prog += p.spd * (0.3 + edgeW * 1.2);
-        if (p.prog > 1) {
-          p.prog = 0;
-          p.ei = Math.floor(Math.random()*FC.length);
-          p.spd = 0.003+Math.random()*0.004;
-        }
-        const fc = fcVal(p.ei, t) * edgeW;
-        if (fc < 0.12) continue;
-        const from = NETS[fi], to = NETS[ti];
-        const px = nx(from.x) + (nx(to.x)-nx(from.x))*p.prog;
-        const py = ny(from.y) + (ny(to.y)-ny(from.y))*p.prog;
-        ctx.globalAlpha = Math.sin(p.prog*Math.PI)*fc*0.92;
-        ctx.fillStyle = from.color;
-        ctx.shadowColor = from.color;
-        ctx.shadowBlur = 9;
-        ctx.beginPath(); ctx.arc(px, py, 2.5 + edgeW, 0, Math.PI*2); ctx.fill();
-        ctx.shadowBlur = 0;
-        ctx.globalAlpha = 1;
-      }
-      while (pulses.length < 22) {
-        pulses.push({ ei: Math.floor(Math.random()*FC.length), prog: 0, spd: 0.003+Math.random()*0.004 });
-      }
-
-      // Network nodes — size and brightness scale with activation weight
-      NETS.forEach((net, i) => {
-        const x = nx(net.x), y = ny(net.y);
-        const aw = wt[net.id] ?? 0.05;
-        const pulse = 0.5+0.5*Math.sin(t*(1.1+aw*0.7) + i*0.9);
-        const scale = 0.28 + aw * 1.3;   // wider range: quiet=0.28, full=1.58
-
-        // outer halo — more pronounced for highly active nodes
-        ctx.globalAlpha = Math.min(0.55, (0.12 + 0.20*pulse) * (0.4 + aw));
-        ctx.fillStyle = net.color;
-        ctx.beginPath(); ctx.arc(x, y, (8+4*pulse)*scale, 0, Math.PI*2); ctx.fill();
-        ctx.globalAlpha = 1;
-
-        // core node
-        ctx.shadowColor = net.color; ctx.shadowBlur = 4 + 16*aw;
-        ctx.fillStyle = net.color;
-        ctx.globalAlpha = Math.min(1, 0.35 + 0.65*aw);
-        ctx.beginPath(); ctx.arc(x, y, Math.max(2, 5*scale), 0, Math.PI*2); ctx.fill();
-        ctx.shadowBlur = 0; ctx.globalAlpha = 1;
-
-        // label pill — for all networks with activation ≥0.10
-        if (aw < 0.10) return;
-        const pillW = net.label.length * 5.2 + 5;
-        ctx.fillStyle = `rgba(8,12,22,${0.60 + 0.32*aw})`;
-        const lx = x-pillW/2, ly = y + Math.max(6, 7*scale);
-        ctx.beginPath();
-        ctx.moveTo(lx+3,ly); ctx.lineTo(lx+pillW-3,ly);
-        ctx.quadraticCurveTo(lx+pillW,ly,lx+pillW,ly+3);
-        ctx.lineTo(lx+pillW,ly+10); ctx.quadraticCurveTo(lx+pillW,ly+13,lx+pillW-3,ly+13);
-        ctx.lineTo(lx+3,ly+13); ctx.quadraticCurveTo(lx,ly+13,lx,ly+10);
-        ctx.lineTo(lx,ly+3); ctx.quadraticCurveTo(lx,ly,lx+3,ly); ctx.closePath();
-        ctx.fill();
-        ctx.fillStyle = net.color;
-        ctx.font = `bold ${Math.round(7.5+aw*2.5)}px system-ui,sans-serif`;
-        ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
-        ctx.globalAlpha = Math.min(1, 0.50 + 0.50*aw);
-        ctx.fillText(net.label, x, ly+6.5);
-        ctx.textAlign = 'left'; ctx.textBaseline = 'alphabetic';
-        ctx.globalAlpha = 1;
-      });
-
-      t += 0.016;
-    }
-
-    function loop() { draw(); raf = requestAnimationFrame(loop); }
-    loop();
-    return () => cancelAnimationFrame(raf);
-  }, []);
-  return (
-    <canvas ref={ref} width={280} height={240} className="ri-connectome-canvas" aria-hidden="true" />
-  );
+function NetworkLegend({selected,onHover,onSelect}: NetworkInteraction) {
+  return <div className="ri-dynamics-legend" role="group" aria-label="Highlight a functional network">
+    {DYNAMICS_COMMUNITIES.map((c,i)=><button type="button" key={c.id} aria-pressed={selected===i} onPointerEnter={()=>onHover(i)} onPointerLeave={()=>onHover(null)} onFocus={()=>onHover(i)} onBlur={()=>onHover(null)} onClick={()=>onSelect(i)} style={{'--community-color':c.color} as CSSProperties}><i style={{background:c.color}}/>{c.name}</button>)}
+  </div>;
 }
 
 // ── Mode 0: Encoding stimulus panel (card + network activation bars) ──────
@@ -525,41 +441,39 @@ const ENC_STIM_ICONS = [
   </svg>,
 ];
 
-function EncodingStimPanel({ stimIdx }: { stimIdx: number }) {
+function EncodingStimPanel({ stimIdx, onSelect }: { stimIdx: number; onSelect: (i:number)=>void }) {
   const idx = stimIdx % ENC_STIM_DATA.length;
   const stim = ENC_STIM_DATA[idx];
   return (
-    <div className="ri-encstim-panel" aria-hidden="true">
+    <div className="ri-encstim-panel">
       <div className="ri-encstim-hdr">Input Stimulus</div>
       <div className="ri-encstim-card"
         style={{ borderColor: stim.color + '50', background: stim.color + '0d' } as CSSProperties}>
-        <div className="ri-encstim-icon">{ENC_STIM_ICONS[idx]}</div>
+        <div className={`ri-encstim-icon ri-stim-motion--${idx}`}>{ENC_STIM_ICONS[idx]}</div>
         <div className="ri-encstim-label" style={{ color: stim.color }}>{stim.label}</div>
         <div className="ri-encstim-desc">{stim.desc}</div>
+        <div className="ri-encoding-features">{[['Shape','Motion'],['Pitch','Rhythm'],['Valence','Arousal'],['Words','Context']][idx].map((f,i)=><span key={f}><i style={{animationDelay:`${i*.4}s`}}/>{f}</span>)}</div>
       </div>
-      <div className="ri-encstim-arrow" style={{ color: stim.color }}>↓</div>
-      <div className="ri-encstim-hdr">Active Networks</div>
-      <div className="ri-encstim-nets">
-        {stim.nets.map(net => (
-          <div key={net.name} className="ri-encstim-net-row">
-            <span className="ri-encstim-dot" style={{ background: net.color }}/>
-            <span className="ri-encstim-net-name">{net.name}</span>
-            <div className="ri-encstim-bar-bg">
-              <div className="ri-encstim-bar" style={{ width: `${net.w * 100}%`, background: net.color }}/>
-            </div>
-          </div>
-        ))}
-      </div>
+      <div className="ri-stim-selector" aria-label="Encoding stimulus">{ENC_STIM_DATA.map((item,i)=><button type="button" key={item.label} aria-label={`${item.label} stimulus`} aria-pressed={idx===i} title={item.label} onClick={()=>onSelect(i)} style={{'--choice-color':item.color} as CSSProperties}>{ENC_STIM_ICONS[i]}</button>)}</div>
     </div>
   );
 }
 
 // ── Mode 0: Decoding column (neural signal → model → task output) ────────
 const DEC_TASKS = [
-  { label: 'Emotion Recognition',    icon: '🧠' },
-  { label: 'Motor Imagery',          icon: '🤸' },
-  { label: 'Imagined Speech',        icon: '💬' },
-  { label: 'Mental Disorder Dx',     icon: '🔬' },
+  { label: 'Emotion Recognition', icon: '🎭', classes: [
+    { label: 'Positive', icon: '😊' }, { label: 'Negative', icon: '☹️' }, { label: 'Neutral', icon: '😐' },
+  ] },
+  { label: 'Motor Imagery', icon: '🖐️', classes: [
+    { label: 'Left hand', icon: '👈' }, { label: 'Right hand', icon: '👉' },
+    { label: 'Both hands', icon: '🙌' }, { label: 'Both feet', icon: '🦶' },
+  ] },
+  { label: 'Imagined Speech', icon: '💬', classes: [
+    { label: 'Call', icon: '📞' }, { label: 'Music', icon: '🎵' }, { label: 'Up', icon: '⬆️' },
+  ] },
+  { label: 'Mental Disorder Prediction', icon: '🔎', classes: [
+    { label: 'Healthy control', icon: '👤' }, { label: 'Depression', icon: '🌧️' },
+  ] },
 ];
 
 function DecodingCol({ taskIdx }: { taskIdx: number }) {
@@ -570,15 +484,15 @@ function DecodingCol({ taskIdx }: { taskIdx: number }) {
         <span>Foundation</span>
         <span>Model</span>
       </div>
-      <div className="ri-dec-down">↓</div>
-      <ul className="ri-dec-tasks">
+      <div className="ri-dec-down">→</div>
+      <div className="ri-dec-examples"><span className="ri-dec-examples-label">Tasks</span><ul className="ri-dec-tasks">
         {DEC_TASKS.map((t, i) => (
           <li key={t.label} className={`ri-dec-task${i === taskIdx ? ' ri-dec-task--on' : ''}`}>
-            <span className="ri-dec-task-icon">{t.icon}</span>
-            <span className="ri-dec-task-label">{t.label}</span>
+            <span className="ri-dec-task-heading"><span className="ri-dec-task-icon">{t.icon}</span><span className="ri-dec-task-label">{t.label}</span></span>
+            <span className="ri-dec-classes">{t.classes.map(c => <span className="ri-dec-class" key={c.label}><span>{c.icon}</span>{c.label}</span>)}</span>
           </li>
         ))}
-      </ul>
+      </ul></div>
     </div>
   );
 }
@@ -586,163 +500,161 @@ function DecodingCol({ taskIdx }: { taskIdx: number }) {
 // ── Mode 2: TMS coil overlay on the brain ─────────────────────────────────
 function NeuromodOverlay() {
   return (
-    <svg className="ri-net-overlay ri-neuromod-overlay" viewBox="0 0 100 100"
-      preserveAspectRatio="none" aria-hidden="true">
-      {/* Figure-8 TMS coil above the head */}
-      <ellipse cx="34" cy="10" rx="13" ry="7"
-        fill="rgba(239,68,68,.10)" stroke="rgba(239,68,68,.85)" strokeWidth="1.8"/>
-      <ellipse cx="56" cy="10" rx="13" ry="7"
-        fill="rgba(239,68,68,.10)" stroke="rgba(239,68,68,.85)" strokeWidth="1.8"/>
-      {/* Handle */}
-      <rect x="43" y="15" width="5" height="16" rx="2"
-        fill="rgba(60,60,90,.75)" stroke="rgba(130,130,170,.55)" strokeWidth="0.7"/>
-      <line x1="43" y1="20" x2="48" y2="20" stroke="rgba(180,180,210,.35)" strokeWidth="0.6"/>
-      <line x1="43" y1="24" x2="48" y2="24" stroke="rgba(180,180,210,.35)" strokeWidth="0.6"/>
-      {/* Magnetic field lines into cortex */}
-      <path d="M34,17 Q38,32 45,42" fill="none"
-        stroke="rgba(251,191,36,.60)" strokeWidth="0.9" strokeDasharray="2.5 1.5"
-        className="ri-nm-field"/>
-      <path d="M45,17 Q45,33 45,44" fill="none"
-        stroke="rgba(251,191,36,.60)" strokeWidth="0.9" strokeDasharray="2.5 1.5"
-        className="ri-nm-field" style={{animationDelay:'.25s'}}/>
-      <path d="M56,17 Q52,32 45,42" fill="none"
-        stroke="rgba(251,191,36,.60)" strokeWidth="0.9" strokeDasharray="2.5 1.5"
-        className="ri-nm-field" style={{animationDelay:'.50s'}}/>
-      {/* Cortical target flash */}
-      <circle cx="45" cy="44" r="4" className="ri-nm-target-pulse"/>
+    <svg className="ri-neuromod-schematic" viewBox="0 0 260 230" aria-hidden="true">
+      <defs>
+        <linearGradient id="ri-coil-metal" x2="0" y2="1">
+          <stop stopColor="#64748b"/><stop offset="1" stopColor="#273548"/>
+        </linearGradient>
+        <radialGradient id="ri-target-glow">
+          <stop stopColor="#fb7185" stopOpacity=".6"/><stop offset="1" stopColor="#fb7185" stopOpacity="0"/>
+        </radialGradient>
+      </defs>
+      <text x="16" y="20" className="ri-nm-svg-label">TMS example</text>
+      <path d="M174 19 C205 12 223 32 234 11" stroke="#64748b" strokeWidth="4" fill="none"/>
+      <g transform="translate(100 40) rotate(-16)">
+        <path d="M40 0 H77" stroke="#475569" strokeWidth="12" strokeLinecap="round"/>
+        {[-20, 20].map(x => <g key={x}>
+          <ellipse cx={x} rx="23" ry="14" fill="var(--paper)" stroke="url(#ri-coil-metal)" strokeWidth="8"/>
+          <ellipse cx={x} rx="16" ry="8" fill="none" stroke="#fb7185" strokeWidth="1.8"/>
+        </g>)}
+      </g>
+      {[0,1,2].map(i => <path key={i} d={`M${77+i*18} 57 Q${90+i*10} 78 107 105`} className="ri-nm-field" fill="none" stroke="#e79936" strokeWidth="1.5" strokeDasharray="4 5" style={{animationDelay:`${i*.2}s`}}/>)}
+      <circle cx="107" cy="107" r="30" fill="url(#ri-target-glow)" className="ri-nm-focus"/>
+      <circle cx="107" cy="107" r="7" fill="#fb7185" stroke="white" strokeWidth="2"/>
+      <circle cx="107" cy="107" r="15" fill="none" stroke="#fb7185" className="ri-nm-focus-ring"/>
+      <path d="M115 106 L178 82 H241" fill="none" stroke="#e98088" strokeWidth="1"/>
+      <text x="183" y="76" className="ri-nm-svg-label">Cortical target</text>
+      <text x="130" y="222" textAnchor="middle" className="ri-nm-svg-label">Perturb activity · probe mechanisms</text>
     </svg>
   );
 }
 
-// ── Mode 2: Left panel — TMS device info ──────────────────────────────────
 function NeuromodDevicePanel() {
-  return (
-    <div className="ri-nm-device-panel">
-      <span className="ri-nm-device-title">TMS / tDCS</span>
-      <svg className="ri-nm-device-svg" viewBox="0 0 64 84" aria-hidden="true">
-        {/* Coil housing body */}
-        <rect x="4" y="6" width="56" height="22" rx="8"
-          fill="rgba(50,50,70,.55)" stroke="rgba(120,120,160,.60)" strokeWidth="1.2"/>
-        {/* Figure-8 imprint on housing */}
-        <ellipse cx="22" cy="17" rx="10" ry="6"
-          fill="none" stroke="rgba(239,68,68,.80)" strokeWidth="1.5"/>
-        <ellipse cx="42" cy="17" rx="10" ry="6"
-          fill="none" stroke="rgba(239,68,68,.80)" strokeWidth="1.5"/>
-        {/* Handle grip */}
-        <rect x="26" y="28" width="12" height="30" rx="5"
-          fill="rgba(40,40,60,.75)" stroke="rgba(100,100,140,.55)" strokeWidth="1"/>
-        <line x1="26" y1="35" x2="38" y2="35" stroke="rgba(160,160,200,.30)" strokeWidth="0.8"/>
-        <line x1="26" y1="42" x2="38" y2="42" stroke="rgba(160,160,200,.30)" strokeWidth="0.8"/>
-        <line x1="26" y1="49" x2="38" y2="49" stroke="rgba(160,160,200,.30)" strokeWidth="0.8"/>
-        {/* Power cable */}
-        <path d="M32,58 Q32,68 20,72" fill="none"
-          stroke="rgba(80,80,100,.70)" strokeWidth="2" strokeLinecap="round"/>
-        {/* Field pulse indicator */}
-        <circle cx="32" cy="6" r="3" className="ri-nm-coil-pulse"/>
-      </svg>
-      <div className="ri-nm-protocol">
-        <span>10 Hz rTMS</span>
-        <span>1800 pulses</span>
-      </div>
-    </div>
-  );
+  return <div className="ri-nm-intro" aria-hidden="true">
+    <span className="ri-nm-intro-title">Targeted neuromodulation</span>
+    <span className="ri-nm-methods"><span>TMS <small>magnetic pulses</small></span><span>tDCS <small>weak current</small></span></span>
+  </div>;
 }
-
-// ── Mode 2: Right panel — Before / After comparison ───────────────────────
-const PRE_BARS  = [0.28, 0.18, 0.32, 0.15, 0.24];
-const POST_BARS = [0.68, 0.88, 0.72, 0.82, 0.78];
 
 function NeuromodBeforeAfter() {
-  return (
-    <div className="ri-nm-ba-panel">
-      <div className="ri-nm-ba-section ri-nm-ba--pre">
-        <span className="ri-nm-ba-label">Pre-Stim</span>
-        <div className="ri-nm-ba-bars">
-          {PRE_BARS.map((h, i) => (
-            <div key={i} className="ri-nm-ba-bar ri-nm-ba-bar--pre" style={{height: `${h * 52}px`}} />
-          ))}
-        </div>
-      </div>
-      <div className="ri-nm-delta">↑ Excitability</div>
-      <div className="ri-nm-ba-section ri-nm-ba--post">
-        <span className="ri-nm-ba-label">Post-Stim</span>
-        <div className="ri-nm-ba-bars">
-          {POST_BARS.map((h, i) => (
-            <div key={i} className="ri-nm-ba-bar ri-nm-ba-bar--post" style={{height: `${h * 52}px`, animationDelay: `${i * 0.15}s`}} />
-          ))}
-        </div>
-      </div>
-    </div>
-  );
+  const baseline=useRef<HTMLCanvasElement>(null),modulated=useRef<HTMLCanvasElement>(null);
+  useEffect(()=>{
+    let raf=0,start=0;
+    const reduced=window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    function draw(stamp:number){
+      if(!start)start=stamp;
+      // Fast left-to-right acquisition, followed by a short hold before the next sweep.
+      const cycle=(stamp-start)%3500;
+      [baseline,modulated].forEach((ref,row)=>{
+        const ctx=ref.current?.getContext('2d');if(!ctx)return;
+        const color=row?'#e7627b':'#94a3b8';
+        const progress=reduced?1:Math.max(0,Math.min(1,(cycle-(row?1450:0))/1200));
+        ctx.setTransform(2,0,0,2,0,0);ctx.clearRect(0,0,180,50);
+        ctx.strokeStyle='rgba(148,163,184,.15)';ctx.lineWidth=.6;
+        ctx.beginPath();ctx.moveTo(0,25);ctx.lineTo(180,25);ctx.stroke();
+        ctx.strokeStyle=color;ctx.lineWidth=1.6;ctx.lineJoin='round';ctx.beginPath();
+        let y=25;
+        const end=Math.floor(progress*180);
+        for(let i=0;i<=end;i++){
+          const envelope=row?9+3*Math.sin(i*.035):4;
+          y=25+Math.sin(i*(row?.23:.16))*envelope+Math.sin(i*.47)*(row?3:1.5);
+          i?ctx.lineTo(i,y):ctx.moveTo(i,y);
+        }
+        ctx.stroke();
+        if(progress>0 && progress<1){ctx.fillStyle=color;ctx.beginPath();ctx.arc(end,y,2,0,Math.PI*2);ctx.fill();}
+      });
+      if(!reduced)raf=requestAnimationFrame(draw);
+    }
+    raf=requestAnimationFrame(draw);return()=>cancelAnimationFrame(raf);
+  },[]);
+  return <div className="ri-nm-response" aria-hidden="true">
+    <div className="ri-nm-response-title">Neural response <span>Illustrative</span></div>
+    <div className="ri-nm-trace-row"><span>Baseline</span><canvas ref={baseline} width={360} height={100}/></div>
+    <div className="ri-nm-trace-row"><span>Modulated</span><canvas ref={modulated} width={360} height={100}/></div>
+  </div>;
 }
 
-// ── Mode 1: TRIBE v2-inspired multimodal input panel ──────────────────────
-// Inspired by Meta's TRIBE v2: predicts fMRI brain responses from multi-modal stimuli
-const MODALITIES = [
-  { label: 'Image', color: '#7c3aed' },
-  { label: 'Audio', color: '#f77f00' },
-  { label: 'Video', color: '#e63946' },
-  { label: 'Text',  color: '#10b981' },
-];
-
-function TribeV2Panel({ stimIdx }: { stimIdx: number }) {
-  const activeMod = stimIdx % MODALITIES.length;
-  return (
-    <div className="ri-tribe-panel" aria-hidden="true">
-      <div className="ri-tribe-header">Brain Encoding Model</div>
-      <div className="ri-tribe-sublabel">stimuli → predicted fMRI</div>
-      <div className="ri-tribe-mods">
-        {MODALITIES.map((m, i) => (
-          <div key={m.label}
-            className={`ri-tribe-mod${i === activeMod ? ' ri-tribe-mod--on' : ''}`}
-            style={i === activeMod
-              ? { background: m.color + '18', borderColor: m.color + '60' } as CSSProperties
-              : {}}>
-            <span className="ri-tribe-mod-label"
-              style={i === activeMod ? { color: m.color } : {}}>
-              {m.label}
-            </span>
-          </div>
-        ))}
-      </div>
-      <div className="ri-tribe-arrow"
-        style={{ color: MODALITIES[activeMod].color }}>→</div>
-    </div>
-  );
+function NeuralInputGlyph() {
+  return <svg viewBox="0 0 150 62" className="ri-modalities-glyph" aria-hidden="true">
+    {['EEG','MEG','ECoG'].map((label,i)=><g key={label}>
+      <text x="0" y={12+i*18} className="ri-modality-name">{label}</text>
+      <path className="ri-modality-wave" d={`M24 ${10+i*18} l5 0 3 -4 4 8 4 -12 4 9 6 -3 5 2 5 -4 5 5 5 -3 6 1`} style={{animationDelay:`${i*-.5}s`,stroke:['#548dd6','#9c78d1','#20a99b'][i]}}/>
+    </g>)}
+    <g transform="translate(94 2)">
+      <path className="ri-volume-outline" d="M24 2 C9 0 0 13 1 28 C2 45 11 49 22 46 L24 7 L26 46 C40 48 49 38 48 24 C48 10 39 1 26 2 Z"/>
+      <path className="ri-volume-fold" d="M8 16 Q15 10 20 15 M5 28 Q13 21 20 26 M8 37 Q15 30 20 35 M29 14 Q38 9 43 18 M29 25 Q39 20 45 29 M29 35 Q36 30 42 38"/>
+      <ellipse cx="13" cy="22" rx="5" ry="7" className="ri-bold-spot"/>
+      <ellipse cx="35" cy="33" rx="6" ry="5" className="ri-bold-spot ri-bold-spot--second"/>
+      <text x="24" y="59" textAnchor="middle" className="ri-modality-name">fMRI · BOLD</text>
+    </g>
+  </svg>;
 }
 
-// ── Mode 3: Computational pipeline (neural data → model → brain repr) ─────
-const NEURAL_INPUTS = [
-  { label: 'EEG', color: '#3b82f6' },
-  { label: 'fMRI', color: '#06b6d4' },
-];
+function OutputGlyph({kind}:{kind:number}) {
+  return <svg viewBox="0 0 90 48" className={`ri-output-glyph ri-output-glyph--${kind}`} aria-hidden="true">
+    {kind===0?<>
+      <path d="M4 23 l5 0 3 -5 4 11 4 -14 5 9 5 -2" className="ri-output-line"/>
+      <path d="M33 23 H43 M40 20 l4 3 -4 3" className="ri-output-line"/>
+      {[12,28,18].map((h,i)=><rect key={i} x={50+i*12} y={37-h} width="8" height={h} rx="2" className={`ri-output-bar${i===1?' ri-output-bar--chosen':''}`}/>)}
+      <path d="M48 39 H85" className="ri-output-axis"/>
+    </>:kind===1?<>
+      <path d="M24 5 C8 2 3 16 6 29 C9 40 19 42 24 37 L25 9 L27 38 C40 41 46 31 44 19 C42 8 34 3 27 5 Z" className="ri-output-brain"/>
+      <ellipse cx="16" cy="21" rx="5" ry="7" className="ri-output-hotspot"/>
+      <ellipse cx="35" cy="27" rx="5" ry="4" className="ri-output-hotspot"/>
+      <path d="M52 34 C58 35 58 14 65 16 S72 33 78 24 S84 13 88 18" className="ri-output-response" pathLength="1"/>
+    </>:<>
+      <rect x="7" y="15" width="24" height="20" rx="4" className="ri-output-transfer-source"/>
+      {[0,1,2].map(i=><g key={i}><path d={`M31 25 Q47 25 60 ${10+i*15}`} className="ri-output-transfer-edge"/><rect x="61" y={4+i*15} width="21" height="11" rx="3" className="ri-output-transfer-target" style={{animationDelay:`${i*.35}s`}}/></g>)}
+      <path d="M13 24 h4 l3 -4 5 8" className="ri-output-line"/>
+    </>}
+  </svg>;
+}
 
+// Models learn shared representations, then support multiple downstream uses.
 function CompModelPanel() {
-  return (
-    <div className="ri-comp-panel" aria-hidden="true">
-      <div className="ri-comp-header">Neural Data</div>
-      <div className="ri-comp-inputs">
-        {NEURAL_INPUTS.map(inp => (
-          <div key={inp.label} className="ri-comp-input"
-            style={{ borderColor: inp.color + '60', background: inp.color + '12' }}>
-            <span className="ri-comp-input-label" style={{ color: inp.color }}>{inp.label}</span>
-          </div>
-        ))}
-      </div>
-      <div className="ri-comp-down" style={{ color: 'rgba(99,102,241,.60)' }}>↓</div>
-      <div className="ri-comp-model">
-        <span className="ri-comp-model-title">Foundation</span>
-        <span className="ri-comp-model-title">Model</span>
-        <div className="ri-comp-model-layers">
-          {[1,2,3].map(i => (
-            <div key={i} className="ri-comp-layer" style={{ opacity: 0.35 + i * 0.22 }}/>
-          ))}
-        </div>
-      </div>
-      <div className="ri-comp-down" style={{ color: 'rgba(99,102,241,.60)' }}>↓</div>
-      <div className="ri-comp-arrow-label">→</div>
+  const [source,setSource]=useState(0),[task,setTask]=useState(0),[run,setRun]=useState(0);
+  useEffect(()=>{
+    if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
+    const timer=setInterval(()=>{setSource(v=>(v+1)%2);setTask(v=>(v+1)%3);},2600);
+    return()=>clearInterval(timer);
+  },[run]);
+  const outputs=['Neural decoding','Brain response prediction','Cross-task transfer'];
+  const detail=['Predict cognitive information from neural representations.','Predict neural responses to multimodal context.','Adapt shared representations to a new task.'];
+  const selectSource=(i:number)=>{setSource(i);setRun(n=>n+1);};
+  const selectTask=(i:number)=>{setTask(i);setRun(n=>n+1);};
+  return <div className={`ri-model-scene ri-model-source--${source} ri-model-task--${task}`}>
+
+    <div className="ri-model-title-row"><div className="ri-diagram-heading">Model neural dynamics &amp; learn representations</div></div>
+    <div className="ri-model-input-row">
+      <button type="button" className={`ri-model-source${source===0?' is-selected':''}`} aria-pressed={source===0} onClick={()=>selectSource(0)}><strong>Neural signals</strong><NeuralInputGlyph /><small>Time series + brain volumes</small></button>
+      <span className="ri-model-plus">+</span>
+      <button type="button" className={`ri-model-source${source===1?' is-selected':''}`} aria-pressed={source===1} onClick={()=>selectSource(1)}><strong>Multimodal context</strong><div className="ri-model-context">Aa <span>◉</span> ≋</div><small>Language · vision · audio</small></button>
     </div>
-  );
+    <div className="ri-model-flow" aria-hidden="true"><span/></div>
+    <div className="ri-model-core" key={`core-${run}`}>
+      <div className="ri-computational-unit">
+        <strong>Computational model</strong>
+        <svg viewBox="0 0 140 65" className="ri-model-fit" aria-hidden="true">
+          <path d="M6 7 V56 H136" className="ri-fit-axis"/>
+          <path d="M8 46 C23 51 25 16 42 22 S64 48 81 33 S105 9 134 17" className="ri-fit-prediction" pathLength="1"/>
+          {[[12,46],[26,35],[42,24],[58,34],[76,38],[94,22],[112,15],[130,19]].map(([x,y],i)=><circle key={i} cx={x} cy={y} r="2.5" className="ri-fit-observation"/>)}
+        </svg>
+        <small>Fit · simulate · predict</small>
+      </div>
+      <div className="ri-foundation-unit">
+        <strong>Foundation model</strong>
+        <svg viewBox="0 0 160 65" className="ri-model-layers" aria-hidden="true">
+          {[0,1,2].map(layer=><g key={layer} className="ri-model-layer" style={{animationDelay:`${layer*.4}s`}}>{Array.from({length:5},(_,i)=><g key={i}>{layer<2&&<path d={`M${22+i*29} ${13+layer*20} L${22+((i+2)%5)*29} ${33+layer*20}`}/>}<rect x={16+i*29} y={6+layer*20} width="12" height="9" rx="2"/></g>)}</g>)}
+        </svg>
+        <small>Pretrain · align · transfer</small>
+      </div>
+    </div>
+    <div className="ri-model-flow" aria-hidden="true"><span/></div>
+    <div className="ri-model-latent" key={`latent-${run}`}><span>Shared latent space</span><div>{Array.from({length:16},(_,i)=><i key={i} style={{'--latent-i':i,background:`hsl(${220+i*5} 65% ${45+(i*13)%30}%)`} as CSSProperties}/>)}</div></div>
+    <svg className="ri-model-branches" viewBox="0 0 300 28"><path d="M150 0 V12 M50 28 V12 H250 V28 M150 12 V28"/></svg>
+    <div className="ri-model-outputs">{outputs.map((label,i)=><button key={label} type="button" aria-pressed={task===i} className={task===i?'is-selected':''} onClick={()=>selectTask(i)}><OutputGlyph kind={i}/><span>{label}</span></button>)}</div>
+    <p className="ri-model-task-detail" key={`detail-${run}`}>{detail[task]}</p>
+  </div>;
 }
 
 // ── Mode 0: Neural signal panel for decoding phase ────────────────────────
@@ -761,6 +673,12 @@ function NeuralDecodePanel() {
 export function ResearchInterestsBrain() {
   const [active, setActive] = useState(0);
   const activeRef = useRef(0);
+  const [selectedNetwork,setSelectedNetwork]=useState<number|null>(null);
+  const [hoveredNetwork,setHoveredNetwork]=useState<number|null>(null);
+  const focusedNetwork=hoveredNetwork??selectedNetwork;
+  const networkFocusRef=useRef<number|null>(null);
+  networkFocusRef.current=focusedNetwork;
+  const networkInteraction:NetworkInteraction={focused:focusedNetwork,selected:selectedNetwork,onHover:setHoveredNetwork,onSelect:i=>{setHoveredNetwork(null);setSelectedNetwork(prev=>i===null||prev===i?null:i);}};
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const [stimIdx, setStimIdx] = useState(0);
   const stimIdxRef = useRef(0);
@@ -771,9 +689,9 @@ export function ResearchInterestsBrain() {
 
   // Cycle stimulus idx while mode 0 or mode 1 is active (5 s per stimulus)
   useEffect(() => {
-    if (active !== 0 && active !== 1) return;
+    if (active !== 0) return;
     const timer = setInterval(() => {
-      const next = (stimIdxRef.current + 1) % STIMULI.length;
+      const next = (stimIdxRef.current + 1) % ENC_STIM_DATA.length;
       stimIdxRef.current = next;
       setStimIdx(next);
     }, 5000);
@@ -824,6 +742,7 @@ export function ResearchInterestsBrain() {
       const uTime = gl.getUniformLocation(prog, 'time');
       const uMode = gl.getUniformLocation(prog, 'mode');
       const uStimIdx = gl.getUniformLocation(prog, 'stimIdx');
+      const uNetworkFocus=gl.getUniformLocation(prog,'networkFocus');
 
       const geo = window.meshes.map(m => {
         const pb = gl.createBuffer()!, nb = gl.createBuffer()!, ib = gl.createBuffer()!;
@@ -837,21 +756,25 @@ export function ResearchInterestsBrain() {
       gl.enable(gl.DEPTH_TEST); gl.clearColor(0, 0, 0, 0);
 
       function draw() {
+        if (activeRef.current === 3) return;
         const r = canvas!.getBoundingClientRect();
         const dpr = Math.min(devicePixelRatio || 1, 2);
         const w = Math.round(r.width * dpr), h = Math.round(r.height * dpr);
         if (canvas!.width !== w || canvas!.height !== h) { canvas!.width = w; canvas!.height = h; }
         gl!.viewport(0, 0, w, h);
         gl!.clear(gl!.COLOR_BUFFER_BIT | gl!.DEPTH_BUFFER_BIT);
-        gl!.uniform1f(uAngle, 0.38 + userAngle - elapsed * 0.065 + Math.sin(elapsed * 0.22) * 0.08);
+        gl!.uniform1f(uAngle, activeRef.current === 1 ? Math.PI / 2 : activeRef.current === 2
+          ? 0.38
+          : 0.38 + userAngle - elapsed * 0.065 + Math.sin(elapsed * 0.22) * 0.08);
         gl!.uniform1f(uTilt, -0.18);
         gl!.uniform1f(uAspect, w / h);
         gl!.uniform1f(uTime, elapsed);
         const effectiveMode = activeRef.current === 0
-          ? 4.0
-          : activeRef.current;
+          ? 5.0
+          : activeRef.current === 1 ? 6.0 : activeRef.current;
         gl!.uniform1f(uMode, effectiveMode);
         gl!.uniform1f(uStimIdx, stimIdxRef.current);
+        gl!.uniform1f(uNetworkFocus,networkFocusRef.current??-1);
         for (const m of geo) {
           gl!.bindBuffer(gl!.ARRAY_BUFFER, m.pb); gl!.enableVertexAttribArray(aPos); gl!.vertexAttribPointer(aPos, 3, gl!.FLOAT, false, 0, 0);
           gl!.bindBuffer(gl!.ARRAY_BUFFER, m.nb); gl!.enableVertexAttribArray(aNorm); gl!.vertexAttribPointer(aNorm, 3, gl!.FLOAT, false, 0, 0);
@@ -910,12 +833,17 @@ export function ResearchInterestsBrain() {
   return (
     <div className="ri-layout">
       {/* Visualization panel — brain canvas ALWAYS inside ri-viz-main to preserve WebGL context */}
-      <div className={`ri-viz-panel ri-viz--mode${active}`}>
+      <div className={`ri-viz-panel ri-viz--mode${active}`} data-network-focus={focusedNetwork??'all'} style={{'--stim-color':ENC_STIM_DATA[stimIdx].color} as CSSProperties}>
         <div className="ri-viz-main">
-          {/* Mode 0: encoding panel sits above brain in column layout */}
-          {active === 0 && <EncodingStimPanel stimIdx={stimIdx} />}
+          {active === 0 && <>
+            <div className="ri-flow-heading ri-flow-heading--encoding">Encoding</div>
+            <div className="ri-flow-heading ri-flow-heading--decoding">Decoding</div>
+            <span className="ri-encoding-arrow" aria-hidden="true">→</span>
+          </>}
+          {/* Encoding runs left to right in the upper row; the brain stays mounted. */}
+          {active === 0 && <EncodingStimPanel stimIdx={stimIdx} onSelect={i=>{stimIdxRef.current=i;setStimIdx(i);}} />}
 
-          {active === 1 && <TribeV2Panel stimIdx={stimIdx} />}
+          {active === 1 && <><div className="ri-network-title ri-diagram-heading"><span>Brain activity &amp; network dynamics</span><button type="button" className="ri-network-reset" onClick={()=>networkInteraction.onSelect(null)} onPointerEnter={()=>setHoveredNetwork(null)} aria-pressed={selectedNetwork===null}>All</button></div><NetworkGraph {...networkInteraction} /></>}
           {active === 2 && <NeuromodDevicePanel />}
 
           <div className="ri-brain-wrap">
@@ -925,20 +853,19 @@ export function ResearchInterestsBrain() {
               role="img"
               aria-label="Brain activity visualization"
             />
-            {active === 1 && <ConnectomeCanvas stimIdx={stimIdx} />}
-            {active === 1 && (
-              <svg className="ri-net-pulse-ring" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
-                <circle cx="50" cy="50" r="46" className="ri-net-ring-static" style={{ stroke: STIMULI[stimIdx].color + '70' }} />
-              </svg>
-            )}
+            {active === 0 && <span className="ri-brain-response-label">Evoked brain activity</span>}
+            {active === 1 && <BrainNetworkOverlay />}
             {active === 2 && <NeuromodOverlay />}
-            {active === 3 && <LanguageOverlay />}
           </div>
 
-          {/* Mode 0: decode row sits below brain in column layout */}
+
+          {active === 1 && <NetworkLegend {...networkInteraction} />}
+
+          {/* Decoding runs left to right in the lower row. */}
           {active === 0 && (
             <div className="ri-mode0-dec-row">
               <NeuralDecodePanel />
+              <span className="ri-dec-down" aria-hidden="true">→</span>
               <DecodingCol taskIdx={decTaskIdx} />
             </div>
           )}
@@ -948,8 +875,8 @@ export function ResearchInterestsBrain() {
 
         <span className={`ri-mode-tag ${cur.tagClass}`}>
           {active === 0 ? 'Encode & Decode'
-            : active === 1 ? `${STIMULI[stimIdx % STIMULI.length].label} Input`
-            : active === 3 ? 'Neural Data → Model'
+            : active === 1 ? 'Brain dynamics & networks'
+            : active === 3 ? 'Representation learning'
             : cur.tag}
         </span>
       </div>
@@ -959,7 +886,10 @@ export function ResearchInterestsBrain() {
           <button
             key={item.title}
             className={`ri-card${active === i ? ' ri-card--active' : ''}`}
-            onMouseEnter={() => activate(i)}
+            onPointerMove={e => {
+              if (e.pointerType === 'mouse' && (e.movementX || e.movementY)) activate(i);
+            }}
+            onFocus={() => activate(i)}
             onClick={() => activate(i)}
           >
             <span className="ri-card-num">0{i + 1}</span>

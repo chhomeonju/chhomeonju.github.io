@@ -46,7 +46,6 @@ void main(){
 
 export function HeroBrain({ onExplore }: { onExplore?: (e: MouseEvent<HTMLAnchorElement>) => void }) {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const buttonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     let rafId = 0;
@@ -55,18 +54,15 @@ export function HeroBrain({ onExplore }: { onExplore?: (e: MouseEvent<HTMLAnchor
     function init() {
       if (disposed) return;
       const canvas = canvasRef.current;
-      const control = buttonRef.current;
-      if (!canvas || !control) return;
+      if (!canvas) return;
 
       const gl = canvas.getContext('webgl', { alpha: true, antialias: true, preserveDrawingBuffer: true });
       if (!gl) {
         canvas.textContent = 'Cortical activity preview requires WebGL.';
-        control.hidden = true;
         return;
       }
 
-      let paused = false;
-      let elapsed = 3.2, last = 0, lastDraw = 0, userAngle = 0, velocity = 0, lastPointerX: number | null = null, dirty = true;
+      let elapsed = 3.2, last = 0, lastDraw = 0, userAngle = 0, velocity = 0, lastPointerX: number | null = null;
 
       function mkShader(type: number, src: string) {
         const s = gl!.createShader(type)!;
@@ -132,15 +128,14 @@ export function HeroBrain({ onExplore }: { onExplore?: (e: MouseEvent<HTMLAnchor
 
       function frame(stamp: number) {
         if (disposed) { return; }
-        if (last && !paused && !document.hidden) elapsed += Math.min((stamp - last) / 1000, 0.1);
+        if (last && !document.hidden) elapsed += Math.min((stamp - last) / 1000, 0.1);
         last = stamp;
         if (lastPointerX === null && Math.abs(velocity) > 0.0002) {
           userAngle += velocity;
           velocity *= 0.90;
-          dirty = true;
         }
-        if (stamp - lastDraw > 33 && !document.hidden && (!paused || dirty)) {
-          draw(); lastDraw = stamp; dirty = false;
+        if (stamp - lastDraw > 33 && !document.hidden) {
+          draw(); lastDraw = stamp;
         }
         rafId = requestAnimationFrame(frame);
       }
@@ -151,29 +146,19 @@ export function HeroBrain({ onExplore }: { onExplore?: (e: MouseEvent<HTMLAnchor
           const dx = (e.clientX - lastPointerX) / r.width * 2.5;
           userAngle += dx;
           velocity = dx;
-          dirty = true;
         }
         lastPointerX = e.clientX;
       };
       const onLeave = () => { lastPointerX = null; };
       canvas.addEventListener('pointermove', onMove);
       canvas.addEventListener('pointerleave', onLeave);
-      const ro = new ResizeObserver(() => { dirty = true; });
-      ro.observe(canvas);
 
       rafId = requestAnimationFrame(frame);
 
-      function sync() {
-        control!.setAttribute('aria-pressed', String(paused));
-        control!.textContent = paused ? 'Play animation' : 'Pause animation';
-      }
-      control.addEventListener('click', () => { paused = !paused; sync(); });
-      sync();
 
       const origDispose = () => {
         canvas.removeEventListener('pointermove', onMove);
         canvas.removeEventListener('pointerleave', onLeave);
-        ro.disconnect();
       };
       (canvas as any)._brainDispose = origDispose;
     }
@@ -225,7 +210,6 @@ export function HeroBrain({ onExplore }: { onExplore?: (e: MouseEvent<HTMLAnchor
           <a href="https://github.com/Myeongjuuu" target="_blank" rel="noopener noreferrer">GitHub</a>
           <a href="https://www.linkedin.com/in/myeongju-cho-a690a0387/" target="_blank" rel="noopener noreferrer">LinkedIn</a>
         </div>
-        <button ref={buttonRef} className="motion-button" type="button">Pause animation</button>
       </div>
     </section>
   );

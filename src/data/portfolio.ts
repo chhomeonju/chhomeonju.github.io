@@ -32,7 +32,7 @@ export const portfolio: PortfolioData = {
   researchInterests: [
     {
       title: 'Neural Encoding & Decoding',
-      description: 'Exploring how cognitive information is represented in neural activity and decoded using deep learning across neural measurement modalities, including EEG, ECoG, and fMRI.',
+      description: 'Exploring how cognitive information is represented in neural activity and decoded using deep learning across neuroimaging modalities, such as EEG, MEG, ECoG, and fMRI.',
     },
     {
       title: 'Brain Dynamics & Network Neuroscience',
@@ -646,16 +646,16 @@ export const portfolio: PortfolioData = {
   competencies: [
     {
       title: 'Neural Signal Processing',
-      description: 'End-to-end preprocessing and feature extraction from multichannel EEG/ECoG recordings — filtering, artifact rejection, spatial filtering, and spectral analysis.',
-      methods: ['CSP', 'ICA', 'Band-power', 'wPLI / PLV', 'MNE-Python', 'EEGLAB'],
+      description: 'End-to-end preprocessing and feature extraction from multichannel EEG/ECoG recordings and fMRI volumes — filtering, artifact rejection, spatial filtering, spectral analysis, and GLM-based activation mapping.',
+      methods: ['CSP', 'ICA', 'Band-power', 'wPLI / PLV', 'MNE-Python', 'EEGLAB', 'fMRIPrep', 'SPM'],
     },
     {
-      title: 'Self-Supervised Representation Learning',
+      title: 'Universal EEG Encoder',
       description: 'Designing pretraining objectives for neural time-series: latent prediction with EMA teacher networks, contrastive alignment, and masked reconstruction.',
       methods: ['Latent Predictive Modeling', 'Contrastive Learning', 'EMA Teacher', 'Masked Autoencoding', 'PyTorch'],
     },
     {
-      title: 'Brain–Language Decoding',
+      title: 'Cross-modal Alignment',
       description: 'Aligning neural signals with language semantics — semantic embedding prediction, cross-modal retrieval, and instruction-conditioned EEG-to-text decoding.',
       methods: ['Semantic Alignment', 'LoRA Fine-tuning', 'Llama / HuggingFace', 'Cross-modal Retrieval', 'PEFT'],
     },
