@@ -44,7 +44,7 @@ export const portfolio: PortfolioData = {
     },
     {
       title: 'Computational Modeling & Foundation Models',
-      description: 'Leveraging computational approaches, including deep learning, large language models, and multimodal foundation models, to model neural representations, predict brain responses, and uncover the mechanisms underlying human brain function.',
+      description: 'Leveraging computational approaches, including deep learning, large language models, and multimodal foundation models, to model neural representations, predict brain responses, and advance our understanding of the neural mechanisms underlying human brain function.',
     },
   ],
   futureDirections: [

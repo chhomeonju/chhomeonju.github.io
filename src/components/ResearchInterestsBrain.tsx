@@ -22,7 +22,7 @@ const INTERESTS = [
   },
   {
     title: 'Computational Modeling & Foundation Models',
-    description: 'Leveraging computational approaches, including deep learning, large language models, and multimodal foundation models, to model neural representations, predict brain responses, and uncover the mechanisms underlying human brain function.',
+    description: 'Leveraging computational approaches, including deep learning, large language models, and multimodal foundation models, to model neural representations, predict brain responses, and advance our understanding of the neural mechanisms underlying human brain function.',
     tag: 'Modeling', tagClass: 'ri-tag--comp',
   },
 ];
@@ -641,7 +641,7 @@ function CompModelPanel() {
 
     <div className="ri-model-title-row"><div className="ri-diagram-heading">Model neural dynamics &amp; learn representations</div></div>
     <div className="ri-model-input-row">
-      <button type="button" className={`ri-model-source${source===0?' is-selected':''}`} aria-pressed={source===0} onClick={()=>selectSource(0)}><strong>Neural signals</strong><NeuralInputGlyph /><small>Time series + brain volumes</small></button>
+      <button type="button" className={`ri-model-source${source===0?' is-selected':''}`} aria-pressed={source===0} onClick={()=>selectSource(0)}><strong>Neuroimaging</strong><NeuralInputGlyph /><small>Time series + brain volumes</small></button>
       <span className="ri-model-plus">+</span>
       <button type="button" className={`ri-model-source${source===1?' is-selected':''}`} aria-pressed={source===1} onClick={()=>selectSource(1)}><strong>Multimodal context</strong><div className="ri-model-context">Aa <span>◉</span> ≋</div><small>Language · vision · audio</small></button>
     </div>
