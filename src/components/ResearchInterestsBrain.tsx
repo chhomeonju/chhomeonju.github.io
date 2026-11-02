@@ -703,12 +703,22 @@ export function ResearchInterestsBrain() {
   const hovering = useRef(false);
   const [paused, setPaused] = useState(false);
   const pausedRef = useRef(false);
-
   const pendingSelectionAnchor=useRef<{element:HTMLButtonElement;top:number}|null>(null);
   const hoverTimer=useRef<ReturnType<typeof setTimeout>|null>(null);
+  const autoRotateTimer=useRef<ReturnType<typeof setInterval>|null>(null);
   const cancelHover=()=>{
     if(hoverTimer.current!==null)clearTimeout(hoverTimer.current);
     hoverTimer.current=null;
+  };
+  const startAutoRotate=()=>{
+    if(autoRotateTimer.current!==null)clearInterval(autoRotateTimer.current);
+    autoRotateTimer.current=setInterval(()=>{
+      if(hovering.current||pausedRef.current)return;
+      const next=(activeRef.current+1)%INTERESTS.length;
+      activeRef.current=next;
+      setActive(next);
+      setHoveredNetwork(null);
+    },20000);
   };
   const activate = (i:number,button:HTMLButtonElement) => {
     cancelHover();
@@ -717,6 +727,7 @@ export function ResearchInterestsBrain() {
     setHoveredNetwork(null);
     activeRef.current=i;
     setActive(i);
+    startAutoRotate();
   };
   useLayoutEffect(()=>{
     const anchor=pendingSelectionAnchor.current;
@@ -729,14 +740,9 @@ export function ResearchInterestsBrain() {
 
   // Auto-rotate through interests every 20 s; pause while the user hovers or presses pause
   useEffect(() => {
-    const timer = setInterval(() => {
-      if (hovering.current || pausedRef.current) return;
-      const next = (activeRef.current + 1) % INTERESTS.length;
-      activeRef.current = next;
-      setActive(next);
-      setHoveredNetwork(null);
-    }, 20000);
-    return () => clearInterval(timer);
+    startAutoRotate();
+    return () => { if (autoRotateTimer.current !== null) clearInterval(autoRotateTimer.current); };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Cycle stimulus idx while mode 0 is active (5 s per stimulus → all 4 complete in 20 s)
@@ -947,7 +953,7 @@ export function ResearchInterestsBrain() {
         </span>
       </div>
 
-      <div className="ri-cards-col">
+      <div className="ri-cards-col" data-paused={paused ? 'true' : undefined}>
         <button
           type="button"
           className={`ri-autoplay-btn${paused ? ' ri-autoplay-btn--paused' : ''}`}

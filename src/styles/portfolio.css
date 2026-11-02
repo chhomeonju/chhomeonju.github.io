@@ -230,6 +230,9 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
 .floating-toc--scrolled:hover .ftoc-item--active .ftoc-dot { opacity: 1; }
 .floating-toc--scrolled:hover .ftoc-item:hover .ftoc-label { opacity: 1; }
 .floating-toc--scrolled:hover .ftoc-item--active .ftoc-label { opacity: 1; }
+/* Flash label for 5 s on section entry */
+.floating-toc--scrolled .ftoc-item--flash .ftoc-label { opacity: 1; color: var(--accent); font-weight: 500; }
+.floating-toc--scrolled .ftoc-item--flash .ftoc-dot { opacity: 1; }
 @media (max-width: 900px) { .floating-toc { display: none; } }
 
 /* A personal introduction, with contact information anchored to the portrait. */
@@ -1125,6 +1128,8 @@ footer p { font-size: .76rem; color: var(--muted); letter-spacing: .01em; }
   .project-subtitle { font-size: .93rem; }
   .project-teaser { font-size: .91rem; }
   .project-highlights li { font-size: .84rem; }
+  .project-preview.has-image { flex-direction: column; gap: 0; }
+  .project-visual { display: none; }
   .project-card-footer { gap: 10px; }
   .project-resources { gap: 14px; }
   .entries .papertitle { font-size: .97rem; }

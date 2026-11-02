@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 const TOC_ITEMS = [
   { id: 'about',  label: 'About' },
@@ -14,6 +14,9 @@ export function FloatingTOC() {
   const [active, setActive] = useState<string>('');
   const [scrolled, setScrolled] = useState(false);
   const [inAbout, setInAbout] = useState(true);
+  const [flashingId, setFlashingId] = useState<string | null>(null);
+  const flashTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const prevActiveRef = useRef<string>('');
 
   useEffect(() => {
     let frame=0;
@@ -48,6 +51,19 @@ export function FloatingTOC() {
     };
   }, []);
 
+  // Flash the label for 5 s when first scrolling into the Research Interests section
+  useEffect(() => {
+    if (active !== 'research-interests' || prevActiveRef.current === 'research-interests') {
+      prevActiveRef.current = active;
+      return;
+    }
+    prevActiveRef.current = active;
+    if (flashTimerRef.current) clearTimeout(flashTimerRef.current);
+    setFlashingId('research-interests');
+    flashTimerRef.current = setTimeout(() => setFlashingId(null), 5000);
+    return () => { if (flashTimerRef.current) clearTimeout(flashTimerRef.current); };
+  }, [active]);
+
   const scrollTo = (id: string) => {
     const el = document.getElementById(id);
     if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -59,7 +75,7 @@ export function FloatingTOC() {
         {TOC_ITEMS.map(({ id, label }) => (
           <li key={id}>
             <button
-              className={`ftoc-item${active === id ? ' ftoc-item--active' : ''}`}
+              className={`ftoc-item${active === id ? ' ftoc-item--active' : ''}${flashingId === id ? ' ftoc-item--flash' : ''}`}
               onClick={() => scrollTo(id)}
               title={label}
               aria-label={label}

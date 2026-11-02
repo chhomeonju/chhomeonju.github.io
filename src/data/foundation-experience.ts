@@ -47,7 +47,8 @@ export const celpExperience: Pick<Project, 'relatedPublication' | 'relatedExperi
   experimentalExperience: [
     { title: 'Structured multi-block masking', description: 'Temporal-span masks (contiguous time blocks) and channel-block masks (full electrode groups) applied jointly over the C × P channel-time token grid to expose both temporal continuity and spatial channel dependencies.' },
     { title: 'Dual-branch patch embedding', description: 'Each EEG token passes through a temporal branch (1D conv) and a spectral branch (FFT magnitude projection) independently; outputs are fused additively before depthwise convolutional positional encoding.' },
-    { title: 'EMA target encoder', description: 'Target encoder parameters are updated via exponential moving average of the online encoder at each step, providing stable and slowly-evolving latent prediction targets and preventing representation collapse.' },
+    { title: 'Knowledge Distillation', description: 'CELP frames self-supervised pretraining as knowledge distillation: the online (student) encoder learns by distilling knowledge from the target (teacher) encoder, enabling higher-level semantic abstraction without input reconstruction.' },
+    { title: 'Teacher-Student Architecture', description: 'The target encoder is not updated by gradient but by exponential moving average of the online encoder at each step, providing stable, slowly-evolving latent prediction targets and preventing representation collapse.' },
     { title: 'Latent predictive loss', description: 'Smooth L1 loss between the embedding predictor output and layer-normalised target encoder representations — defined entirely in latent space, with no input-space reconstruction component.' },
     { title: 'Training environment', description: 'Python / PyTorch on four NVIDIA RTX 3090 GPUs.' },
   ],

@@ -634,6 +634,7 @@ export const portfolio: PortfolioData = {
     }
   ],
   "news": [
+    { "date": "Oct. 2026", "category": "Paper", "title": "Submitted to ACL ARR October 2026", "detail": "Continuous Latent Predictive Modeling with Predictive Semantic Alignment for EEG-Language Foundation Models." },
     { "date": "Jan. 2026", "category": "Paper", "title": "Korean patent application filed", "detail": "Apparatus and Method for Learning Universal EEG Representations Based on Functional Connectivity Reconstruction." },
     { "date": "Sep. 2025", "category": "Education", "title": "Started M.S. at Korea University", "detail": "Brain and Cognitive Engineering · PRML Lab · Supervised by Prof. Seong-Whan Lee." },
     { "date": "Aug. 2025", "category": "Career", "title": "Joined PRML Lab as Graduate Researcher", "detail": "Korea University · Prof. Seong-Whan Lee." },
@@ -649,7 +650,7 @@ export const portfolio: PortfolioData = {
     {
       title: 'Experimental Design & Data Collection',
       description: 'Designing and running EEG experiments from scratch — from paradigm planning and participant protocols to operating a 130-channel recording system in a shielded soundproof booth and building the full preprocessing pipeline.',
-      methods: ['Study Protocol Design', 'Imagined & Spoken Speech Paradigms', '16-ch EEG (OpenBCI)', '130-ch EEG (BEL AMP)', 'ICLabel Artifact Rejection', 'DTW Evaluation', 'Multi-condition Recording'],
+      methods: ['Study Protocol Design', 'Imagined & Spoken Speech Paradigms', '16 channels EEG (OpenBCI)', '130 channels EEG (BEL AMP)', 'ICLabel Artifact Rejection', 'DTW Evaluation', 'Multi-condition Recording'],
       projects: ['project-neurodecoder', 'project-neuralspeech'],
     },
     {
