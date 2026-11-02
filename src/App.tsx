@@ -58,6 +58,12 @@ function HomePage() {
       el.style.transitionDelay = `${Math.min(i % 4 * 60, 180)}ms`;
       obs.observe(el);
     });
+    // Stagger each research-interest card (01–04) individually
+    document.querySelectorAll<HTMLElement>('.ri-card').forEach((el, i) => {
+      el.setAttribute('data-hidden', '');
+      el.style.transitionDelay = `${i * 60}ms`;
+      obs.observe(el);
+    });
     return () => obs.disconnect();
   }, [view]);
 
