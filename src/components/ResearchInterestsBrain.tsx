@@ -484,7 +484,7 @@ const DEC_TASKS = [
     { label: 'Both hands', icon: '🙌' }, { label: 'Both feet', icon: '🦶' },
   ] },
   { label: 'Imagined Speech', icon: '💬', classes: [
-    { label: 'Call', icon: '📞' }, { label: 'Music', icon: '🎵' }, { label: 'Up', icon: '⬆️' }, { label: 'Down', icon: '⬇️' },
+    { label: 'Call', icon: '📞' }, { label: 'Music', icon: '🎵' }, { label: 'Down', icon: '⬇️' }, { label: 'Up', icon: '⬆️' },
   ] },
   { label: 'Mental Disorder Prediction', icon: '🔎', classes: [
     { label: 'Healthy control', icon: '👤' }, { label: 'Depression', icon: '🌧️' },
@@ -630,7 +630,7 @@ function CompModelPanel() {
   const [source,setSource]=useState(0),[task,setTask]=useState(0),[run,setRun]=useState(0);
   useEffect(()=>{
     if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
-    const timer=setInterval(()=>{setSource(v=>(v+1)%2);setTask(v=>(v+1)%3);},5000);
+    const timer=setInterval(()=>{setSource(v=>(v+1)%2);setTask(v=>(v+1)%3);},6667);
     return()=>clearInterval(timer);
   },[run]);
   const outputs=['Neural decoding','Brain response prediction','Cross-task transfer'];
@@ -701,6 +701,8 @@ export function ResearchInterestsBrain() {
   const decTaskIdxRef = useRef(0);
 
   const hovering = useRef(false);
+  const [paused, setPaused] = useState(false);
+  const pausedRef = useRef(false);
 
   const pendingSelectionAnchor=useRef<{element:HTMLButtonElement;top:number}|null>(null);
   const hoverTimer=useRef<ReturnType<typeof setTimeout>|null>(null);
@@ -725,19 +727,19 @@ export function ResearchInterestsBrain() {
   },[active]);
   useEffect(()=>()=>{if(hoverTimer.current!==null)clearTimeout(hoverTimer.current);},[]);
 
-  // Auto-rotate through interests every 15 s; pause while the user hovers
+  // Auto-rotate through interests every 20 s; pause while the user hovers or presses pause
   useEffect(() => {
     const timer = setInterval(() => {
-      if (hovering.current) return;
+      if (hovering.current || pausedRef.current) return;
       const next = (activeRef.current + 1) % INTERESTS.length;
       activeRef.current = next;
       setActive(next);
       setHoveredNetwork(null);
-    }, 15000);
+    }, 20000);
     return () => clearInterval(timer);
   }, []);
 
-  // Cycle stimulus idx while mode 0 is active (3.75 s per stimulus → all 4 complete in 15 s)
+  // Cycle stimulus idx while mode 0 is active (5 s per stimulus → all 4 complete in 20 s)
   // Reset to 0 on every mode-0 entry so encoding always starts from the first stimulus
   useEffect(() => {
     if (active !== 0) return;
@@ -747,11 +749,11 @@ export function ResearchInterestsBrain() {
       const next = (stimIdxRef.current + 1) % ENC_STIM_DATA.length;
       stimIdxRef.current = next;
       setStimIdx(next);
-    }, 3750);
+    }, 5000);
     return () => clearInterval(timer);
   }, [active]);
 
-  // Cycle decoding task list while mode 0 is active (3.75 s per task → all 4 complete in 15 s, in sync with encoding)
+  // Cycle decoding task list while mode 0 is active (5 s per task → all 4 complete in 20 s, in sync with encoding)
   useEffect(() => {
     if (active !== 0) return;
     decTaskIdxRef.current = 0;
@@ -760,7 +762,7 @@ export function ResearchInterestsBrain() {
       const next = (decTaskIdxRef.current + 1) % DEC_TASKS.length;
       decTaskIdxRef.current = next;
       setDecTaskIdx(next);
-    }, 3750);
+    }, 5000);
     return () => clearInterval(timer);
   }, [active]);
 
@@ -946,6 +948,18 @@ export function ResearchInterestsBrain() {
       </div>
 
       <div className="ri-cards-col">
+        <button
+          type="button"
+          className={`ri-autoplay-btn${paused ? ' ri-autoplay-btn--paused' : ''}`}
+          aria-label={paused ? 'Resume auto-rotation' : 'Pause auto-rotation'}
+          onClick={() => {
+            const next = !pausedRef.current;
+            pausedRef.current = next;
+            setPaused(next);
+          }}
+        >
+          {paused ? '▶' : '⏸'}
+        </button>
         {INTERESTS.map((item, i) => (
           <button
             key={item.title}

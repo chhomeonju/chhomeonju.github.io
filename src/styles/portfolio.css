@@ -757,6 +757,16 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
 .ri-cards-col {
   flex: 1; display: flex; flex-direction: column; gap: 6px; min-width: 0;
 }
+.ri-autoplay-btn {
+  align-self: flex-end; display: flex; align-items: center; justify-content: center;
+  width: 28px; height: 28px; border-radius: 50%;
+  border: 1px solid var(--rule); background: none;
+  color: var(--muted); font-size: .7rem; cursor: pointer;
+  transition: border-color .15s, color .15s, background .15s;
+  margin-bottom: 2px;
+}
+.ri-autoplay-btn:hover { border-color: var(--accent); color: var(--accent); }
+.ri-autoplay-btn--paused { border-color: var(--accent); color: var(--accent); }
 .ri-card {
   display: flex; gap: 14px; padding: 14px 18px;
   background: none; border: 1px solid transparent; border-radius: 8px;
