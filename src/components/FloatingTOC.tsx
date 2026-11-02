@@ -16,51 +16,35 @@ export function FloatingTOC() {
   const [inAbout, setInAbout] = useState(true);
 
   useEffect(() => {
-    const observers: IntersectionObserver[] = [];
-    const map = new Map<string, number>();
-
-    TOC_ITEMS.forEach(({ id }) => {
-      const el = document.getElementById(id);
-      if (!el) return;
-      const obs = new IntersectionObserver(
-        ([entry]) => {
-          map.set(id, entry.intersectionRatio);
-          let best = '';
-          let bestRatio = 0;
-          map.forEach((ratio, key) => {
-            if (ratio > bestRatio) { bestRatio = ratio; best = key; }
-          });
-          if (best) setActive(best);
-        },
-        { threshold: [0, 0.1, 0.3, 0.5], rootMargin: '-80px 0px -40% 0px' }
-      );
-      obs.observe(el);
-      observers.push(obs);
-    });
-
-    // Hide TOC once Publications section comes into view; show again if scrolled back up above it
-    const pubEl = document.getElementById('publications');
-    if (pubEl) {
-      const pubObs = new IntersectionObserver(
-        ([entry]) => {
-          if (entry.isIntersecting) {
-            setInAbout(false);
-          } else if (entry.boundingClientRect.top > 0) {
-            setInAbout(true);
-          }
-        },
-        { threshold: 0 }
-      );
-      pubObs.observe(pubEl);
-      observers.push(pubObs);
-    }
-
-    const onScroll = () => setScrolled(window.scrollY > 80);
-    window.addEventListener('scroll', onScroll, { passive: true });
-
-    return () => {
-      observers.forEach(o => o.disconnect());
-      window.removeEventListener('scroll', onScroll);
+    let frame=0;
+    const update=()=>{
+      frame=0;
+      const nav=document.querySelector('.site-nav');
+      const offset=(nav?.getBoundingClientRect().height??72)+20;
+      const readingLine=offset+Math.min(120,window.innerHeight*.18);
+      let current=TOC_ITEMS[0].id;
+      for(const {id} of TOC_ITEMS){
+        const el=document.getElementById(id);
+        if(el&&el.getBoundingClientRect().top<=readingLine)current=id;
+      }
+      setActive(current);
+      setScrolled(window.scrollY>80);
+      const skills=document.getElementById('skills');
+      // Hide the TOC only after the last TOC section (Technical Skills) has scrolled off the top.
+      setInAbout(!skills||skills.getBoundingClientRect().bottom>offset);
+    };
+    const schedule=()=>{if(!frame)frame=requestAnimationFrame(update);};
+    window.addEventListener('scroll',schedule,{passive:true});
+    window.addEventListener('resize',schedule);
+    const observer=new ResizeObserver(schedule);
+    const area=document.querySelector('.about-area');
+    if(area)observer.observe(area);
+    update();
+    return()=>{
+      cancelAnimationFrame(frame);
+      observer.disconnect();
+      window.removeEventListener('scroll',schedule);
+      window.removeEventListener('resize',schedule);
     };
   }, []);
 
@@ -78,6 +62,8 @@ export function FloatingTOC() {
               className={`ftoc-item${active === id ? ' ftoc-item--active' : ''}`}
               onClick={() => scrollTo(id)}
               title={label}
+              aria-label={label}
+              aria-current={active===id?'location':undefined}
             >
               <span className="ftoc-label">{label}</span>
               <span className="ftoc-dot" />

@@ -71,20 +71,43 @@ export function ResearchInterests() {
 }
 
 export function Competencies() {
-  return <section id="competencies" className="competencies-section" aria-labelledby="competencies-heading">
-    <h2 id="competencies-heading">Research Competencies</h2>
-    <div className="competencies-grid">
-      {portfolio.competencies.map(c => (
-        <div className="competency-card" key={c.title}>
-          <h3>{c.title}</h3>
-          <p>{c.description}</p>
-          <ul className="competency-methods">
-            {c.methods.map(m => <li key={m}>{m}</li>)}
-          </ul>
-        </div>
-      ))}
-    </div>
-  </section>;
+  const projectMap = Object.fromEntries(portfolio.projects.map(p => [p.id, p]));
+  return (
+    <section id="competencies" className="competencies-section" aria-labelledby="competencies-heading">
+      <h2 id="competencies-heading">Research Competencies &amp; Strengths</h2>
+      <div className="cs-spine-wrap">
+        <div className="cs-spine-line" aria-hidden="true" />
+        {portfolio.competencies.map((c, i) => (
+          <div key={c.title} className="cs-item">
+            <div className="cs-dot-col" aria-hidden="true">
+              <span className="cs-num">{String(i + 1).padStart(2, '0')}</span>
+            </div>
+            <div className="cs-body">
+              <h3 className="cs-title">{c.title}</h3>
+              <p className="cs-desc">{c.description}</p>
+              <div className="cs-methods">
+                {c.methods.map(m => <span key={m} className="cs-method-tag">{m}</span>)}
+              </div>
+              {c.projects && c.projects.length > 0 && (
+                <div className="cs-projects">
+                  <span className="cs-projects-label">Related projects</span>
+                  {c.projects.map(pid => {
+                    const p = projectMap[pid];
+                    if (!p) return null;
+                    return (
+                      <a key={pid} href={projectHref(p)} className="cs-project-link">
+                        {p.name} <span aria-hidden="true">→</span>
+                      </a>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
 }
 
 export function GitHubCard() {

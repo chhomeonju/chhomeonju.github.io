@@ -645,24 +645,40 @@ export const portfolio: PortfolioData = {
   ],
   competencies: [
     {
-      title: 'Neural Signal Processing',
-      description: 'End-to-end preprocessing and feature extraction from multichannel EEG/ECoG recordings and fMRI volumes — filtering, artifact rejection, spatial filtering, spectral analysis, and GLM-based activation mapping.',
-      methods: ['CSP', 'ICA', 'Band-power', 'wPLI / PLV', 'MNE-Python', 'EEGLAB', 'fMRIPrep', 'SPM'],
+      title: 'Experimental Design & Data Collection',
+      description: 'Designing and running EEG experiments from scratch — from paradigm planning and participant protocols to operating a 130-channel recording system in a shielded soundproof booth and building the full preprocessing pipeline.',
+      methods: ['Study Protocol Design', 'Imagined & Spoken Speech Paradigms', '16-ch EEG (OpenBCI)', '130-ch EEG (BEL AMP)', 'ICLabel Artifact Rejection', 'DTW Evaluation', 'Multi-condition Recording'],
+      projects: ['project-neurodecoder', 'project-neuralspeech'],
     },
     {
-      title: 'Universal EEG Encoder',
-      description: 'Designing pretraining objectives for neural time-series: latent prediction with EMA teacher networks, contrastive alignment, and masked reconstruction.',
-      methods: ['Latent Predictive Modeling', 'Contrastive Learning', 'EMA Teacher', 'Masked Autoencoding', 'PyTorch'],
+      title: 'Neural Signal Processing',
+      description: 'End-to-end preprocessing and feature extraction across EEG, ECoG, and fMRI — from raw multichannel recordings to analysis-ready representations using spatial filters, connectivity measures, and GLM-based activation mapping.',
+      methods: ['CSP / Multi-CSP', 'ICA', 'Band-power', 'wPLI² / PLV / Coherence', 'SRM Alignment', 'fMRIPrep', 'SPM', 'MNE-Python', 'EEGLAB'],
+      projects: ['project-inner-speech', 'project-neuralspeech', 'project-celp', 'project-blpm', 'project-tada'],
+    },
+    {
+      title: 'Large-scale Multi-modal Data Engineering',
+      description: 'Building scalable pipelines across EEG, ECoG, and fMRI datasets — LMDB-backed fast I/O, joint training on seven heterogeneous benchmarks, and multi-GPU distributed training for large-model optimization.',
+      methods: ['Multi-modal Neuroimaging (EEG / ECoG / fMRI)', '7-dataset Multi-task Training', 'NeuralSet / NeuralBench', 'LMDB (Fast I/O)', 'Balanced Accuracy', 'Cross-dataset Generalization', 'Distributed Training (Multi-GPU)'],
+      projects: ['project-celp', 'project-blpm'],
+    },
+    {
+      title: 'Neural Decoding',
+      description: 'Classifying and reconstructing cognitive states from brain signals — imagined speech, motor imagery, inner speech, ECoG-to-text retrieval — using pipelines from classical spatial filters to multi-scale deep networks, with cross-subject generalization.',
+      methods: ['Echo State Networks', 'LDA / SVM', 'GAN-based Speech Synthesis', 'Multi-scale Temporal CNN', 'Domain Adaptation', 'Leave-one-subject-out CV'],
+      projects: ['project-neurodecoder', 'project-inner-speech', 'project-neuralspeech', 'project-eeg-llm', 'project-tada'],
+    },
+    {
+      title: 'Foundation Modeling & Large Language Model',
+      description: 'Building a self-supervised EEG foundation encoder using JEPA-inspired latent prediction — dual-branch patch embedding, knowledge distillation via an EMA target network, and structured multi-block masking — then adapting a large language model for multi-task neural decoding through instruction tuning.',
+      methods: ['Latent Predictive Modeling (JEPA)', 'Dual-branch Patch Embedding', 'Knowledge Distillation', 'Structured Multi-block Masking', 'LLM Adaptation', 'Backbone Transfer'],
+      projects: ['project-celp', 'project-blpm'],
     },
     {
       title: 'Cross-modal Alignment',
-      description: 'Aligning neural signals with language semantics — semantic embedding prediction, cross-modal retrieval, and instruction-conditioned EEG-to-text decoding.',
-      methods: ['Semantic Alignment', 'LoRA Fine-tuning', 'Llama / HuggingFace', 'Cross-modal Retrieval', 'PEFT'],
-    },
-    {
-      title: 'BCI System Design',
-      description: 'Building classification pipelines for imagined speech, motor imagery, and inner speech decoding tasks using classical and deep learning approaches.',
-      methods: ['Imagined Speech Decoding', 'Motor Imagery', 'Echo State Networks', 'LDA / SVM', 'Inner Speech EEG'],
+      description: 'Aligning EEG representations with language semantics through language-guided multi-query decomposition and multi-task instruction tuning — one model predicting answer embeddings across seven heterogeneous decoding tasks without task-specific heads.',
+      methods: ['Predictive Semantic Alignment (PSA)', 'Language-guided MQSD', 'Multi-task Instruction Tuning', 'LoRA / PEFT', 'Bidirectional Multi-positive Contrastive Learning', 'Llama 3.2 / HuggingFace'],
+      projects: ['project-celp', 'project-blpm'],
     },
   ],
 };

@@ -34,7 +34,7 @@ export interface Award { date: string; title: string; organization: string; deta
 export interface TimelineEntry { title: string; description: string; date: string; location?: string; expected?: string }
 export type NewsCategory = 'Paper' | 'Award' | 'Career' | 'Education' | 'Activity';
 export interface NewsItem { date: string; category: NewsCategory; title: string; detail?: string; }
-export interface Competency { title: string; description: string; methods: string[]; }
+export interface Competency { title: string; description: string; methods: string[]; projects?: string[]; }
 export interface FutureDirection { label: string; title: string; description: string; tags: string[]; }
 export interface PortfolioData {
   researchInterests: { title: string; description: string; raisedQuestion?: string }[];

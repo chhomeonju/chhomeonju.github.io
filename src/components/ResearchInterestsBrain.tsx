@@ -1,4 +1,4 @@
-import { CSSProperties, useEffect, useRef, useState } from 'react';
+import { CSSProperties, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 declare global {
   interface Window { meshes: Array<{ p: string; n: string; i: string }> }
@@ -47,6 +47,7 @@ void main(){
 const FRAGMENT = `
 precision mediump float;
 uniform float time; uniform float mode; uniform float stimIdx; uniform float networkFocus;
+uniform vec3 encColor0; uniform vec3 encColor1; uniform vec3 encColor2; uniform vec3 encWeights;
 varying vec3 point; varying vec3 shadingNormal;
 float wave(vec3 focus,float offset){
  float d=distance(point,focus);
@@ -98,19 +99,19 @@ void main(){
   highlight=(c1*(g1+l1)+c2*g2+c3*(g3+l2)+vec3(.24,.78,.58)*g4+vec3(.98,.65,.20)*g5)/max(sum,.001);
   highlight*=(.85+.15*light);
  }else if(mode>4.5){
-  /* Bilateral distributed responses stay visible from either hemisphere. */
-  vec3 color=vec3(.65,.20,1.0),accent=vec3(1.,.38,.64);
-  if(stimIdx>.5 && stimIdx<1.5){color=vec3(1.,.46,.02);accent=vec3(1.,.75,.16);}
-  else if(stimIdx>1.5 && stimIdx<2.5){color=vec3(1.,.20,.40);accent=vec3(.94,.44,.85);}
-  else if(stimIdx>2.5){color=vec3(.02,.78,.50);accent=vec3(.17,.82,.88);}
+  /* Colors and relative strengths come from the same stimulus data as the bars. */
   float response=.75+.25*sin(time*2.4);
-  float front=glow(vec3(-.40,.18,.28),.18)+glow(vec3(.40,.18,.28),.18);
-  float temporal=glow(vec3(-.43,-.18,.27),.18)+glow(vec3(.43,-.18,.27),.18);
-  float back=glow(vec3(-.38,.12,-.28),.20)+glow(vec3(.38,.12,-.28),.20);
-  float crown=glow(vec3(0.,.40,.08),.21)+glow(vec3(0.,-.32,.12),.18);
-  float local=(front*.9+temporal*.8+back+crown*.65)*response;
-  activity=clamp(local*2.0,0.,1.)*.729;
-  highlight=mix(color,accent,clamp((temporal+crown)*.9,0.,.65))*(.88+.12*light);
+  float front=glow(vec3(-.40,.18,.28),.16)+glow(vec3(.40,.18,.28),.16);
+  float temporal=glow(vec3(-.43,-.18,.27),.16)+glow(vec3(.43,-.18,.27),.16);
+  float back=glow(vec3(-.38,.12,-.28),.18)+glow(vec3(.38,.12,-.28),.18);
+  float crown=glow(vec3(0.,.40,.08),.18)+glow(vec3(0.,-.32,.12),.16);
+  float a=(back+front*.18)*encWeights.x;
+  float b=(front*.85+crown*.5)*encWeights.y;
+  float c=(temporal*.85+crown*.15)*encWeights.z;
+  float local=a+b+c;
+  activity=clamp(local*response*2.0,0.,1.)*.729;
+  highlight=(encColor0*a+encColor1*b+encColor2*c)/max(local,.001);
+  highlight*=(.88+.12*light);
  }else if(mode>1.5 && mode<2.5){
   vec3 target=vec3(-.38,.28,.20);
   float pulse=pow(max(0.,sin(time*3.2)),3.);
@@ -441,6 +442,20 @@ const ENC_STIM_ICONS = [
   </svg>,
 ];
 
+function EncodingNetworkBars({stimIdx}:{stimIdx:number}) {
+  const stim=ENC_STIM_DATA[stimIdx % ENC_STIM_DATA.length];
+  return <div className="ri-encoding-networks" aria-hidden="true">
+    <span className="ri-encoding-networks-title">Active networks</span>
+    <div className="ri-encstim-nets" key={stimIdx}>
+      {stim.nets.map((net,i)=><div className="ri-encstim-net-row" key={net.name}>
+        <span className="ri-encstim-dot" style={{background:net.color}}/>
+        <span className="ri-encstim-net-name">{net.name}</span>
+        <span className="ri-encstim-bar-bg"><span className="ri-encstim-bar ri-encoding-network-bar" style={{width:`${net.w*100}%`,background:net.color,animationDelay:`${i*-.45}s`}}/></span>
+      </div>)}
+    </div>
+  </div>;
+}
+
 function EncodingStimPanel({ stimIdx, onSelect }: { stimIdx: number; onSelect: (i:number)=>void }) {
   const idx = stimIdx % ENC_STIM_DATA.length;
   const stim = ENC_STIM_DATA[idx];
@@ -685,7 +700,28 @@ export function ResearchInterestsBrain() {
   const [decTaskIdx, setDecTaskIdx] = useState(0);
   const decTaskIdxRef = useRef(0);
 
-  const activate = (i: number) => { activeRef.current = i; setActive(i); };
+  const pendingSelectionAnchor=useRef<{element:HTMLButtonElement;top:number}|null>(null);
+  const hoverTimer=useRef<ReturnType<typeof setTimeout>|null>(null);
+  const cancelHover=()=>{
+    if(hoverTimer.current!==null)clearTimeout(hoverTimer.current);
+    hoverTimer.current=null;
+  };
+  const activate = (i:number,button:HTMLButtonElement) => {
+    cancelHover();
+    if(activeRef.current===i)return;
+    pendingSelectionAnchor.current={element:button,top:button.getBoundingClientRect().top};
+    setHoveredNetwork(null);
+    activeRef.current=i;
+    setActive(i);
+  };
+  useLayoutEffect(()=>{
+    const anchor=pendingSelectionAnchor.current;
+    pendingSelectionAnchor.current=null;
+    if(!anchor?.element.isConnected)return;
+    const delta=anchor.element.getBoundingClientRect().top-anchor.top;
+    if(Math.abs(delta)>.5)window.scrollBy({top:delta,behavior:'instant'});
+  },[active]);
+  useEffect(()=>()=>{if(hoverTimer.current!==null)clearTimeout(hoverTimer.current);},[]);
 
   // Cycle stimulus idx while mode 0 or mode 1 is active (5 s per stimulus)
   useEffect(() => {
@@ -743,6 +779,10 @@ export function ResearchInterestsBrain() {
       const uMode = gl.getUniformLocation(prog, 'mode');
       const uStimIdx = gl.getUniformLocation(prog, 'stimIdx');
       const uNetworkFocus=gl.getUniformLocation(prog,'networkFocus');
+      const uEncColors=[0,1,2].map(i=>gl.getUniformLocation(prog,`encColor${i}`));
+      const uEncWeights=gl.getUniformLocation(prog,'encWeights');
+      const encodingPalettes=ENC_STIM_DATA.map(stim=>stim.nets.map(net=>
+        new Float32Array([1,3,5].map(offset=>parseInt(net.color.slice(offset,offset+2),16)/255))));
 
       const geo = window.meshes.map(m => {
         const pb = gl.createBuffer()!, nb = gl.createBuffer()!, ib = gl.createBuffer()!;
@@ -775,6 +815,9 @@ export function ResearchInterestsBrain() {
         gl!.uniform1f(uMode, effectiveMode);
         gl!.uniform1f(uStimIdx, stimIdxRef.current);
         gl!.uniform1f(uNetworkFocus,networkFocusRef.current??-1);
+        const currentStim=stimIdxRef.current;
+        uEncColors.forEach((uniform,i)=>gl!.uniform3fv(uniform,encodingPalettes[currentStim][i]));
+        gl!.uniform3f(uEncWeights,...ENC_STIM_DATA[currentStim].nets.map(net=>net.w) as [number,number,number]);
         for (const m of geo) {
           gl!.bindBuffer(gl!.ARRAY_BUFFER, m.pb); gl!.enableVertexAttribArray(aPos); gl!.vertexAttribPointer(aPos, 3, gl!.FLOAT, false, 0, 0);
           gl!.bindBuffer(gl!.ARRAY_BUFFER, m.nb); gl!.enableVertexAttribArray(aNorm); gl!.vertexAttribPointer(aNorm, 3, gl!.FLOAT, false, 0, 0);
@@ -831,17 +874,19 @@ export function ResearchInterestsBrain() {
   const cur = INTERESTS[active];
 
   return (
-    <div className="ri-layout">
+    <div className={`ri-layout ri-layout--mode${active}`}>
       {/* Visualization panel — brain canvas ALWAYS inside ri-viz-main to preserve WebGL context */}
       <div className={`ri-viz-panel ri-viz--mode${active}`} data-network-focus={focusedNetwork??'all'} style={{'--stim-color':ENC_STIM_DATA[stimIdx].color} as CSSProperties}>
-        <div className="ri-viz-main">
+        <div className="ri-viz-main" id="research-interest-visualization">
           {active === 0 && <>
             <div className="ri-flow-heading ri-flow-heading--encoding">Encoding</div>
             <div className="ri-flow-heading ri-flow-heading--decoding">Decoding</div>
             <span className="ri-encoding-arrow" aria-hidden="true">→</span>
+            <span className="ri-encoding-arrow ri-encoding-arrow--response" aria-hidden="true">→</span>
           </>}
           {/* Encoding runs left to right in the upper row; the brain stays mounted. */}
           {active === 0 && <EncodingStimPanel stimIdx={stimIdx} onSelect={i=>{stimIdxRef.current=i;setStimIdx(i);}} />}
+          {active === 0 && <EncodingNetworkBars stimIdx={stimIdx} />}
 
           {active === 1 && <><div className="ri-network-title ri-diagram-heading"><span>Brain activity &amp; network dynamics</span><button type="button" className="ri-network-reset" onClick={()=>networkInteraction.onSelect(null)} onPointerEnter={()=>setHoveredNetwork(null)} aria-pressed={selectedNetwork===null}>All</button></div><NetworkGraph {...networkInteraction} /></>}
           {active === 2 && <NeuromodDevicePanel />}
@@ -886,11 +931,16 @@ export function ResearchInterestsBrain() {
           <button
             key={item.title}
             className={`ri-card${active === i ? ' ri-card--active' : ''}`}
-            onPointerMove={e => {
-              if (e.pointerType === 'mouse' && (e.movementX || e.movementY)) activate(i);
+            aria-pressed={active===i}
+            aria-controls="research-interest-visualization"
+            onPointerEnter={e=>{
+              if(e.pointerType!=='mouse'||activeRef.current===i)return;
+              cancelHover();
+              const button=e.currentTarget;
+              hoverTimer.current=setTimeout(()=>activate(i,button),140);
             }}
-            onFocus={() => activate(i)}
-            onClick={() => activate(i)}
+            onPointerLeave={cancelHover}
+            onClick={e=>activate(i,e.currentTarget)}
           >
             <span className="ri-card-num">0{i + 1}</span>
             <div className="ri-card-body">
