@@ -700,6 +700,8 @@ export function ResearchInterestsBrain() {
   const [decTaskIdx, setDecTaskIdx] = useState(0);
   const decTaskIdxRef = useRef(0);
 
+  const hovering = useRef(false);
+
   const pendingSelectionAnchor=useRef<{element:HTMLButtonElement;top:number}|null>(null);
   const hoverTimer=useRef<ReturnType<typeof setTimeout>|null>(null);
   const cancelHover=()=>{
@@ -722,6 +724,18 @@ export function ResearchInterestsBrain() {
     if(Math.abs(delta)>.5)window.scrollBy({top:delta,behavior:'instant'});
   },[active]);
   useEffect(()=>()=>{if(hoverTimer.current!==null)clearTimeout(hoverTimer.current);},[]);
+
+  // Auto-rotate through interests every 10 s; pause while the user hovers
+  useEffect(() => {
+    const timer = setInterval(() => {
+      if (hovering.current) return;
+      const next = (activeRef.current + 1) % INTERESTS.length;
+      activeRef.current = next;
+      setActive(next);
+      setHoveredNetwork(null);
+    }, 10000);
+    return () => clearInterval(timer);
+  }, []);
 
   // Cycle stimulus idx while mode 0 or mode 1 is active (5 s per stimulus)
   useEffect(() => {
@@ -874,7 +888,7 @@ export function ResearchInterestsBrain() {
   const cur = INTERESTS[active];
 
   return (
-    <div className={`ri-layout ri-layout--mode${active}`}>
+    <div className={`ri-layout ri-layout--mode${active}`} onMouseEnter={() => { hovering.current = true; }} onMouseLeave={() => { hovering.current = false; }}>
       {/* Visualization panel — brain canvas ALWAYS inside ri-viz-main to preserve WebGL context */}
       <div className={`ri-viz-panel ri-viz--mode${active}`} data-network-focus={focusedNetwork??'all'} style={{'--stim-color':ENC_STIM_DATA[stimIdx].color} as CSSProperties}>
         <div className="ri-viz-main" id="research-interest-visualization">
