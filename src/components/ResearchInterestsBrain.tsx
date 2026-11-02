@@ -484,7 +484,7 @@ const DEC_TASKS = [
     { label: 'Both hands', icon: '🙌' }, { label: 'Both feet', icon: '🦶' },
   ] },
   { label: 'Imagined Speech', icon: '💬', classes: [
-    { label: 'Call', icon: '📞' }, { label: 'Music', icon: '🎵' }, { label: 'Up', icon: '⬆️' },
+    { label: 'Call', icon: '📞' }, { label: 'Music', icon: '🎵' }, { label: 'Up', icon: '⬆️' }, { label: 'Down', icon: '⬇️' },
   ] },
   { label: 'Mental Disorder Prediction', icon: '🔎', classes: [
     { label: 'Healthy control', icon: '👤' }, { label: 'Depression', icon: '🌧️' },
@@ -738,8 +738,11 @@ export function ResearchInterestsBrain() {
   }, []);
 
   // Cycle stimulus idx while mode 0 is active (3.75 s per stimulus → all 4 complete in 15 s)
+  // Reset to 0 on every mode-0 entry so encoding always starts from the first stimulus
   useEffect(() => {
     if (active !== 0) return;
+    stimIdxRef.current = 0;
+    setStimIdx(0);
     const timer = setInterval(() => {
       const next = (stimIdxRef.current + 1) % ENC_STIM_DATA.length;
       stimIdxRef.current = next;
@@ -748,14 +751,16 @@ export function ResearchInterestsBrain() {
     return () => clearInterval(timer);
   }, [active]);
 
-  // Cycle decoding task list while mode 0 is active
+  // Cycle decoding task list while mode 0 is active (3.75 s per task → all 4 complete in 15 s, in sync with encoding)
   useEffect(() => {
     if (active !== 0) return;
+    decTaskIdxRef.current = 0;
+    setDecTaskIdx(0);
     const timer = setInterval(() => {
       const next = (decTaskIdxRef.current + 1) % DEC_TASKS.length;
       decTaskIdxRef.current = next;
       setDecTaskIdx(next);
-    }, 1500);
+    }, 3750);
     return () => clearInterval(timer);
   }, [active]);
 
