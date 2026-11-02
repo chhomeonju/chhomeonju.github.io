@@ -19,16 +19,18 @@ export default function App({ projectId }: { projectId?: string } = {}) {
 function HomePage() {
   const navigation = useSectionNavigation();
 
-  const [view, setView] = useState<'home' | 'portfolio'>('home');
+  // Start portfolio so SSR and client initial render match (hydration safe).
+  // Effect immediately switches to home when no hash is present.
+  const [view, setView] = useState<'home' | 'portfolio'>('portfolio');
   const [dark, setDark] = useState(false);
 
   useEffect(() => {
+    if (!window.location.hash.slice(1)) setView('home');
     try {
       const saved = localStorage.getItem('theme') === 'dark';
       if (saved) setDark(true);
       document.documentElement.setAttribute('data-theme', saved ? 'dark' : 'light');
     } catch { /* ignore */ }
-    if (window.location.hash.slice(1)) setView('portfolio');
   }, []);
 
   useEffect(() => {
