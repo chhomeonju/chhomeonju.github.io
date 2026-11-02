@@ -51,15 +51,12 @@ export function FloatingTOC() {
     };
   }, []);
 
-  // Flash the label for 5 s when first scrolling into the Research Interests section
+  // Flash the active section label for 5 s whenever the active section changes
   useEffect(() => {
-    if (active !== 'research-interests' || prevActiveRef.current === 'research-interests') {
-      prevActiveRef.current = active;
-      return;
-    }
+    if (!active || prevActiveRef.current === active) return;
     prevActiveRef.current = active;
     if (flashTimerRef.current) clearTimeout(flashTimerRef.current);
-    setFlashingId('research-interests');
+    setFlashingId(active);
     flashTimerRef.current = setTimeout(() => setFlashingId(null), 5000);
     return () => { if (flashTimerRef.current) clearTimeout(flashTimerRef.current); };
   }, [active]);
