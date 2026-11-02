@@ -18,7 +18,7 @@ const INTERESTS = [
   {
     title: 'Neural Mechanisms & Neuromodulation',
     description: 'Investigating how neural activity and brain network interactions support cognition, emotion, and behavior, and how neuromodulation influences brain dynamics and mental health.',
-    tag: 'Mechanisms', tagClass: 'ri-tag--mech',
+    tag: 'Mechanisms & Modulation', tagClass: 'ri-tag--mech',
   },
   {
     title: 'Computational Modeling & Foundation Models',
@@ -641,7 +641,7 @@ function CompModelPanel() {
 
     <div className="ri-model-title-row"><div className="ri-diagram-heading">Model neural dynamics &amp; learn representations</div></div>
     <div className="ri-model-input-row">
-      <button type="button" className={`ri-model-source${source===0?' is-selected':''}`} aria-pressed={source===0} onClick={()=>selectSource(0)}><strong>Neuroimaging</strong><NeuralInputGlyph /><small>Time series + brain volumes</small></button>
+      <button type="button" className={`ri-model-source${source===0?' is-selected':''}`} aria-pressed={source===0} onClick={()=>selectSource(0)}><strong>Neuroimaging modalities</strong><NeuralInputGlyph /><small>Time series + brain volumes</small></button>
       <span className="ri-model-plus">+</span>
       <button type="button" className={`ri-model-source${source===1?' is-selected':''}`} aria-pressed={source===1} onClick={()=>selectSource(1)}><strong>Multimodal context</strong><div className="ri-model-context">Aa <span>◉</span> ≋</div><small>Language · vision · audio</small></button>
     </div>
@@ -921,7 +921,7 @@ export function ResearchInterestsBrain() {
         <span className={`ri-mode-tag ${cur.tagClass}`}>
           {active === 0 ? 'Encode & Decode'
             : active === 1 ? 'Brain dynamics & networks'
-            : active === 3 ? 'Representation learning'
+            : active === 3 ? 'Computational modeling'
             : cur.tag}
         </span>
       </div>
