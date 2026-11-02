@@ -630,7 +630,7 @@ function CompModelPanel() {
   const [source,setSource]=useState(0),[task,setTask]=useState(0),[run,setRun]=useState(0);
   useEffect(()=>{
     if(window.matchMedia('(prefers-reduced-motion: reduce)').matches)return;
-    const timer=setInterval(()=>{setSource(v=>(v+1)%2);setTask(v=>(v+1)%3);},2600);
+    const timer=setInterval(()=>{setSource(v=>(v+1)%2);setTask(v=>(v+1)%3);},5000);
     return()=>clearInterval(timer);
   },[run]);
   const outputs=['Neural decoding','Brain response prediction','Cross-task transfer'];
