@@ -524,7 +524,7 @@ function NeuromodOverlay() {
           <stop stopColor="#fb7185" stopOpacity=".6"/><stop offset="1" stopColor="#fb7185" stopOpacity="0"/>
         </radialGradient>
       </defs>
-      <text x="16" y="20" className="ri-nm-svg-label">TMS example</text>
+      <text x="16" y="20" className="ri-nm-svg-label">TMS paradigm</text>
       <path d="M174 19 C205 12 223 32 234 11" stroke="#64748b" strokeWidth="4" fill="none"/>
       <g transform="translate(100 40) rotate(-16)">
         <path d="M40 0 H77" stroke="#475569" strokeWidth="12" strokeLinecap="round"/>
