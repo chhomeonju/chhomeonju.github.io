@@ -725,7 +725,7 @@ export function ResearchInterestsBrain() {
   },[active]);
   useEffect(()=>()=>{if(hoverTimer.current!==null)clearTimeout(hoverTimer.current);},[]);
 
-  // Auto-rotate through interests every 10 s; pause while the user hovers
+  // Auto-rotate through interests every 15 s; pause while the user hovers
   useEffect(() => {
     const timer = setInterval(() => {
       if (hovering.current) return;
@@ -733,18 +733,18 @@ export function ResearchInterestsBrain() {
       activeRef.current = next;
       setActive(next);
       setHoveredNetwork(null);
-    }, 10000);
+    }, 15000);
     return () => clearInterval(timer);
   }, []);
 
-  // Cycle stimulus idx while mode 0 or mode 1 is active (5 s per stimulus)
+  // Cycle stimulus idx while mode 0 is active (3.75 s per stimulus → all 4 complete in 15 s)
   useEffect(() => {
     if (active !== 0) return;
     const timer = setInterval(() => {
       const next = (stimIdxRef.current + 1) % ENC_STIM_DATA.length;
       stimIdxRef.current = next;
       setStimIdx(next);
-    }, 5000);
+    }, 3750);
     return () => clearInterval(timer);
   }, [active]);
 
