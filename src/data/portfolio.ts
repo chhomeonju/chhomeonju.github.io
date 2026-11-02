@@ -623,12 +623,14 @@ export const portfolio: PortfolioData = {
     {
       "title": "Graduate Researcher · Pattern Recognition and Machine Learning (PRML) Lab",
       "description": "Korea University · Prof. Seong-Whan Lee",
-      "date": "Aug. 2025 – Present"
+      "date": "Aug. 2025 – Present",
+      "url": "http://pr.korea.ac.kr/"
     },
     {
       "title": "Undergraduate Researcher · Brain-inspired eXpainable Artificial Intelligence (BXAI) Lab",
       "description": "Pukyong National University · Prof. Hoon-Hee Kim",
-      "date": "Mar. 2023 – Jan. 2025"
+      "date": "Mar. 2023 – Jan. 2025",
+      "url": "https://sites.google.com/view/brainxai"
     }
   ],
   "news": [

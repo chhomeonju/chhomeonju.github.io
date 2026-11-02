@@ -956,6 +956,8 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
 .timeline-location { font-size: .74rem; color: var(--muted); opacity: .7; }
 .timeline-supervisor { font-size: .84rem; color: var(--muted); margin-top: 3px; }
 .timeline-supervisor span { color: var(--ink); }
+.timeline-lab-link { color: inherit; text-decoration: none; border-bottom: 1.5px solid var(--accent); transition: color .15s, border-color .15s; }
+.timeline-lab-link:hover { color: var(--accent); }
 /* Future Directions */
 .future-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
 .future-card { padding: 30px 32px; border: 1px solid var(--rule); border-radius: 8px; background: var(--wash); transition: border-color .15s, box-shadow .15s; }

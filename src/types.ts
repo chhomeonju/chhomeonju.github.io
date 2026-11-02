@@ -31,7 +31,7 @@ export interface Project {
   cardImages?: { src: string; alt: string }[];
 }
 export interface Award { date: string; title: string; organization: string; detail: string | null }
-export interface TimelineEntry { title: string; description: string; date: string; location?: string; expected?: string }
+export interface TimelineEntry { title: string; description: string; date: string; location?: string; expected?: string; url?: string }
 export type NewsCategory = 'Paper' | 'Award' | 'Career' | 'Education' | 'Activity';
 export interface NewsItem { date: string; category: NewsCategory; title: string; detail?: string; }
 export interface Competency { title: string; description: string; methods: string[]; projects?: string[]; }

@@ -294,7 +294,8 @@ export function Awards() {
 export function Timeline({ id, title, entries, supervisor }: { id: string; title: string; entries: TimelineEntry[]; supervisor?: boolean }) {
   return <section id={id}><h2>{title}</h2><table className="timeline"><tbody>{entries.map(entry => {
     const parts = supervisor ? entry.description.split(' · ') : null;
-    return <tr key={entry.title}><td><h3>{entry.title}</h3>
+    return <tr key={entry.title}><td>
+      <h3>{entry.url ? <a href={entry.url} target="_blank" rel="noopener noreferrer" className="timeline-lab-link">{entry.title}</a> : entry.title}</h3>
       {parts && parts.length > 1
         ? <><p>{parts[0]}</p><p className="timeline-supervisor"><span>Supervisor:</span> {parts.slice(1).join(' · ')}</p></>
         : <p>{entry.description}</p>}
