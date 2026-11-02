@@ -1101,6 +1101,7 @@ footer p { font-size: .76rem; color: var(--muted); letter-spacing: .01em; }
   .about-area > section > h2,
   .projects-heading h2 { font-size: 2rem; margin-bottom: 22px; }
   .projects-heading h2 { margin-bottom: 10px; }
+  .news-heading h2 { font-size: 2rem; }
   .mj-paper { grid-template-columns: minmax(0, 1fr); padding: 25px 0; gap: 20px; }
   .mj-figure { grid-row: 2; width: 100%; max-width: 450px; }
   .mj-paper h2 { font-size: 1.06rem; }
@@ -1280,10 +1281,15 @@ footer p { font-size: .76rem; color: var(--muted); letter-spacing: .01em; }
   justify-content: space-between;
   gap: 16px; margin-bottom: 28px;
 }
-.rt-header-row h2 {
-  font-size: clamp(1.15rem, 1.05rem + .5vw, 1.45rem);
-  font-weight: 700; letter-spacing: -.01em;
+/* Use double-class specificity to beat .research-timeline h2 which appears later */
+.research-timeline .rt-header-row h2 {
+  font-size: clamp(1.6rem, 2.3vw, 1.9rem);
+  font-weight: 800; letter-spacing: -.035em;
   color: var(--ink); margin: 0;
+}
+/* Must come after the base rule above so it wins when the media query matches */
+@media (max-width: 680px) {
+  .research-timeline .rt-header-row h2 { font-size: 2rem; }
 }
 .rt-layout-tabs {
   display: flex;
