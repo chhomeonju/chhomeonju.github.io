@@ -19,20 +19,17 @@ export default function App({ projectId }: { projectId?: string } = {}) {
 function HomePage() {
   const navigation = useSectionNavigation();
 
-  const [view, setView] = useState<'home' | 'portfolio'>(() => {
-    if (typeof window === 'undefined') return 'portfolio';
-    const hash = window.location.hash.slice(1);
-    return !hash ? 'home' : 'portfolio';
-  });
-
-  const [dark, setDark] = useState(() => {
-    try { return localStorage.getItem('theme') === 'dark'; } catch { return false; }
-  });
+  const [view, setView] = useState<'home' | 'portfolio'>('home');
+  const [dark, setDark] = useState(false);
 
   useEffect(() => {
-    document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
-    try { localStorage.setItem('theme', dark ? 'dark' : 'light'); } catch { /* ignore */ }
-  }, [dark]);
+    try {
+      const saved = localStorage.getItem('theme') === 'dark';
+      if (saved) setDark(true);
+      document.documentElement.setAttribute('data-theme', saved ? 'dark' : 'light');
+    } catch { /* ignore */ }
+    if (window.location.hash.slice(1)) setView('portfolio');
+  }, []);
 
   useEffect(() => {
     if (view === 'home') {
@@ -62,6 +59,15 @@ function HomePage() {
     return () => obs.disconnect();
   }, [view]);
 
+  const toggleDark = () => {
+    setDark(d => {
+      const next = !d;
+      document.documentElement.setAttribute('data-theme', next ? 'dark' : 'light');
+      try { localStorage.setItem('theme', next ? 'dark' : 'light'); } catch { /* ignore */ }
+      return next;
+    });
+  };
+
   const goHome = (event: React.MouseEvent) => {
     if ((event as React.MouseEvent<HTMLAnchorElement>).button !== 0) return;
     if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
@@ -85,7 +91,7 @@ function HomePage() {
       }
     }}>
       <a className="site-name" href="/" onClick={goHome}>Myeongju Cho</a>
-      <div className="mobile-menu"><span>Myeongju Cho</span><div className="mobile-menu-right"><button className="theme-toggle" onClick={() => setDark(d => !d)} aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'}>{dark ? <Sun size={15} /> : <Moon size={15} />}</button><button className="menu-toggle" type="button" aria-expanded={navigation.menuOpen} aria-controls="section-navigation" onClick={() => navigation.setMenuOpen(open => !open)}>{navigation.menuOpen ? 'Close menu' : 'Menu'}</button></div></div>
+      <div className="mobile-menu"><span>Myeongju Cho</span><div className="mobile-menu-right"><button className="theme-toggle" onClick={toggleDark} aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'}>{dark ? <Sun size={15} /> : <Moon size={15} />}</button><button className="menu-toggle" type="button" aria-expanded={navigation.menuOpen} aria-controls="section-navigation" onClick={() => navigation.setMenuOpen(open => !open)}>{navigation.menuOpen ? 'Close menu' : 'Menu'}</button></div></div>
       <nav id="section-navigation" className="section-nav" aria-label="Page sections">
         <a href="/" aria-current={view === 'home' ? 'location' : undefined} onClick={goHome}>Home</a>
         {sections.map(([id, label]) => (
@@ -94,7 +100,7 @@ function HomePage() {
             onClick={event => goSection(event, id)}>{label}</a>
         ))}
       </nav>
-      <button className="theme-toggle theme-toggle--desktop" onClick={() => setDark(d => !d)} aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'}>{dark ? <Sun size={15} /> : <Moon size={15} />}</button>
+      <button className="theme-toggle theme-toggle--desktop" onClick={toggleDark} aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'}>{dark ? <Sun size={15} /> : <Moon size={15} />}</button>
     </div>
 
     {view === 'home' ? (
