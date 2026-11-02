@@ -14,9 +14,9 @@ const phases = [
     question: 'What can brain activity reveal about cognition?',
     entries: [
       { year: '2023', projectId: 'project-neurodecoder', desc: 'Imagined speech decoding for alternative communication' },
-      { year: '2025', projectId: 'project-inner-speech',  desc: 'Inner speech decoding & functional connectivity analysis' },
       { year: '2024', projectId: 'project-neuralspeech',  desc: 'Voice reconstruction from imagined speech EEG' },
       { year: '2024', projectId: 'project-eeg-llm',       desc: 'Motor imagery classification with an LLM' },
+      { year: '2025', projectId: 'project-inner-speech',  desc: 'Inner speech decoding & functional connectivity analysis' },
       { year: '2026', projectId: 'project-tada',          desc: 'Multi-scale temporal fusion for ECoG-to-text decoding' },
     ],
     keywords: ['Imagined Speech', 'Motor Imagery', 'Inner Speech', 'ECoG-to-Text'],

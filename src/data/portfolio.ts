@@ -51,14 +51,14 @@ export const portfolio: PortfolioData = {
     {
       label: 'A',
       title: 'Decoding Human Cognition',
-      description: 'Developing generalizable neural representation models that decode cognitive information across subjects, tasks, and recording modalities — connecting EEG, ECoG, and fMRI toward a unified framework for brain–language alignment.',
-      tags: ['Neural Decoding', 'Foundation Models', 'Cross-modal Alignment', 'fMRI'],
+      description: 'Developing generalizable neural representation models that decode cognitive information across subjects, tasks, and recording modalities — integrating EEG, ECoG, and fMRI signals alongside brain network dynamics and functional connectivity patterns toward a unified framework for brain–language alignment.',
+      tags: ['Neural Decoding', 'Foundation Models', 'Cross-modal Alignment', 'Brain Network Dynamics'],
     },
     {
       label: 'B',
-      title: 'Understanding Human Cognition & Behavior',
-      description: 'Investigating how distributed neural dynamics, functional connectivity, and individual variability shape human perception and cognition — moving from decoding models toward mechanistic understanding of what the brain is actually computing.',
-      tags: ['Neural Dynamics', 'Functional Connectivity', 'Individual Variability', 'Computational Neuroscience'],
+      title: 'Understanding & Modulating Neural Mechanisms',
+      description: 'Investigating how distributed neural dynamics, functional connectivity, and brain network interactions shape human cognition and behavior — and leveraging neuromodulation techniques such as TMS and tDCS to causally probe and modulate these mechanisms, moving from predictive models toward a mechanistic and causal understanding of how the brain computes.',
+      tags: ['Network Neuroscience', 'Brain Dynamics', 'Neuromodulation', 'Causal Neuroscience'],
     },
   ],
   "publications": [
