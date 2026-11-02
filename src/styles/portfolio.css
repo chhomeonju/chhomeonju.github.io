@@ -1753,17 +1753,11 @@ footer p { font-size: .76rem; color: var(--muted); letter-spacing: .01em; }
 
 /* ── Feed: future directions divider ── */
 .rt-nf-future-divider {
-  display: flex; align-items: center; gap: 10px;
   margin: 18px 0 10px; padding: 0 4px;
-}
-.rt-nf-future-divider::before,
-.rt-nf-future-divider::after {
-  content: ''; flex: 1;
-  border-top: 1px dashed var(--rule);
 }
 .rt-nf-future-divider-label {
   font-size: .72rem; font-weight: 600;
-  color: var(--muted); letter-spacing: .04em;
+  color: var(--accent); letter-spacing: .04em;
   white-space: nowrap;
 }
 
