@@ -26,7 +26,7 @@ export function ProjectsSection({ navigate }: { navigate: Navigate }) {
     <section id="projects">
       <div className="projects-heading">
         <h2>Projects</h2>
-        <p>Research and applied work, from neural signals to language.</p>
+        <p>Research and applied work, from neuroimaging research to applied language modeling.</p>
       </div>
       <div className="projects-filter" role="group" aria-label="Filter by keyword">
         <button

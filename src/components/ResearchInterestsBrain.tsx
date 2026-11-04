@@ -965,7 +965,7 @@ export function ResearchInterestsBrain() {
           {active === 0 && <EncodingStimPanel stimIdx={stimIdx} onSelect={i=>{stimIdxRef.current=i;setStimIdx(i);}} />}
           {active === 0 && <EncodingNetworkBars stimIdx={stimIdx} />}
 
-          {active === 1 && <><div className="ri-network-title ri-diagram-heading"><span>Brain activity &amp; network dynamics</span><button type="button" className="ri-network-reset" onClick={()=>networkInteraction.onSelect(null)} onPointerEnter={()=>setHoveredNetwork(null)} aria-pressed={selectedNetwork===null}>All</button></div><NetworkGraph {...networkInteraction} /></>}
+          {active === 1 && <><div className="ri-network-title ri-diagram-heading"><span>Brain activity &amp; network dynamics</span></div><NetworkGraph {...networkInteraction} /></>}
           {active === 2 && <NeuromodDevicePanel />}
 
           <div className="ri-brain-wrap">
