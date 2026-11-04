@@ -547,6 +547,10 @@ export const portfolio: PortfolioData = {
         "Functional connectivity"
       ],
       "goal": "Built separate analysis workflows for two public OpenNeuro datasets. The EEG-only dataset (ds003626) was used for run-held-out CSP–LDA/SVM decoding, exploratory task-versus-rest EEG connectivity (wPLI², coherence, and PLV), and multitaper time-frequency analysis. The simultaneous EEG–fMRI dataset (ds006033) was used for an eight-word EEG decoding workflow with session-held-out evaluation, paired alpha-band connectivity, and multitaper power. For fMRI, implemented a workflow that uses fMRIPrep derivatives and Nilearn to estimate task-regressed BOLD connectivity between regions.",
+      "cardHighlights": [
+        "Implemented run-held-out CSP-LDA/SVM decoding and compared alpha-band EEG connectivity during inner speech and inter-trial rest.",
+        "Developed an fMRI workflow using fMRIPrep outputs and Nilearn to estimate BOLD correlations between brain regions after regressing out task effects."
+      ],
       "contributionLabel": "Implementation",
       "contributions": [
         "Built a full EEG preprocessing pipeline: bandpass filtering, resampling, ICA-based artefact rejection, and paired epoch quality control on the public EEG-only inner-speech dataset (ds003626).",
