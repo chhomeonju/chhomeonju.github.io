@@ -539,17 +539,17 @@ export const portfolio: PortfolioData = {
       "category": "Multimodal inner speech analysis",
       "subtitle": "Decoding & Functional Connectivity with EEG and fMRI",
       "date": "Apr. 2025 – Jul. 2025",
-      "teaser": "Multimodal inner speech analysis combining EEG decoding (CSP/LDA/SVM) and fMRI functional connectivity, applied to the public Nieto et al. 2022 dataset.",
+      "teaser": "Inner-speech EEG decoding and functional connectivity across two public datasets, with a separate BOLD connectivity workflow for simultaneous EEG–fMRI recordings.",
       "tags": [
         "EEG",
         "fMRI",
         "Inner speech",
         "Functional connectivity"
       ],
-      "goal": "Inner speech — the silent production of language without any vocalization or movement — leaves measurable neural traces in both scalp EEG and fMRI. This project builds a reproducible multimodal analysis pipeline on the openly available Nieto et al. 2022 'Thinking out loud' dataset (OpenNeuro ds003626 v2.1.2), which provides 136-channel EEG (128 EEG + 8 EXG), fMRI, and simultaneous physiological recordings from participants performing inner-speech tasks across multiple sessions.\n\nThe pipeline starts with auditable EEG preprocessing — bandpass filtering, resampling, ICA-based artefact rejection, and paired epoch quality control — then trains run-held-out Common Spatial Pattern (CSP) decoders with LDA and SVM classifiers to distinguish inner-speech categories. Beyond classification, the project includes task-vs-rest functional connectivity analysis using weighted Phase Lag Index squared (wPLI²), magnitude-squared coherence, and Phase Locking Value (PLV), as well as multitaper time-frequency representations to characterise oscillatory dynamics during inner speech.",
+      "goal": "Built separate analysis workflows for two public OpenNeuro datasets. The EEG-only dataset (ds003626) was used for run-held-out CSP–LDA/SVM decoding, exploratory task-versus-rest EEG connectivity (wPLI², coherence, and PLV), and multitaper time-frequency analysis. The simultaneous EEG–fMRI dataset (ds006033) was used for an eight-word EEG decoding workflow with session-held-out evaluation, paired alpha-band connectivity, and multitaper power. For fMRI, implemented a workflow that uses fMRIPrep derivatives and Nilearn to estimate task-regressed BOLD connectivity between regions.",
       "contributionLabel": "Implementation",
       "contributions": [
-        "Built a full EEG preprocessing pipeline: bandpass filtering, resampling, ICA-based artefact rejection, and paired epoch quality control on a publicly available multimodal EEG–fMRI dataset for inner speech.",
+        "Built a full EEG preprocessing pipeline: bandpass filtering, resampling, ICA-based artefact rejection, and paired epoch quality control on the public EEG-only inner-speech dataset (ds003626).",
         "Implemented run-held-out CSP with LDA and SVM classifiers for inner-speech category decoding; evaluated with held-out-run cross-validation to avoid data leakage.",
         "Computed task-vs-rest functional connectivity using wPLI², coherence, and PLV across canonical frequency bands (delta, theta, alpha, beta, gamma).",
         "Generated multitaper time-frequency representations to characterise oscillatory dynamics time-locked to inner-speech onset."
@@ -558,7 +558,8 @@ export const portfolio: PortfolioData = {
         "EEG preprocessing — bandpass filtering, resampling, ICA, paired QC",
         "Run-held-out CSP classification with LDA and SVM",
         "Task vs. rest functional connectivity (wPLI², coherence, PLV)",
-        "Multitaper time-frequency analysis"
+        "Multitaper time-frequency analysis",
+        "Simultaneous EEG–fMRI workflow — session-held-out EEG decoding and task-regressed BOLD ROI connectivity with fMRIPrep and Nilearn"
       ],
       "code": "https://github.com/Myeongjuuu/EEG_fMRI_Inner_Speech_FC",
       "relatedPublication": null,
@@ -568,23 +569,29 @@ export const portfolio: PortfolioData = {
         "MNE-Connectivity",
         "scikit-learn",
         "SciPy",
-        "pandas"
+        "pandas",
+        "fMRIPrep",
+        "Nilearn"
       ],
       "image": null,
       "cardImage": { "src": "/assets/images/inner-speech-connectivity.png", "alt": "Exploratory alpha-band EEG connectivity matrices for one participant: task, inter-trial rest, and task minus rest for debiased wPLI squared, coherence, and PLV." },
       "datasetExperience": [
         {
-          "title": "Public dataset",
-          "description": "Nieto et al. (2022) 'Thinking out loud' is an openly available multimodal dataset containing 136-channel EEG (128 EEG + 8 EXG channels, downsampled to 256 Hz), fMRI, and physiological recordings from participants performing inner-speech, auditory imagery, and rest conditions across multiple sessions. The OpenNeuro release (ds003626 v2.1.2) includes raw data for up to 10 subjects with full session metadata.",
-          "datasets": [
-            {
-              "name": "Nieto et al. (2022) — 'Thinking out loud'",
-              "task": "Inner speech decoding & functional connectivity · 136-ch EEG + fMRI, task vs. rest epochs, multiple inner-speech categories"
-            }
-          ],
+          "title": "EEG-only inner speech (ds003626)",
+          "description": "Nieto et al. (2022), Thinking out loud. Used EEG from 10 participants for direction decoding and exploratory EEG connectivity.",
+          "datasets": [{ "name": "Thinking out loud", "task": "Direction decoding and task-versus-rest EEG connectivity" }],
           "source": {
-            "href": "https://doi.org/10.1038/s41597-022-01147-2",
-            "label": "Nieto et al., Scientific Data 2022"
+            "href": "https://openneuro.org/datasets/ds003626/versions/2.1.2",
+            "label": "OpenNeuro ds003626 v2.1.2"
+          }
+        },
+        {
+          "title": "Simultaneous EEG–fMRI inner speech (ds006033)",
+          "description": "Three participants performed an eight-word inner-speech task during simultaneous EEG and fMRI. Used the EEG for decoding and spectral connectivity and developed a separate workflow for BOLD ROI connectivity.",
+          "datasets": [{ "name": "Synchronous EEG and fMRI dataset on inner speech", "task": "Eight-word EEG decoding, spectral connectivity, and a BOLD ROI connectivity workflow" }],
+          "source": {
+            "href": "https://openneuro.org/datasets/ds006033/versions/1.0.0",
+            "label": "OpenNeuro ds006033 v1.0.0"
           }
         }
       ]
