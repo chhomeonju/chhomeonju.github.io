@@ -1,4 +1,4 @@
-import { CSSProperties, useEffect, useLayoutEffect, useRef, useState } from 'react';
+import { CSSProperties, Fragment, useEffect, useLayoutEffect, useRef, useState } from 'react';
 
 declare global {
   interface Window { meshes: Array<{ p: string; n: string; i: string }> }
@@ -508,11 +508,14 @@ function DecodingCol({ taskIdx }: { taskIdx: number }) {
         {DEC_TASKS.map((t, i) => (
           <li key={t.label} className={`ri-dec-task${i === taskIdx ? ' ri-dec-task--on' : ''}`}>
             <span className="ri-dec-task-heading"><span className="ri-dec-task-icon">{t.icon}</span><span className="ri-dec-task-label">{t.label}</span></span>
-            <span className="ri-dec-classes" style={{ '--class-columns': t.columns, '--class-step': `${DECODE_HIGHLIGHT_MS / t.classes.length}ms` } as CSSProperties}>
+            <span className="ri-dec-classes" style={{ '--class-step': `${DECODE_HIGHLIGHT_MS / t.classes.length}ms` } as CSSProperties}>
               {t.classes.map((item, index) => (
-                <span className="ri-dec-class" key={item.label} style={{ '--class-index': index } as CSSProperties}>
-                  <span>{item.icon}</span>{item.label}
-                </span>
+                <Fragment key={item.label}>
+                  {index === t.columns && <span className="ri-dec-class-break" />}
+                  <span className="ri-dec-class" style={{ '--class-index': index } as CSSProperties}>
+                    <span>{item.icon}</span>{item.label}
+                  </span>
+                </Fragment>
               ))}
             </span>
           </li>
