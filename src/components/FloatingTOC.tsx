@@ -13,7 +13,7 @@ const TOC_ITEMS = [
 export function FloatingTOC() {
   const [active, setActive] = useState<string>('');
   const [scrolled, setScrolled] = useState(false);
-  const [inAbout, setInAbout] = useState(true);
+  const [inAbout, setInAbout] = useState(false);
   const [flashingId, setFlashingId] = useState<string | null>(null);
   const flashTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const prevActiveRef = useRef<string>('');
@@ -32,9 +32,11 @@ export function FloatingTOC() {
       }
       setActive(current);
       setScrolled(window.scrollY>80);
-      const skills=document.getElementById('skills');
-      // Hide the TOC only after the last TOC section (Technical Skills) has scrolled off the top.
-      setInAbout(!skills||skills.getBoundingClientRect().bottom>offset);
+      const about = document.getElementById('about');
+      const skills = document.getElementById('skills');
+      setInAbout(Boolean(about && skills &&
+        about.getBoundingClientRect().top <= offset + 2 &&
+        skills.getBoundingClientRect().bottom > offset));
     };
     const schedule=()=>{if(!frame)frame=requestAnimationFrame(update);};
     window.addEventListener('scroll',schedule,{passive:true});

@@ -19,13 +19,9 @@ export default function App({ projectId }: { projectId?: string } = {}) {
 function HomePage() {
   const navigation = useSectionNavigation();
 
-  // Start portfolio so SSR and client initial render match (hydration safe).
-  // Effect immediately switches to home when no hash is present.
-  const [view, setView] = useState<'home' | 'portfolio'>('portfolio');
   const [dark, setDark] = useState(false);
 
   useEffect(() => {
-    if (!window.location.hash.slice(1)) setView('home');
     try {
       const saved = localStorage.getItem('theme') === 'dark';
       if (saved) setDark(true);
@@ -34,18 +30,7 @@ function HomePage() {
   }, []);
 
   useEffect(() => {
-    if (view === 'home') {
-      document.body.classList.add('home-view');
-    } else {
-      document.body.classList.remove('home-view');
-    }
-    return () => { document.body.classList.remove('home-view'); };
-  }, [view]);
-
-  useEffect(() => {
-    // Home view (hero) is always above the fold — no scroll-reveal needed there.
-    if (view !== 'portfolio') return;
-    const targets = document.querySelectorAll<HTMLElement>('section, .mj-paper, .project-card, .research-interest');
+    const targets = document.querySelectorAll<HTMLElement>('section:not(.hero-brain), .mj-paper, .project-card, .research-interest');
     const obs = new IntersectionObserver(
       entries => entries.forEach(entry => {
         if (entry.isIntersecting) {
@@ -67,7 +52,7 @@ function HomePage() {
       obs.observe(el);
     });
     return () => obs.disconnect();
-  }, [view]);
+  }, []);
 
   const toggleDark = () => {
     setDark(d => {
@@ -78,20 +63,6 @@ function HomePage() {
     });
   };
 
-  const goHome = (event: React.MouseEvent) => {
-    if ((event as React.MouseEvent<HTMLAnchorElement>).button !== 0) return;
-    if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
-    event.preventDefault();
-    window.history.pushState(null, '', window.location.pathname);
-    window.scrollTo({ top: 0, behavior: 'instant' });
-    setView('home');
-  };
-
-  const goSection = (event: React.MouseEvent<HTMLAnchorElement>, id: string) => {
-    setView('portfolio');
-    navigation.navigate(event, id);
-  };
-
   return <><CustomCursor /><main className="homepage" ref={navigation.mainRef}>
     <a className="skip-link" href="#about">Skip to content</a>
     <div ref={navigation.navRef} className={`site-nav${navigation.menuOpen ? ' is-open' : ''}`} onKeyDown={event => {
@@ -100,38 +71,34 @@ function HomePage() {
         navigation.navRef.current?.querySelector<HTMLButtonElement>('button')?.focus();
       }
     }}>
-      <a className="site-name" href="/" onClick={goHome}>Myeongju Cho</a>
+      <a className="site-name" href="/" onClick={event => navigation.navigate(event, '')}>Myeongju Cho</a>
       <div className="mobile-menu"><span>Myeongju Cho</span><div className="mobile-menu-right"><button className="theme-toggle" onClick={toggleDark} aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'}>{dark ? <Sun size={15} /> : <Moon size={15} />}</button><button className="menu-toggle" type="button" aria-expanded={navigation.menuOpen} aria-controls="section-navigation" onClick={() => navigation.setMenuOpen(open => !open)}>{navigation.menuOpen ? 'Close menu' : 'Menu'}</button></div></div>
       <nav id="section-navigation" className="section-nav" aria-label="Page sections">
-        <a href="/" aria-current={view === 'home' ? 'location' : undefined} onClick={goHome}>Home</a>
+        <a href="/" aria-current={!navigation.active ? 'location' : undefined} onClick={event => navigation.navigate(event, '')}>Home</a>
         {sections.map(([id, label]) => (
           <a key={id} href={`#${id}`}
-            aria-current={view === 'portfolio' && navigation.active === id ? 'location' : undefined}
-            onClick={event => goSection(event, id)}>{label}</a>
+            aria-current={navigation.active === id ? 'location' : undefined}
+            onClick={event => navigation.navigate(event, id)}>{label}</a>
         ))}
       </nav>
       <button className="theme-toggle theme-toggle--desktop" onClick={toggleDark} aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'}>{dark ? <Sun size={15} /> : <Moon size={15} />}</button>
     </div>
 
-    {view === 'home' ? (
-      <HeroBrain onExplore={e => goSection(e, 'about')} />
-    ) : (
-      <><FloatingTOC />
-        <div className="about-area">
-          <About />
-          <ResearchInterests />
-          <ResearchTimeline />
-          <Competencies />
-          <News />
-          <Timeline id="experience" title="Research Experience" entries={portfolio.experience} supervisor />
-          <Timeline id="education" title="Education" entries={portfolio.education} />
-          <TechnicalSkills />
-        </div>
-        <Publications /><Presentations />
-        <ProjectsSection navigate={navigation.navigate} />
-        <Awards /><Patents /><Activities />
-        <footer><p>Copyright ©Myeongju Cho · 2026</p></footer>
-      </>
-    )}
+    <HeroBrain onExplore={event => navigation.navigate(event, 'about')} />
+    <FloatingTOC />
+    <div className="about-area">
+      <About />
+      <ResearchInterests />
+      <ResearchTimeline />
+      <Competencies />
+      <News />
+      <Timeline id="experience" title="Research Experience" entries={portfolio.experience} supervisor />
+      <Timeline id="education" title="Education" entries={portfolio.education} />
+      <TechnicalSkills />
+    </div>
+    <Publications /><Presentations />
+    <ProjectsSection navigate={navigation.navigate} />
+    <Awards /><Patents /><Activities />
+    <footer><p>Copyright ©Myeongju Cho · 2026</p></footer>
   </main></>;
 }

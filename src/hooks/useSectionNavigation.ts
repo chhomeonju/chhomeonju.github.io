@@ -8,7 +8,7 @@ export const sections = [
 ] as const;
 
 export function useSectionNavigation() {
-  const [active, setActive] = useState<string>('about');
+  const [active, setActive] = useState<string>('');
   const [menuOpen, setMenuOpen] = useState(false);
   const navRef = useRef<HTMLDivElement>(null);
   const mainRef = useRef<HTMLElement>(null);
@@ -31,7 +31,7 @@ export function useSectionNavigation() {
       main.style.paddingBottom = `${Math.max(0, window.innerHeight - offset - lastSection.getBoundingClientRect().height - footer.getBoundingClientRect().height)}px`;
     }
     function updateActive() {
-      let current: string = 'about';
+      let current = '';
       for (const [id] of sections) {
         const section = document.getElementById(id);
         if (section && section.getBoundingClientRect().top <= offset + 2) current = id;
@@ -92,7 +92,10 @@ export function useSectionNavigation() {
   const navigate: Navigate = (event, id) => {
     if (event.button !== 0 || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return;
     event.preventDefault();
-    if (window.location.hash !== `#${id}`) window.history.pushState(null, '', `#${id}`);
+    const hash = id ? `#${id}` : '';
+    if (window.location.hash !== hash) {
+      window.history.pushState(null, '', hash || window.location.pathname + window.location.search);
+    }
     window.dispatchEvent(new Event('portfolio:navigate'));
   };
   return { active, menuOpen, setMenuOpen, navigate, navRef, mainRef };
