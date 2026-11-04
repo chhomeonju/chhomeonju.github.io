@@ -681,7 +681,7 @@ export const portfolio: PortfolioData = {
       title: 'Cross-modal Alignment',
       description: 'Aligning EEG representations with language semantics through language-guided multi-query decomposition and multi-task instruction tuning — one model predicting answer embeddings across seven heterogeneous decoding tasks without task-specific heads.',
       methods: ['Predictive Semantic Alignment (PSA)', 'Language-guided MQSD', 'Multi-task Instruction Tuning', 'LoRA / PEFT', 'Bidirectional Multi-positive Contrastive Learning', 'Llama 3.2 / HuggingFace'],
-      projects: ['project-celp', 'project-blpm'],
+      projects: ['project-blpm'],
     },
   ],
 };

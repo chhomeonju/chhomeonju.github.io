@@ -485,11 +485,15 @@ const DEC_TASKS = [
   ] },
   { label: 'Imagined Speech', icon: '💬', classes: [
     { label: 'Call', icon: '📞' }, { label: 'Music', icon: '🎵' }, { label: 'Down', icon: '⬇️' }, { label: 'Up', icon: '⬆️' },
+    { label: 'Thank you', icon: '🙏' }, { label: 'Sorry', icon: '🙇' },
   ] },
   { label: 'Mental Disorder Prediction', icon: '🔎', classes: [
     { label: 'Healthy control', icon: '👤' }, { label: 'Depression', icon: '🌧️' },
   ] },
 ];
+
+const ENCODE_DECODE_STEP_MS = 5000;
+const DECODE_HIGHLIGHT_MS = ENCODE_DECODE_STEP_MS - 200;
 
 function DecodingCol({ taskIdx }: { taskIdx: number }) {
   return (
@@ -504,7 +508,13 @@ function DecodingCol({ taskIdx }: { taskIdx: number }) {
         {DEC_TASKS.map((t, i) => (
           <li key={t.label} className={`ri-dec-task${i === taskIdx ? ' ri-dec-task--on' : ''}`}>
             <span className="ri-dec-task-heading"><span className="ri-dec-task-icon">{t.icon}</span><span className="ri-dec-task-label">{t.label}</span></span>
-            <span className="ri-dec-classes">{t.classes.map(c => <span className="ri-dec-class" key={c.label}><span>{c.icon}</span>{c.label}</span>)}</span>
+            <span className="ri-dec-classes" style={{ '--class-step': `${DECODE_HIGHLIGHT_MS / t.classes.length}ms` } as CSSProperties}>
+              {t.classes.map((item, index) => (
+                <span className="ri-dec-class" key={item.label} style={{ '--class-index': index } as CSSProperties}>
+                  <span>{item.icon}</span>{item.label}
+                </span>
+              ))}
+            </span>
           </li>
         ))}
       </ul></div>
@@ -755,7 +765,7 @@ export function ResearchInterestsBrain() {
       const next = (stimIdxRef.current + 1) % ENC_STIM_DATA.length;
       stimIdxRef.current = next;
       setStimIdx(next);
-    }, 5000);
+    }, ENCODE_DECODE_STEP_MS);
     return () => clearInterval(timer);
   }, [active]);
 
@@ -768,7 +778,7 @@ export function ResearchInterestsBrain() {
       const next = (decTaskIdxRef.current + 1) % DEC_TASKS.length;
       decTaskIdxRef.current = next;
       setDecTaskIdx(next);
-    }, 5000);
+    }, ENCODE_DECODE_STEP_MS);
     return () => clearInterval(timer);
   }, [active]);
 
@@ -906,8 +916,8 @@ export function ResearchInterestsBrain() {
       <div className={`ri-viz-panel ri-viz--mode${active}`} data-network-focus={focusedNetwork??'all'} style={{'--stim-color':ENC_STIM_DATA[stimIdx].color} as CSSProperties}>
         <div className="ri-viz-main" id="research-interest-visualization">
           {active === 0 && <>
-            <div className="ri-flow-heading ri-flow-heading--encoding">Encoding</div>
-            <div className="ri-flow-heading ri-flow-heading--decoding">Decoding</div>
+            <div className="ri-flow-heading ri-flow-heading--encoding">Brain Encoding</div>
+            <div className="ri-flow-heading ri-flow-heading--decoding">Brain Decoding</div>
             <span className="ri-encoding-arrow" aria-hidden="true">→</span>
             <span className="ri-encoding-arrow ri-encoding-arrow--response" aria-hidden="true">→</span>
           </>}
