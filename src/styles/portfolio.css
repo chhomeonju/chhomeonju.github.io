@@ -413,8 +413,12 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
 .ri-dec-examples { min-width: 0; }
 .ri-dec-examples-label { display: block; color: var(--muted); font-size: .55rem; margin-bottom: 6px; }
 .ri-dec-task-heading { display: flex; align-items: center; gap: 5px; }
-.ri-dec-classes { display: flex; flex-wrap: wrap; align-items: flex-start; column-gap: 3px; }
+.ri-dec-classes { container-type: inline-size; display: flex; flex-wrap: wrap; align-items: flex-start; column-gap: 3px; }
 .ri-dec-class-break { flex-basis: 100%; height: 0; }
+.ri-dec-class-break--compact { display: none; }
+@container (width < 175px) {
+  .ri-dec-class-break--compact { display: block; }
+}
 .ri-dec-class { display: inline-flex; align-items: center; gap: 3px; margin-bottom: 3px; white-space: nowrap; color: var(--ink); background: var(--paper); border: 1px solid var(--rule); border-radius: 4px; padding: 2px 4px; font-size: .52rem; font-weight: 500; line-height: 1.5; }
 @media (prefers-reduced-motion: no-preference) {
   .ri-dec-task--on .ri-dec-class {
@@ -2207,9 +2211,24 @@ button.ri-model-source:hover { border-color: #8b83d0aa; }
 .ri-modality-name { fill: var(--muted); font: 6px system-ui,sans-serif; }
 .ri-model-source .ri-modalities-glyph .ri-volume-outline { fill: #94a3b82b; stroke: #94a3b8; stroke-width: .8; animation: none; stroke-dasharray: none; }
 .ri-model-source .ri-modalities-glyph .ri-volume-fold { fill: none; stroke: #94a3b87a; stroke-width: .6; animation: none; stroke-dasharray: none; }
-.ri-bold-spot { fill: #f19052; animation: ri-bold-activity 2.6s ease-in-out infinite alternate; }
-.ri-bold-spot--second { animation-delay: -1.3s; fill: #e9697b; }
-@keyframes ri-bold-activity { from { opacity: .3; } to { opacity: .95; } }
+.ri-bold-spot {
+  fill: #f19052;
+  opacity: .45;
+  transform-box: fill-box;
+  transform-origin: center;
+}
+.ri-bold-spot--second { fill: #e9697b; }
+.ri-model-source:is(.is-selected, :hover, :focus-visible) .ri-bold-spot {
+  animation: ri-bold-activity 4s ease-in-out infinite;
+}
+.ri-model-source:is(.is-selected, :hover, :focus-visible) .ri-bold-spot--second {
+  animation-delay: -.85s;
+}
+@keyframes ri-bold-activity {
+  0%, 100% { opacity: .28; scale: .78; }
+  38% { opacity: 1; scale: 1.2; }
+  72% { opacity: .56; scale: 1; }
+}
 /* The downstream tasks now show their output, not only its name. */
 .ri-model-outputs button { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 7px 3px; }
 .ri-model-outputs button > span { border: 0; padding: 0; font: inherit; color: inherit; }
