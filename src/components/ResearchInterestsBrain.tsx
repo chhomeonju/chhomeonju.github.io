@@ -483,7 +483,7 @@ const DEC_TASKS = [
     { label: 'Left hand', icon: '👈' }, { label: 'Right hand', icon: '👉' },
     { label: 'Both hands', icon: '🙌' }, { label: 'Both feet', icon: '🦶' },
   ] },
-  { label: 'Imagined Speech', columns: 4, icon: '💬', classes: [
+  { label: 'Imagined Speech', columns: 3, icon: '💬', classes: [
     { label: 'Call', icon: '📞' }, { label: 'Music', icon: '🎵' }, { label: 'Down', icon: '⬇️' }, { label: 'Up', icon: '⬆️' },
     { label: 'Thank you', icon: '🙏' }, { label: 'Sorry', icon: '🙇' },
   ] },
@@ -508,11 +508,10 @@ function DecodingCol({ taskIdx }: { taskIdx: number }) {
         {DEC_TASKS.map((t, i) => (
           <li key={t.label} className={`ri-dec-task${i === taskIdx ? ' ri-dec-task--on' : ''}`}>
             <span className="ri-dec-task-heading"><span className="ri-dec-task-icon">{t.icon}</span><span className="ri-dec-task-label">{t.label}</span></span>
-            <span className="ri-dec-classes" style={{ '--class-step': `${DECODE_HIGHLIGHT_MS / t.classes.length}ms` } as CSSProperties}>
+            <span className={`ri-dec-classes${t.columns === 3 ? ' ri-dec-classes--balanced' : ''}`} style={{ '--class-step': `${DECODE_HIGHLIGHT_MS / t.classes.length}ms` } as CSSProperties}>
               {t.classes.map((item, index) => (
                 <Fragment key={item.label}>
-                  {index === t.columns && <span className="ri-dec-class-break" />}
-                  {t.columns === 4 && index === 2 && <span className="ri-dec-class-break ri-dec-class-break--compact" />}
+                  {t.columns === 2 && index === 2 && <span className="ri-dec-class-break" />}
                   <span className="ri-dec-class" style={{ '--class-index': index } as CSSProperties}>
                     <span>{item.icon}</span>{item.label}
                   </span>
