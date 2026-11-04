@@ -56,12 +56,6 @@ function FeedLayout({ projectMap }: { projectMap: Record<string, { name: string 
 
   return (
     <>
-      <div className="rt-nf-hub">
-        <span className="rt-hub-eyebrow">Fundamental Scientific Question</span>
-        <p className="rt-hub-question">How does the human brain give rise to cognition?</p>
-        <span className="rt-hub-goal">→ Understanding Human Cognition</span>
-      </div>
-
       <div className="rt-nf-feed">
         {phases.map(ph => (
           <div key={ph.num} className={`rt-nf-phase${ph.future ? ' rt-nf-phase--future' : ''}`}>
@@ -160,12 +154,6 @@ function PhasesLayout({ projectMap }: { projectMap: Record<string, { name: strin
 
   return (
     <>
-      <div className="rt-hub">
-        <span className="rt-hub-eyebrow">Fundamental Scientific Question</span>
-        <p className="rt-hub-question">How does the human brain give rise to cognition?</p>
-        <span className="rt-hub-goal">→ Understanding Human Cognition</span>
-      </div>
-
       <div className="rt-phase-cards" role="tablist" aria-label="Research phases">
         {allItems.map((ph, i) => (
           <button
@@ -245,12 +233,6 @@ function PhasesLayout({ projectMap }: { projectMap: Record<string, { name: strin
 function SpineLayout({ projectMap }: { projectMap: Record<string, { name: string }> }) {
   return (
     <div className="rt-tl-wrap">
-      <div className="rt-tl-hub">
-        <span className="rt-hub-eyebrow">Fundamental Scientific Question</span>
-        <p className="rt-hub-question">How does the human brain give rise to cognition?</p>
-        <span className="rt-hub-goal">→ Understanding Human Cognition</span>
-      </div>
-
       <div className="rt-tl-body">
         <div className="rt-tl-axis" aria-hidden="true" />
 
@@ -340,6 +322,8 @@ export function ResearchTimeline() {
           >Timeline</button>
         </div>
       </div>
+
+      <p className="rt-trajectory-intro">My research has evolved from decoding information from neural activity to learning generalizable neural representations and investigating how the brain encodes and processes information, with a growing focus on brain network dynamics and the neural mechanisms underlying human cognition and behavior.</p>
 
       {layout === 'feed'   && <FeedLayout   projectMap={projectMap} />}
       {layout === 'phases' && <PhasesLayout projectMap={projectMap} />}

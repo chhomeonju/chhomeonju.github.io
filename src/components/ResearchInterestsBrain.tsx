@@ -7,21 +7,25 @@ declare global {
 const INTERESTS = [
   {
     title: 'Neural Encoding & Decoding',
+    question: 'What cognitive representations are encoded in neural activity?',
     description: 'Exploring how cognitive information is represented in neural activity and decoded using deep learning across neuroimaging modalities, such as EEG, MEG, ECoG, and fMRI.',
     tag: 'Decoding', tagClass: 'ri-tag--decode',
   },
   {
     title: 'Brain Dynamics & Network Neuroscience',
+    question: 'How do brain networks change and interact over time?',
     description: 'Characterizing dynamic functional connectivity, latent brain states, and network reconfiguration to understand the temporal organization and interactions of distributed brain networks.',
     tag: 'Network', tagClass: 'ri-tag--net',
   },
   {
     title: 'Neural Mechanisms & Neuromodulation',
+    question: 'How do neural activity and network interactions contribute to cognition, emotion, and behavior?',
     description: 'Investigating how neural activity and brain network interactions support cognition, emotion, and behavior, and how neuromodulation influences brain dynamics and mental health.',
     tag: 'Mechanisms & Modulation', tagClass: 'ri-tag--mech',
   },
   {
     title: 'Computational Modeling & Foundation Models',
+    question: 'How can computational models explain and predict brain function and how it changes?',
     description: 'Leveraging computational approaches, including deep learning, large language models, and multimodal foundation models, to model neural representations, predict brain responses, and advance our understanding of the neural mechanisms underlying human brain function.',
     tag: 'Modeling', tagClass: 'ri-tag--comp',
   },
@@ -508,13 +512,13 @@ function DecodingCol({ taskIdx }: { taskIdx: number }) {
         {DEC_TASKS.map((t, i) => (
           <li key={t.label} className={`ri-dec-task${i === taskIdx ? ' ri-dec-task--on' : ''}`}>
             <span className="ri-dec-task-heading"><span className="ri-dec-task-icon">{t.icon}</span><span className="ri-dec-task-label">{t.label}</span></span>
-            <span className={`ri-dec-classes${t.columns === 3 ? ' ri-dec-classes--balanced' : ''}`} style={{ '--class-step': `${DECODE_HIGHLIGHT_MS / t.classes.length}ms` } as CSSProperties}>
+            <span className="ri-dec-classes" style={{ '--class-step': `${DECODE_HIGHLIGHT_MS / t.classes.length}ms` } as CSSProperties}>
               {t.classes.map((item, index) => (
                 <Fragment key={item.label}>
                   {t.columns === 2 && index === 2 && <span className="ri-dec-class-break" />}
                   {t.columns === 3 && index === 3 && <span className="ri-dec-class-break ri-dec-class-break--wide" />}
                   {t.columns === 3 && (index === 2 || index === 4) && <span className="ri-dec-class-break ri-dec-class-break--compact" />}
-                  <span className={`ri-dec-class${item.label === 'Thank you' ? ' ri-dec-class--single-line' : ''}`} style={{ '--class-index': index } as CSSProperties}>
+                  <span className="ri-dec-class" style={{ '--class-index': index } as CSSProperties}>
                     <span>{item.icon}</span>{item.label}
                   </span>
                 </Fragment>
@@ -1030,7 +1034,8 @@ export function ResearchInterestsBrain() {
             <span className="ri-card-num">0{i + 1}</span>
             <div className="ri-card-body">
               <h3 className="ri-card-title">{item.title}</h3>
-              <p className="ri-card-desc">{item.description}</p>
+              <p className="ri-card-question">{item.question}</p>
+              <p className="ri-card-desc" hidden={active !== i}>{item.description}</p>
             </div>
           </button>
         ))}
