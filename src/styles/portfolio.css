@@ -414,6 +414,12 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
 .ri-dec-examples-label { display: block; color: var(--muted); font-size: .55rem; margin-bottom: 6px; }
 .ri-dec-task-heading { display: flex; align-items: center; gap: 5px; }
 .ri-dec-classes { display: flex; flex-wrap: wrap; gap: 3px; }
+.ri-dec-classes[style*="--class-columns"] {
+  display: grid;
+  grid-template-columns: repeat(var(--class-columns), minmax(0, max-content));
+  justify-items: start;
+  align-items: start;
+}
 .ri-dec-class { display: inline-flex; align-items: center; gap: 3px; color: var(--ink); background: var(--paper); border: 1px solid var(--rule); border-radius: 4px; padding: 2px 4px; font-size: .52rem; font-weight: 500; line-height: 1.5; }
 @media (prefers-reduced-motion: no-preference) {
   .ri-dec-task--on .ri-dec-class {

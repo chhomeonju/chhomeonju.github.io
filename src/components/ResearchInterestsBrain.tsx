@@ -479,11 +479,11 @@ const DEC_TASKS = [
   { label: 'Emotion Recognition', icon: '🎭', classes: [
     { label: 'Positive', icon: '😊' }, { label: 'Negative', icon: '☹️' }, { label: 'Neutral', icon: '😐' },
   ] },
-  { label: 'Motor Imagery', icon: '🖐️', classes: [
+  { label: 'Motor Imagery', columns: 2, icon: '🖐️', classes: [
     { label: 'Left hand', icon: '👈' }, { label: 'Right hand', icon: '👉' },
     { label: 'Both hands', icon: '🙌' }, { label: 'Both feet', icon: '🦶' },
   ] },
-  { label: 'Imagined Speech', icon: '💬', classes: [
+  { label: 'Imagined Speech', columns: 4, icon: '💬', classes: [
     { label: 'Call', icon: '📞' }, { label: 'Music', icon: '🎵' }, { label: 'Down', icon: '⬇️' }, { label: 'Up', icon: '⬆️' },
     { label: 'Thank you', icon: '🙏' }, { label: 'Sorry', icon: '🙇' },
   ] },
@@ -508,7 +508,7 @@ function DecodingCol({ taskIdx }: { taskIdx: number }) {
         {DEC_TASKS.map((t, i) => (
           <li key={t.label} className={`ri-dec-task${i === taskIdx ? ' ri-dec-task--on' : ''}`}>
             <span className="ri-dec-task-heading"><span className="ri-dec-task-icon">{t.icon}</span><span className="ri-dec-task-label">{t.label}</span></span>
-            <span className="ri-dec-classes" style={{ '--class-step': `${DECODE_HIGHLIGHT_MS / t.classes.length}ms` } as CSSProperties}>
+            <span className="ri-dec-classes" style={{ '--class-columns': t.columns, '--class-step': `${DECODE_HIGHLIGHT_MS / t.classes.length}ms` } as CSSProperties}>
               {t.classes.map((item, index) => (
                 <span className="ri-dec-class" key={item.label} style={{ '--class-index': index } as CSSProperties}>
                   <span>{item.icon}</span>{item.label}
