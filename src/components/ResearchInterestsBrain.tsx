@@ -618,6 +618,37 @@ function NeuralInputGlyph() {
   </svg>;
 }
 
+function MultimodalContextGlyph() {
+  return <svg className="ri-model-context" viewBox="0 0 156 62" aria-hidden="true">
+    <g className="ri-context-text">
+      <rect className="ri-context-panel" x="1" y="6" width="48" height="48" rx="6" />
+      <rect x="7" y="13" width="21" height="14" rx="3" />
+      <rect x="14" y="32" width="28" height="14" rx="3" />
+      <text x="17.5" y="23">hear</text>
+      <text x="28" y="42">birds</text>
+    </g>
+    <g className="ri-context-vision">
+      <rect className="ri-context-panel" x="54" y="6" width="48" height="48" rx="6" />
+      <rect x="60" y="13" width="36" height="34" rx="3" fill="#b8dfec" />
+      <circle cx="88" cy="21" r="3" fill="#ffe4a0" />
+      <polygon points="60,46 60,37 71,27 81,36 88,31 96,38 96,46" fill="#80ab95" />
+      <line x1="66" y1="40" x2="91" y2="36" stroke="#534332" strokeWidth="1.2" />
+      <ellipse cx="78" cy="33" rx="5" ry="3" fill="#26484e" transform="rotate(-20 78 33)" />
+      <circle cx="82" cy="29" r="2.3" fill="#26484e" />
+      <polygon points="84,28 88,29 84,30" fill="#9a5928" />
+    </g>
+    <g className="ri-context-audio">
+      <rect className="ri-context-panel" x="107" y="6" width="48" height="48" rx="6" />
+      <line x1="112" y1="28" x2="150" y2="28" />
+      <polyline points="112,28 114,27 116,30 118,22 120,35 122,18 124,37 126,24 128,28 130,27 132,30 134,21 136,35 138,19 140,33 142,24 144,30 146,26 148,29 150,28" />
+      <line x1="112" y1="44" x2="150" y2="44" />
+      <line x1="112" y1="42" x2="112" y2="46" />
+      <line x1="131" y1="42" x2="131" y2="46" />
+      <line x1="150" y1="42" x2="150" y2="46" />
+    </g>
+  </svg>;
+}
+
 function OutputGlyph({kind}:{kind:number}) {
   return <svg viewBox="0 0 90 48" className={`ri-output-glyph ri-output-glyph--${kind}`} aria-hidden="true">
     {kind===0?<>
@@ -656,7 +687,7 @@ function CompModelPanel() {
     <div className="ri-model-input-row">
       <button type="button" className={`ri-model-source${source===0?' is-selected':''}`} aria-pressed={source===0} onClick={()=>selectSource(0)}><strong>Neuroimaging modalities</strong><NeuralInputGlyph /><small>Time series + brain volumes</small></button>
       <span className="ri-model-plus">+</span>
-      <button type="button" className={`ri-model-source${source===1?' is-selected':''}`} aria-pressed={source===1} onClick={()=>selectSource(1)}><strong>Multimodal context</strong><div className="ri-model-context">Aa <span>◉</span> ≋</div><small>Language · vision · audio</small></button>
+      <button type="button" className={`ri-model-source${source===1?' is-selected':''}`} aria-pressed={source===1} onClick={()=>selectSource(1)}><strong>Multimodal context</strong><MultimodalContextGlyph /><small>Language · vision · audio</small></button>
     </div>
     <div className="ri-model-flow" aria-hidden="true"><span/></div>
     <div className="ri-model-core" key={`core-${run}`}>

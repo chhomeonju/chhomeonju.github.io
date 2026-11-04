@@ -2092,8 +2092,12 @@ a.rt-tl-proj:hover { color: var(--accent); text-decoration: underline; }
 .ri-model-source small, .ri-model-core small { color: var(--muted); font-size: .55rem; line-height: 1.5; text-align: center; }
 .ri-model-source svg { width: 100%; height: 32px; }
 .ri-model-source svg path { fill: none; stroke: #548dd6; stroke-width: 1.5; }
-.ri-model-context { display: flex; gap: 16px; align-items: center; justify-content: center; height: 32px; color: #9670d2; font-size: 1.3rem; }
-.ri-model-context span { font-size: 1.1rem; color: #20a99b; }
+.ri-model-source svg.ri-model-context { height: 62px; }
+.ri-context-panel { fill: var(--paper); stroke: var(--rule); }
+.ri-context-text rect:not(.ri-context-panel) { fill: #a786da38; }
+.ri-context-text text { fill: var(--ink); font-size: 8px; font-weight: 600; text-anchor: middle; }
+.ri-context-audio line { stroke: var(--rule); }
+.ri-context-audio polyline { fill: none; stroke: #428f83; stroke-width: 1.25; stroke-linejoin: round; stroke-linecap: round; }
 .ri-model-plus, .ri-model-flow { color: var(--muted); font-size: 1rem; text-align: center; }
 .ri-model-flow { padding: 9px 0; }
 .ri-model-core { width: 100%; display: flex; flex-direction: column; align-items: center; border: 1px solid #a599d955; background: #8c78d008; border-radius: 9px; padding: 10px 12px 13px; gap: 4px; }
@@ -2206,7 +2210,6 @@ button.ri-model-source:hover { border-color: #8b83d0aa; }
 .ri-bold-spot { fill: #f19052; animation: ri-bold-activity 2.6s ease-in-out infinite alternate; }
 .ri-bold-spot--second { animation-delay: -1.3s; fill: #e9697b; }
 @keyframes ri-bold-activity { from { opacity: .3; } to { opacity: .95; } }
-.ri-model-context { min-height: 62px; }
 /* The downstream tasks now show their output, not only its name. */
 .ri-model-outputs button { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 7px 3px; }
 .ri-model-outputs button > span { border: 0; padding: 0; font: inherit; color: inherit; }
