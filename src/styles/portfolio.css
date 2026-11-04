@@ -957,6 +957,7 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
 .act-alt-badge { font-size: .75rem; font-weight: 700; color: var(--accent); background: var(--accent-soft); border: 1px solid var(--accent-border); padding: 2px 10px; border-radius: 4px; white-space: nowrap; max-width: 100%; overflow: hidden; text-overflow: ellipsis; }
 @media (max-width: 600px) {
   .act-alt-wrap { padding: 4px 0; }
+  .act-alt-spine { left: 5px; }
   .act-alt-item { grid-template-columns: 24px 1fr; grid-template-rows: auto auto; }
   .act-alt-dot-col { grid-column: 1; grid-row: 1; padding-top: 4px; justify-content: flex-start; }
   .act-alt-left,
