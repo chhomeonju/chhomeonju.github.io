@@ -3,10 +3,21 @@ import { portfolio } from '../data/portfolio';
 import { ProjectCard } from './Content';
 import type { Navigate } from './Content';
 
+const tagOrder = [
+  'EEG', 'fMRI', 'ECoG',
+  'Encoding', 'Decoding', 'Functional connectivity', 'BCI', 'Imagined Speech', 'Inner speech', 'Motor Imagery', 'Brain-to-Speech',
+  'Foundation Model', 'Representation learning', 'Self-supervised learning', 'LLM fine-tuning',
+  'Echo State Network', 'GAN', 'NLP', 'BERT', 'KoBART', 'Web',
+];
+
 export function ProjectsSection({ navigate }: { navigate: Navigate }) {
   const [active, setActive] = useState<string | null>(null);
 
-  const allTags = [...new Set(portfolio.projects.flatMap(p => p.tags))].sort();
+  const projectTags = new Set(portfolio.projects.flatMap(p => p.tags));
+  const allTags = [
+    ...tagOrder.filter(tag => projectTags.has(tag)),
+    ...[...projectTags].filter(tag => !tagOrder.includes(tag)).sort(),
+  ];
   const filtered = active
     ? portfolio.projects.filter(p => p.tags.includes(active))
     : portfolio.projects;

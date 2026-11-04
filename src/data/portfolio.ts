@@ -132,7 +132,8 @@ export const portfolio: PortfolioData = {
         "EEG",
         "Foundation Model",
         "Decoding",
-        "Representation learning"
+        "Representation learning",
+        "LLM fine-tuning"
       ],
       "goal": "BLPM formulates heterogeneous EEG decoding tasks as continuous semantic embedding prediction. Instead of generating answer tokens, one model predicts an answer embedding in a single forward pass and selects the closest candidate description.\n\nThe core contribution is Predictive Semantic Alignment (PSA): language-guided queries summarize complementary EEG characteristics, while projected EEG tokens preserve fine-grained information. Multi-task instruction tuning then reuses the same predictor and output head across seven tasks.",
       "contributionLabel": "Research contributions",
@@ -204,6 +205,7 @@ export const portfolio: PortfolioData = {
       "teaser": "Retrieving contextual word representations from ECoG by combining multiple temporal scales with encoding-guided candidate re-ranking.",
       "tags": [
         "ECoG",
+        "Encoding",
         "Decoding",
         "BCI"
       ],
@@ -257,6 +259,7 @@ export const portfolio: PortfolioData = {
       "date": "Feb. 2024 – Jan. 2025",
       "teaser": "GAN-based voice reconstruction from imagined and spoken speech EEG, converting neural signals to Mel-spectrograms via a generator–discriminator architecture with domain adaptation and DTW-based evaluation.",
       "tags": [
+        "Decoding",
         "EEG",
         "Imagined Speech",
         "Brain-to-Speech",
@@ -426,6 +429,7 @@ export const portfolio: PortfolioData = {
       "date": "Apr. 2024 – Oct. 2024",
       "teaser": "A fine-tuned large language model for non-invasive EEG motor imagery task classification, converting neural signals into structured text representations for LLM input.",
       "tags": [
+        "Decoding",
         "EEG",
         "Motor Imagery",
         "LLM fine-tuning",
@@ -476,6 +480,7 @@ export const portfolio: PortfolioData = {
       "date": "Mar. 2023 – Nov. 2023",
       "teaser": "EEG-based imagined speech decoding for individuals with aphasia, using self-collected data, filter-bank feature extraction, and an Echo State Network classifier.",
       "tags": [
+        "Decoding",
         "EEG",
         "Imagined Speech",
         "BCI",
@@ -541,6 +546,7 @@ export const portfolio: PortfolioData = {
       "date": "Apr. 2025 – Jul. 2025",
       "teaser": "Inner-speech decoding and functional connectivity across two public datasets, with a separate BOLD connectivity workflow for simultaneous EEG–fMRI recordings.",
       "tags": [
+        "Decoding",
         "EEG",
         "fMRI",
         "Inner speech",
@@ -665,37 +671,37 @@ export const portfolio: PortfolioData = {
     {
       title: 'Experimental Design & Data Collection',
       description: 'Designing and running EEG experiments from scratch — from paradigm planning and participant protocols to operating a 130-channel recording system in a shielded soundproof booth and building the full preprocessing pipeline.',
-      methods: ['Study Protocol Design', 'Imagined & Spoken Speech Paradigms', '16 channels EEG (OpenBCI)', '130 channels EEG (BEL AMP)', 'ICLabel Artifact Rejection', 'DTW Evaluation', 'Multi-condition Recording'],
+      methods: ['Study Protocol Design', 'Imagined & Spoken Speech Paradigms', '16 channels EEG (OpenBCI)', '130 channels EEG (BEL AMP)', 'ICLabel Artifact Rejection', 'DTW', 'Multi-condition Recording'],
       projects: ['project-neurodecoder', 'project-neuralspeech'],
     },
     {
       title: 'Neural Signal Processing',
       description: 'End-to-end preprocessing and feature extraction across EEG, ECoG, and fMRI — from raw multichannel recordings to analysis-ready representations using spatial filters, connectivity measures, and GLM-based activation mapping.',
-      methods: ['CSP / Multi-CSP', 'ICA', 'Band-power', 'wPLI² / PLV / Coherence', 'SRM Alignment', 'fMRIPrep', 'SPM', 'MNE-Python', 'EEGLAB'],
+      methods: ['CSP', 'ICA', 'Band-power', 'wPLI² (debiased)', 'PLV', 'Coherence', 'Shared Response Model', 'Cross-Subject Functional Alignment', 'fMRIPrep', 'SPM', 'MNE-Python', 'EEGLAB'],
       projects: ['project-inner-speech', 'project-neuralspeech', 'project-celp', 'project-blpm', 'project-tada'],
     },
     {
       title: 'Large-scale Multi-modal Data Engineering',
       description: 'Building scalable pipelines across EEG, ECoG, and fMRI datasets — LMDB-backed fast I/O, joint training on seven heterogeneous benchmarks, and multi-GPU distributed training for large-model optimization.',
-      methods: ['Multi-modal Neuroimaging (EEG / ECoG / fMRI)', '7-dataset Multi-task Training', 'NeuralSet / NeuralBench', 'LMDB (Fast I/O)', 'Balanced Accuracy', 'Cross-dataset Generalization', 'Distributed Training (Multi-GPU)'],
+      methods: ['Multi-modal Neuroimaging (EEG / ECoG / fMRI)', '7-dataset Multi-task Training', 'NeuralSet', 'NeuralBench', 'LMDB (Fast I/O)', 'Cross-dataset Generalization', 'Distributed Training (Multi-GPU)'],
       projects: ['project-celp', 'project-blpm'],
     },
     {
       title: 'Neural Decoding',
       description: 'Classifying and reconstructing cognitive states from brain signals — imagined speech, motor imagery, inner speech, ECoG-to-text retrieval — using pipelines from classical spatial filters to multi-scale deep networks, with cross-subject generalization.',
-      methods: ['Echo State Networks', 'LDA / SVM', 'GAN-based Speech Synthesis', 'Multi-scale Temporal CNN', 'Domain Adaptation', 'Leave-one-subject-out CV'],
+      methods: ['Echo State Networks', 'LDA', 'SVM', 'Generative AI', 'GAN-based Speech Synthesis', 'Multi-scale Temporal Fusion', 'Domain Adaptation', 'Leave-one-subject-out CV'],
       projects: ['project-neurodecoder', 'project-inner-speech', 'project-neuralspeech', 'project-eeg-llm', 'project-tada'],
     },
     {
       title: 'Foundation Modeling & Large Language Model',
       description: 'Building a self-supervised EEG foundation encoder using JEPA-inspired latent prediction — dual-branch patch embedding, knowledge distillation via an EMA target network, and structured multi-block masking — then adapting a large language model for multi-task neural decoding through instruction tuning.',
-      methods: ['Latent Predictive Modeling (JEPA)', 'Dual-branch Patch Embedding', 'Knowledge Distillation', 'Structured Multi-block Masking', 'LLM Adaptation', 'Backbone Transfer'],
-      projects: ['project-celp', 'project-blpm'],
+      methods: ['Large Language Models', 'Multimodal LLMs', 'Latent Predictive Modeling (JEPA)', 'Dual-branch Patch Embedding', 'Knowledge Distillation', 'Structured Multi-block Masking', 'LLM Adaptation', 'Pretrained Language Model Fine-tuning', 'Backbone Transfer'],
+      projects: ['project-celp', 'project-blpm', 'project-essenti'],
     },
     {
       title: 'Cross-modal Alignment',
-      description: 'Aligning EEG representations with language semantics through language-guided multi-query decomposition and multi-task instruction tuning — one model predicting answer embeddings across seven heterogeneous decoding tasks without task-specific heads.',
-      methods: ['Predictive Semantic Alignment (PSA)', 'Language-guided MQSD', 'Multi-task Instruction Tuning', 'LoRA / PEFT', 'Bidirectional Multi-positive Contrastive Learning', 'Llama 3.2 / HuggingFace'],
+      description: 'Aligning EEG representations with language semantics and adapting a shared model to predict answer embeddings across seven neural decoding tasks.',
+      methods: ['EEG–Language Alignment', 'Representation Learning', 'Cross-Attention', 'Multi-Query Feature Extraction', 'Semantic Decomposition', 'Multi-task Instruction Tuning', 'Parameter-efficient Fine-tuning', 'Llama 3.2', 'Hugging Face'],
       projects: ['project-blpm'],
     },
   ],
