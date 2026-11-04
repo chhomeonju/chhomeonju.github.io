@@ -78,7 +78,7 @@ export const portfolio: PortfolioData = {
     {
       "title": "Continuous Latent Predictive Modeling with Predictive Semantic Alignment for EEG-Language Foundation Models",
       "authors": "M.-J. Cho, H.-B. Shin, S.-H. Lee, and S.-W. Lee†",
-      "venue": "ARR 2027 · Preprint · Submitted",
+      "venue": "Under review at ACL Rolling Review (October 2026 cycle) · Planned commitment to NAACL 2027",
       "image": "/assets/images/continuous-latent-framework.png",
       "imageAlt": "Continuous Latent Predictive Modeling 논문의 EEG 사전학습 및 예측 의미 정렬 구조도",
       "links": []
