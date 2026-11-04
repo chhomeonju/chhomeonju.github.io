@@ -213,6 +213,10 @@ export function Activities() {
               <div className="act-alt-head">
                 <span className="act-alt-badge">{badge}</span>
                 <span className="act-alt-date">{a.date}</span>
+                {a.url && <ExternalLink href={a.url} className="act-alt-link">
+                  {a.url.startsWith('https://github.com/') ? 'GitHub' : 'Website'} ↗
+                  <span className="sr-only"> for {badge}</span>
+                </ExternalLink>}
               </div>
               {subtitle && <div className="act-alt-sub">{subtitle}</div>}
               <div className="act-alt-role">{a.role}</div>

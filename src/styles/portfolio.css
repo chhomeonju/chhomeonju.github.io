@@ -953,6 +953,7 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
   .act-alt-l .act-alt-head { justify-content: flex-start; }
 }
 .act-alt-date { font-size: .7rem; color: var(--muted); }
+.act-alt-link { font-size: .75rem; font-weight: 600; white-space: nowrap; }
 .act-alt-sub { font-size: .83rem; font-weight: 600; color: var(--ink); margin-top: 5px; }
 .act-alt-role { font-size: .75rem; color: var(--muted); margin-top: 3px; }
 .act-alt-desc { font-size: .73rem; color: var(--muted); line-height: 1.75; margin: 5px 0 0; }
