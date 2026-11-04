@@ -539,7 +539,7 @@ export const portfolio: PortfolioData = {
       "category": "Multimodal inner speech analysis",
       "subtitle": "Decoding & Functional Connectivity with EEG and fMRI",
       "date": "Apr. 2025 – Jul. 2025",
-      "teaser": "Inner-speech EEG decoding and functional connectivity across two public datasets, with a separate BOLD connectivity workflow for simultaneous EEG–fMRI recordings.",
+      "teaser": "Inner-speech decoding and functional connectivity across two public datasets, with a separate BOLD connectivity workflow for simultaneous EEG–fMRI recordings.",
       "tags": [
         "EEG",
         "fMRI",
@@ -573,7 +573,7 @@ export const portfolio: PortfolioData = {
         "fMRIPrep",
         "Nilearn"
       ],
-      "image": { "src": "/assets/images/inner-speech-connectivity.png", "alt": "Exploratory alpha-band EEG connectivity matrices for one participant: task, inter-trial rest, and task minus rest for debiased wPLI squared, coherence, and PLV.", "caption": "Exploratory alpha-band EEG connectivity for one participant and session (ds003626). Columns show task, inter-trial rest, and task minus rest." },
+      "image": { "src": "/assets/images/inner-speech-connectivity.png", "alt": "Exploratory alpha-band EEG connectivity matrices for one participant: task, inter-trial rest, and task minus rest for debiased wPLI squared, coherence, and PLV.", "caption": "Alpha-band (8–13 Hz) EEG functional connectivity during inner speech and inter-trial rest." },
       "datasetExperience": [
         {
           "title": "EEG-only inner speech (ds003626)",

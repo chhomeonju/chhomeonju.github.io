@@ -65,7 +65,7 @@ export function ResearchInterests() {
   return (
     <section id="research-interests" className="research-interests" aria-labelledby="research-interests-heading">
       <h2 id="research-interests-heading">Research Interests</h2>
-      <div className="ri-research-question">
+      <div className="research-summary">
         <span className="rt-hub-eyebrow">Core Research Question</span>
         <p className="rt-hub-question">What are the neural mechanisms underlying human cognition, emotion, and behavior, and how can we understand them through neuroimaging and computational modeling?</p>
       </div>

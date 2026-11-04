@@ -323,7 +323,10 @@ export function ResearchTimeline() {
         </div>
       </div>
 
-      <p className="rt-trajectory-intro">My research has evolved from decoding information from neural activity to learning generalizable neural representations and investigating how the brain encodes and processes information, with a growing focus on brain network dynamics and the neural mechanisms underlying human cognition and behavior.</p>
+      <div className="research-summary">
+        <span className="rt-hub-eyebrow">Research Progression</span>
+        <p className="rt-hub-question">My research has evolved from decoding information from neural activity to learning generalizable neural representations and investigating how the brain encodes and processes information, with a growing focus on brain network dynamics and the neural mechanisms underlying human cognition and behavior.</p>
+      </div>
 
       {layout === 'feed'   && <FeedLayout   projectMap={projectMap} />}
       {layout === 'phases' && <PhasesLayout projectMap={projectMap} />}

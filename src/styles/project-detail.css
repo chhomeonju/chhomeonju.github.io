@@ -15,6 +15,19 @@
 .detail-resources a { font-size: .86rem; font-weight: 700; }
 .project-page-figure { margin: 0 0 36px; padding: 24px; border: 1px solid #dce2ea; background: #fff; }
 .project-page-figure img { display: block; width: 100%; height: auto; max-height: 500px; object-fit: contain; }
+/* Show rows 58 through 1399 of the 1680 by 1400 source figure. */
+.project-connectivity-crop {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 1680 / 1342;
+  max-width: 626px;
+  margin-inline: auto;
+}
+.project-connectivity-crop img {
+  position: absolute;
+  top: -4.322%;
+  max-height: none;
+}
 .project-page-figure figcaption { margin-top: 15px; color: #717d8c; font-size: .78rem; text-align: center; }
 .project-page-layout { border-top: 1px solid #dce2ea; display: grid; grid-template-columns: 180px minmax(0, 1fr); gap: 50px; padding-top: 35px; }
 .project-page-aside { align-self: start; position: sticky; top: 25px; display: flex; flex-direction: column; gap: 9px; }
