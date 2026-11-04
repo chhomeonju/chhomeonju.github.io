@@ -512,7 +512,7 @@ function DecodingCol({ taskIdx }: { taskIdx: number }) {
               {t.classes.map((item, index) => (
                 <Fragment key={item.label}>
                   {t.columns === 2 && index === 2 && <span className="ri-dec-class-break" />}
-                  <span className="ri-dec-class" style={{ '--class-index': index } as CSSProperties}>
+                  <span className={`ri-dec-class${item.label === 'Thank you' ? ' ri-dec-class--single-line' : ''}`} style={{ '--class-index': index } as CSSProperties}>
                     <span>{item.icon}</span>{item.label}
                   </span>
                 </Fragment>

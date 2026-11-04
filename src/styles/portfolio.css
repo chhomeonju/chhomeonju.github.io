@@ -418,15 +418,16 @@ section, header, .project-card { scroll-margin-top: var(--section-offset, 100px)
 .ri-dec-class-break { flex-basis: 100%; height: 0; }
 .ri-dec-classes--balanced {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: minmax(0, 1fr) minmax(max-content, 1fr) minmax(0, 1fr);
 }
 .ri-dec-classes--balanced .ri-dec-class {
   min-width: 0;
   white-space: normal;
   overflow-wrap: anywhere;
 }
+.ri-dec-classes--balanced .ri-dec-class--single-line { white-space: nowrap; }
 @container (width < 145px) {
-  .ri-dec-classes--balanced { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .ri-dec-classes--balanced { grid-template-columns: minmax(max-content, 1fr) minmax(0, 1fr); }
 }
 .ri-dec-class { display: inline-flex; align-items: center; gap: 3px; margin-bottom: 3px; white-space: nowrap; color: var(--ink); background: var(--paper); border: 1px solid var(--rule); border-radius: 4px; padding: 2px 4px; font-size: .52rem; font-weight: 500; line-height: 1.5; }
 @media (prefers-reduced-motion: no-preference) {
