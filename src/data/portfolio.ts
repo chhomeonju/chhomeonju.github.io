@@ -573,8 +573,7 @@ export const portfolio: PortfolioData = {
         "fMRIPrep",
         "Nilearn"
       ],
-      "image": null,
-      "cardImage": { "src": "/assets/images/inner-speech-connectivity.png", "alt": "Exploratory alpha-band EEG connectivity matrices for one participant: task, inter-trial rest, and task minus rest for debiased wPLI squared, coherence, and PLV." },
+      "image": { "src": "/assets/images/inner-speech-connectivity.png", "alt": "Exploratory alpha-band EEG connectivity matrices for one participant: task, inter-trial rest, and task minus rest for debiased wPLI squared, coherence, and PLV.", "caption": "Exploratory alpha-band EEG connectivity for one participant and session (ds003626). Columns show task, inter-trial rest, and task minus rest." },
       "datasetExperience": [
         {
           "title": "EEG-only inner speech (ds003626)",
