@@ -70,6 +70,10 @@ export const portfolio: PortfolioData = {
       "imageAlt": "TADA framework: multi-scale temporal decoder and encoding-guided reciprocal re-ranking for ECoG-to-text decoding",
       "links": [
         {
+          "label": "PDF ↗",
+          "href": "https://drive.google.com/file/d/1Mv5ZfI-nHCfKSjvAo5hsi3rf-S41nw0H/view?usp=drive_link"
+        },
+        {
           "label": "Code ↗",
           "href": "https://github.com/Myeongjuuu/TADA"
         }
@@ -81,7 +85,12 @@ export const portfolio: PortfolioData = {
       "venue": "ACL Rolling Review (October 2026 cycle) · Under review · Planned commitment to NAACL 2027",
       "image": "/assets/images/continuous-latent-framework.png",
       "imageAlt": "Continuous Latent Predictive Modeling 논문의 EEG 사전학습 및 예측 의미 정렬 구조도",
-      "links": []
+      "links": [
+        {
+          "label": "PDF ↗",
+          "href": "https://drive.google.com/file/d/1wY7UePiGvkIhmQRbo-edH_nbTgdNXFKs/view?usp=drive_link"
+        }
+      ]
     },
     {
       "title": "Classification of Non-Invasive EEG Signals During Motor Imagery Tasks Using a Large Language Model",
@@ -90,6 +99,10 @@ export const portfolio: PortfolioData = {
       "image": "/assets/images/ieee-cw-2024-framework.png",
       "imageAlt": "IEEE CW 2024 논문의 EEG 특징 추출 및 LLM 분류 구조도",
       "links": [
+        {
+          "label": "IEEE Xplore ↗",
+          "href": "https://ieeexplore.ieee.org/document/10918230"
+        },
         {
           "label": "Code ↗",
           "href": "https://github.com/Myeongjuuu/EEG-LLM"
