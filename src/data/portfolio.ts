@@ -70,7 +70,7 @@ export const portfolio: PortfolioData = {
       "imageAlt": "TADA framework: multi-scale temporal decoder and encoding-guided reciprocal re-ranking for ECoG-to-text decoding",
       "links": [
         {
-          "label": "PDF ↗",
+          "label": "Paper ↗",
           "href": "https://drive.google.com/file/d/1Mv5ZfI-nHCfKSjvAo5hsi3rf-S41nw0H/view?usp=drive_link"
         },
         {
@@ -87,7 +87,7 @@ export const portfolio: PortfolioData = {
       "imageAlt": "Continuous Latent Predictive Modeling 논문의 EEG 사전학습 및 예측 의미 정렬 구조도",
       "links": [
         {
-          "label": "PDF ↗",
+          "label": "Paper ↗",
           "href": "https://drive.google.com/file/d/1wY7UePiGvkIhmQRbo-edH_nbTgdNXFKs/view?usp=drive_link"
         }
       ]
@@ -100,7 +100,7 @@ export const portfolio: PortfolioData = {
       "imageAlt": "IEEE CW 2024 논문의 EEG 특징 추출 및 LLM 분류 구조도",
       "links": [
         {
-          "label": "IEEE Xplore ↗",
+          "label": "Paper ↗",
           "href": "https://ieeexplore.ieee.org/document/10918230"
         },
         {
